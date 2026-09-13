@@ -1,0 +1,19 @@
+---
+/** Banda de avisos arriba de todo. Sin avisos vigentes no renderiza nada. */
+import { avisosVigentes } from '../lib/eventos';
+import { parroquia } from '../lib/parroquia';
+
+const ID = 'avisos';
+---
+
+{
+  avisosVigentes.length > 0 && (
+    <aside id={ID} data-vigencia={ID} aria-label={parroquia.sitio.avisos.etiqueta} class="bg-bordo px-4 py-3 text-crema">
+      <div class="mx-auto max-w-3xl space-y-1 text-center text-lg leading-snug text-balance">
+        {avisosVigentes.map((aviso) => (
+          <p data-hasta={aviso.hasta}>{aviso.texto}</p>
+        ))}
+      </div>
+    </aside>
+  )
+}

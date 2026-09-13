@@ -12,7 +12,7 @@
 import { misas as misasParroquia } from '../data/parroquia.json';
 import type { DiaSemana, Hora, Misas } from '../types/parroquia';
 
-const ZONA_HORARIA = 'America/Argentina/Buenos_Aires';
+export const ZONA_HORARIA ='America/Argentina/Buenos_Aires';
 
 /** Días en orden, empezando por el domingo. */
 export const SEMANA: readonly DiaSemana[] = [

@@ -13,7 +13,11 @@
     "hero": {
       "alt": "Frente de la Parroquia Inmaculado Corazón de María"
     },
+    "avisos": {
+      "etiqueta": "Avisos"
+    },
     "secciones": [
+      { "id": "eventos", "titulo": "Eventos" },
       { "id": "horarios", "titulo": "Horarios" },
       { "id": "ubicacion", "titulo": "Ubicación" },
       { "id": "sacramentos", "titulo": "Sacramentos" },

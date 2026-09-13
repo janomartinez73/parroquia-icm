@@ -1,0 +1,37 @@
+---
+/**
+ * Grilla de flyers vigentes. index.astro solo la incluye si hay alguno.
+ *
+ * Cada flyer va en una caja 4:5 con object-fit contain: entra entero, sin
+ * recortes, cualquiera sea su proporción.
+ */
+import { Image } from 'astro:assets';
+import { flyersVigentes, ID_SECCION_EVENTOS, MAXIMO_FLYERS } from '../lib/eventos';
+
+// Flex en lugar de grid: si queda un flyer solo en la fila, va centrado.
+const claseFlyer = 'w-full md:w-[calc(50%-1.25rem)]';
+
+// Nunca más ancho que el original.
+const anchos = (original: number) => [...new Set([400, 800].map((ancho) => Math.min(ancho, original)))];
+---
+
+<ul data-vigencia={ID_SECCION_EVENTOS} data-maximo={MAXIMO_FLYERS} class="mt-8 flex flex-wrap justify-center gap-10">
+  {
+    flyersVigentes.map((flyer, i) => (
+      <li data-hasta={flyer.hasta} hidden={i >= MAXIMO_FLYERS} class={claseFlyer}>
+        <figure>
+          <Image
+            src={flyer.imagen}
+            alt={flyer.titulo}
+            widths={anchos(flyer.imagen.width)}
+            sizes="(min-width: 768px) 400px, calc(100vw - 32px)"
+            class="aspect-[4/5] w-full rounded-sm border border-dorado/30 bg-dorado/10 object-contain"
+          />
+          <figcaption class="font-display mt-3 text-center text-2xl leading-tight font-semibold text-balance">
+            {flyer.titulo}
+          </figcaption>
+        </figure>
+      </li>
+    ))
+  }
+</ul>

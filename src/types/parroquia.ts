@@ -146,6 +146,11 @@ export interface Sitio {
   hero: {
     alt: string;
   };
+  avisos: {
+    /** Nombre accesible de la banda de avisos. */
+    etiqueta: string;
+  };
+  /** "eventos" se omite solo cuando no hay flyers vigentes. */
   secciones: Seccion[];
   horarios: TextosHorarios;
   ubicacion: TextosUbicacion;

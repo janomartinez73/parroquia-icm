@@ -10,14 +10,21 @@ import Ubicacion from '../components/Ubicacion.astro';
 import Campanario from '../components/Campanario.astro';
 import Sacramentos from '../components/Sacramentos.astro';
 import Contacto from '../components/Contacto.astro';
+import Avisos from '../components/Avisos.astro';
+import Eventos from '../components/Eventos.astro';
+import FiltroVigencia from '../components/FiltroVigencia.astro';
 import { parroquia } from '../lib/parroquia';
+import { avisosVigentes, flyersVigentes, seccionesVisibles } from '../lib/eventos';
 
 const { sitio } = parroquia;
+// Sin avisos ni flyers vigentes no hace falta el script de vigencia.
+const hayVigencias = avisosVigentes.length > 0 || flyersVigentes.length > 0;
 
 type Componente = typeof Horarios;
 
 // Contenido de cada sección, por id. Las que no figuran quedan solo con el título.
 const contenidos: Record<string, Componente | undefined> = {
+  eventos: Eventos,
   horarios: Horarios,
   ubicacion: Ubicacion,
   sacramentos: Sacramentos,
@@ -31,11 +38,12 @@ const separadoresAntes: Record<string, Componente | undefined> = {
 ---
 
 <Layout title={sitio.titulo} description={sitio.descripcion}>
+  <Avisos />
   <Header />
   <main>
     <Hero />
     {
-      sitio.secciones.map((seccion) => {
+      seccionesVisibles.map((seccion) => {
         const Contenido = contenidos[seccion.id];
         const Separador = separadoresAntes[seccion.id];
         return (
@@ -52,4 +60,5 @@ const separadoresAntes: Record<string, Componente | undefined> = {
   </main>
   <Footer />
   <BotonWhatsApp />
+  {hayVigencias && <FiltroVigencia />}
 </Layout>

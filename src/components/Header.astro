@@ -1,7 +1,8 @@
 ---
 import { parroquia } from '../lib/parroquia';
+import { seccionesVisibles as secciones } from '../lib/eventos';
 
-const { marca, menu, secciones } = parroquia.sitio;
+const { marca, menu } = parroquia.sitio;
 ---
 
 <header class="sticky top-0 z-40 border-b border-dorado/40 bg-crema/95">
@@ -14,7 +15,7 @@ const { marca, menu, secciones } = parroquia.sitio;
     </a>
 
     <nav aria-label={menu.etiqueta}>
-      <ul class="hidden gap-8 md:flex">
+      <ul class="hidden gap-8 lg:flex">
         {
           secciones.map((seccion) => (
             <li>
@@ -29,7 +30,7 @@ const { marca, menu, secciones } = parroquia.sitio;
         }
       </ul>
 
-      <details class="group md:hidden" data-menu>
+      <details class="group lg:hidden" data-menu>
         <summary
           class="flex min-h-12 cursor-pointer list-none items-center gap-1.5 rounded border border-dorado/60 px-2.5 text-marron [&::-webkit-details-marker]:hidden"
         >

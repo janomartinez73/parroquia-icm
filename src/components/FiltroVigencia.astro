@@ -1,0 +1,35 @@
+---
+/**
+ * Oculta en el cliente los avisos y flyers que vencieron después del último
+ * deploy. Solo mira "hasta": lo que todavía no empezaba en el build ni
+ * siquiera llegó al HTML.
+ *
+ * Cada [data-vigencia] agrupa elementos con data-hasta y, opcionalmente,
+ * data-maximo. Si no queda ninguno visible, oculta el elemento cuyo id es el
+ * valor de data-vigencia y sus enlaces en el menú.
+ */
+import { ZONA_HORARIA } from '../lib/horarios';
+
+const zona = ZONA_HORARIA;
+---
+
+<script is:inline define:vars={{ zona }}>
+  const partes = new Intl.DateTimeFormat('en', { timeZone: zona, year: 'numeric', month: '2-digit', day: '2-digit' })
+    .formatToParts(new Date())
+    .reduce((acc, parte) => ({ ...acc, [parte.type]: parte.value }), {});
+  const hoy = `${partes.year}-${partes.month}-${partes.day}`;
+
+  document.querySelectorAll('[data-vigencia]').forEach((grupo) => {
+    const maximo = Number(grupo.dataset.maximo) || Infinity;
+    let visibles = 0;
+    grupo.querySelectorAll('[data-hasta]').forEach((item) => {
+      item.hidden = item.dataset.hasta < hoy || visibles >= maximo;
+      if (!item.hidden) visibles++;
+    });
+    if (visibles > 0) return;
+
+    const id = grupo.dataset.vigencia;
+    document.getElementById(id).hidden = true;
+    document.querySelectorAll(`a[href="#${id}"]`).forEach((enlace) => (enlace.closest('li').hidden = true));
+  });
+</script>
