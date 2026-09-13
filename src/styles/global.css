@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-crema: #fdfaf4;
+  --color-marron: #3d2b23;
+  --color-dorado: #b08d4f;
+  --color-bordo: #6b2028;
+
+  --font-serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  background-color: var(--color-crema);
+  color: var(--color-marron);
+  font-family: var(--font-serif);
+}
