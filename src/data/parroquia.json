@@ -1,0 +1,45 @@
+{
+  "nombre": "Parroquia Inmaculado Corazón de María",
+  "comunidad": "Misioneros Claretianos",
+  "barrio": "Barrio Abasto",
+  "direccion": {
+    "calle": "Viamonte 1585",
+    "esquina": "Esquina Presidente Roca",
+    "ciudad": "Rosario",
+    "provincia": "Santa Fe"
+  },
+  "contacto": {
+    "telefono": "7930527",
+    "whatsapp": "5493416539615",
+    "emails": [
+      "secretariacoraderosario@gmail.com",
+      "coraderosario@outlook.com"
+    ]
+  },
+  "apertura": {
+    "lunesASabados": ["08:00 a 13:00", "16:30 a 20:30"],
+    "domingos": ["09:00 a 12:00", "18:00 a 20:30"]
+  },
+  "misas": {
+    "domingo": ["09:30", "11:00", "19:30"],
+    "lunes": [],
+    "martes": ["07:30", "19:30"],
+    "miercoles": ["07:30", "11:00", "19:30"],
+    "jueves": ["07:30", "19:30"],
+    "viernes": ["07:30", "19:30"],
+    "sabado": ["07:30", "19:30"]
+  },
+  "bautismos": {
+    "dia": "Todos los sábados",
+    "turnos": ["Turno mañana: 10:30 hs", "Turno tarde: 17:00 hs"],
+    "nota": "Por favor, realice su consulta en secretaría."
+  },
+  "charlasPreBautismales": {
+    "turnos": ["Primeros sábados: 17:00 hs", "Terceros martes: 18:30 hs"],
+    "nota": "Es requisito indispensable la inscripción previa."
+  },
+  "secretaria": {
+    "martesAViernes": "16:00 a 19:30",
+    "sabados": "09:00 a 12:00"
+  }
+}
