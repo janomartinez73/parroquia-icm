@@ -1,0 +1,156 @@
+---
+/**
+ * Horarios de misa y apertura del templo.
+ *
+ * El HTML sale completo del build, con todos los días. Lo que depende de la
+ * fecha (bloque de hoy y próxima misa) lo resuelve el script en el cliente:
+ * si el JS falla, los horarios se ven igual.
+ */
+import { parroquia } from '../lib/parroquia';
+import { SEMANA } from '../lib/horarios';
+import type { Apertura, DiaSemana, Hora } from '../types/parroquia';
+
+const { misas, apertura, sitio } = parroquia;
+const textos = sitio.horarios;
+
+const lista = new Intl.ListFormat('es', { type: 'conjunction' });
+const nombrarDias = (dias: DiaSemana[]) => lista.format(dias.map((dia) => textos.dias[dia].plural));
+
+// Días con los mismos horarios, en orden de la semana.
+const gruposMisas: { dias: DiaSemana[]; horas: Hora[] }[] = [];
+for (const dia of SEMANA) {
+  const horas = misas[dia];
+  if (horas.length === 0) continue;
+  const grupo = gruposMisas.find((g) => g.horas.join() === horas.join());
+  if (grupo) grupo.dias.push(dia);
+  else gruposMisas.push({ dias: [dia], horas });
+}
+
+const diasSinMisa = SEMANA.filter((dia) => misas[dia].length === 0);
+const textoSinMisa = textos.misas.sinMisa.replace('{dias}', nombrarDias(diasSinMisa).toLocaleLowerCase('es'));
+
+const DIAS_APERTURA: Record<keyof Apertura, DiaSemana[]> = {
+  lunesASabados: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'],
+  domingos: ['domingo'],
+};
+const gruposApertura = (Object.keys(DIAS_APERTURA) as (keyof Apertura)[]).map((clave) => ({
+  dias: DIAS_APERTURA[clave],
+  nombre: textos.apertura[clave],
+  tramos: apertura[clave],
+}));
+
+const textosProxima = {
+  ...textos.proxima,
+  dias: Object.fromEntries(SEMANA.map((dia) => [dia, textos.dias[dia].singular])),
+};
+
+const claseSubtitulo =
+  'font-display mb-2 text-center text-2xl font-semibold tracking-[0.15em] text-dorado [font-variant-caps:small-caps]';
+const claseGrupo = 'relative border-b border-dorado/30 px-3 py-3 hoy:bg-dorado/10';
+// Apoyado sobre el separador de arriba, para no quitarle ancho al nombre del grupo.
+const claseIndicador =
+  'absolute -top-3 right-3 hidden rounded-sm border border-bordo/40 bg-crema px-2 text-sm leading-5 tracking-[0.15em] text-bordo hoy:block [font-variant-caps:all-small-caps]';
+---
+
+<div class="mx-auto mt-6 max-w-md">
+  <p
+    data-proxima
+    data-textos={JSON.stringify(textosProxima)}
+    hidden
+    class="-mt-2 mb-8 border-b border-dorado/30 pb-4 text-center text-xl tabular-nums [&_strong]:font-bold [&_strong]:text-bordo [&>span]:whitespace-nowrap"
+  >
+  </p>
+
+  <h3 class={claseSubtitulo}>{textos.misas.titulo}</h3>
+  <ul class="border-t border-dorado/30">
+    {
+      gruposMisas.map((grupo) => (
+        <li data-dias={grupo.dias.join(' ')} class={claseGrupo}>
+          <span class={claseIndicador}>{textos.indicadorHoy}</span>
+          <span class="dia">{nombrarDias(grupo.dias)}</span>
+          <ul class="flex flex-wrap gap-x-5 text-3xl leading-snug tabular-nums">
+            {grupo.horas.map((hora) => (
+              <li>
+                <time datetime={hora}>{hora}</time>
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))
+    }
+  </ul>
+  {
+    diasSinMisa.length > 0 && (
+      <p data-dias={diasSinMisa.join(' ')} class="mt-3 text-center text-base italic hoy:font-semibold hoy:text-bordo">
+        {textoSinMisa}
+      </p>
+    )
+  }
+
+  <h3 class:list={[claseSubtitulo, 'mt-10']}>{textos.apertura.titulo}</h3>
+  <ul class="border-t border-dorado/30">
+    {
+      gruposApertura.map((grupo) => (
+        <li data-dias={grupo.dias.join(' ')} class={claseGrupo}>
+          <span class={claseIndicador}>{textos.indicadorHoy}</span>
+          <span class="dia">{grupo.nombre}</span>
+          <ul class="flex flex-wrap gap-x-6 text-xl leading-snug tabular-nums">
+            {grupo.tramos.map((tramo) => (
+              <li class="whitespace-nowrap">{tramo}</li>
+            ))}
+          </ul>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<script>
+  import { diaActual, misasDeHoy, siguienteMisa } from '../lib/horarios';
+  import type { DiaSemana, TextosHorarios } from '../types/parroquia';
+
+  type TextosProxima = TextosHorarios['proxima'] & { dias: Record<DiaSemana, string> };
+
+  const ahora = new Date();
+  const hoy = diaActual(ahora);
+
+  document.querySelectorAll<HTMLElement>('[data-dias]').forEach((bloque) => {
+    if (bloque.dataset.dias?.split(' ').includes(hoy)) bloque.classList.add('hoy');
+  });
+
+  const linea = document.querySelector<HTMLElement>('[data-proxima]');
+  const siguiente = siguienteMisa(ahora);
+
+  if (linea?.dataset.textos && siguiente) {
+    const textos = JSON.parse(linea.dataset.textos) as TextosProxima;
+    const tramo = (...contenido: (string | Node)[]) => {
+      const span = document.createElement('span');
+      span.append(...contenido);
+      return span;
+    };
+    const destacada = (hora: string) => {
+      const strong = document.createElement('strong');
+      strong.textContent = hora;
+      return strong;
+    };
+    const deHoy = misasDeHoy(ahora);
+
+    if (siguiente.enDias === 0) {
+      linea.append(textos.hoy, ' ');
+      deHoy.forEach((hora, i) => {
+        if (i > 0) linea.append(' · ');
+        linea.append(tramo(hora === siguiente.hora ? destacada(hora) : hora));
+      });
+    } else {
+      // "mañana" solo si hoy hubo misas; un día sin misa nombra el día siguiente.
+      const huboHoy = deHoy.length > 0;
+      const cuando = huboHoy && siguiente.enDias === 1 ? textos.manana : textos.dias[siguiente.dia];
+      linea.append(
+        tramo(huboHoy ? textos.noQuedan : textos.noHay),
+        ' · ',
+        tramo(`${textos.siguiente} ${cuando} `, destacada(siguiente.hora)),
+      );
+    }
+    linea.hidden = false;
+  }
+</script>

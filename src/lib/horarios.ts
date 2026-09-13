@@ -1,17 +1,29 @@
 /**
  * Cálculos de horarios en hora de Argentina.
  *
- * El sitio es estático y el build corre en UTC, así que estas funciones
- * tienen que llamarse desde un <script> del cliente, nunca desde el
- * frontmatter de un componente .astro.
+ * El sitio es estático y el build corre en UTC, así que las funciones que
+ * dependen de `ahora` tienen que llamarse desde un <script> del cliente,
+ * nunca desde el frontmatter de un componente .astro.
  *
  * Todas reciben `ahora` (y `misas`) como parámetros opcionales para poder
  * testearlas con fechas fijas.
  */
-import { parroquia } from './parroquia';
+// Import nombrado: el bundle del cliente incluye solo `misas`, no todo el JSON.
+import { misas as misasParroquia } from '../data/parroquia.json';
 import type { DiaSemana, Hora, Misas } from '../types/parroquia';
 
 const ZONA_HORARIA = 'America/Argentina/Buenos_Aires';
+
+/** Días en orden, empezando por el domingo. */
+export const SEMANA: readonly DiaSemana[] = [
+  'domingo',
+  'lunes',
+  'martes',
+  'miercoles',
+  'jueves',
+  'viernes',
+  'sabado',
+];
 
 const formatoDia = new Intl.DateTimeFormat('en-US', {
   timeZone: ZONA_HORARIA,
@@ -57,7 +69,7 @@ export function diaActual(ahora: Date = new Date()): DiaSemana {
 /** Horarios de misa de hoy; vacío si no hay. */
 export function misasDeHoy(
   ahora: Date = new Date(),
-  misas: Misas = parroquia.misas,
+  misas: Misas = misasParroquia,
 ): Hora[] {
   return misas[diaActual(ahora)];
 }
@@ -68,8 +80,36 @@ export function misasDeHoy(
  */
 export function proximaMisa(
   ahora: Date = new Date(),
-  misas: Misas = parroquia.misas,
+  misas: Misas = misasParroquia,
 ): Hora | null {
   const minutos = minutosActuales(ahora);
   return misasDeHoy(ahora, misas).find((hora) => minutosDelDia(hora) >= minutos) ?? null;
+}
+
+export interface MisaSiguiente {
+  dia: DiaSemana;
+  hora: Hora;
+  /** 0 = hoy, 1 = mañana… hasta 7 (el mismo día de la semana que viene). */
+  enDias: number;
+}
+
+/**
+ * Próxima misa a partir de ahora: la que queda hoy o, si no hay, la
+ * primera de los días siguientes. Null solo si no hay misas en la semana.
+ */
+export function siguienteMisa(
+  ahora: Date = new Date(),
+  misas: Misas = misasParroquia,
+): MisaSiguiente | null {
+  const hoy = diaActual(ahora);
+  const hora = proximaMisa(ahora, misas);
+  if (hora) return { dia: hoy, hora, enDias: 0 };
+
+  const indiceHoy = SEMANA.indexOf(hoy);
+  for (let enDias = 1; enDias <= 7; enDias++) {
+    const dia = SEMANA[(indiceHoy + enDias) % 7];
+    const primera = dia && misas[dia][0];
+    if (dia && primera) return { dia, hora: primera, enDias };
+  }
+  return null;
 }

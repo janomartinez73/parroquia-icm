@@ -5,9 +5,15 @@ import Hero from '../components/Hero.astro';
 import TituloSeccion from '../components/TituloSeccion.astro';
 import Footer from '../components/Footer.astro';
 import BotonWhatsApp from '../components/BotonWhatsApp.astro';
+import Horarios from '../components/Horarios.astro';
 import { parroquia } from '../lib/parroquia';
 
 const { sitio } = parroquia;
+
+// Contenido de cada sección, por id. Las que no figuran quedan solo con el título.
+const contenidos: Record<string, typeof Horarios | undefined> = {
+  horarios: Horarios,
+};
 ---
 
 <Layout title={sitio.titulo} description={sitio.descripcion}>
@@ -15,11 +21,15 @@ const { sitio } = parroquia;
   <main>
     <Hero />
     {
-      sitio.secciones.map((seccion) => (
-        <section id={seccion.id} aria-labelledby={`${seccion.id}-titulo`} class="mx-auto max-w-3xl px-4 py-12">
-          <TituloSeccion id={`${seccion.id}-titulo`} titulo={seccion.titulo} />
-        </section>
-      ))
+      sitio.secciones.map((seccion) => {
+        const Contenido = contenidos[seccion.id];
+        return (
+          <section id={seccion.id} aria-labelledby={`${seccion.id}-titulo`} class="mx-auto max-w-3xl px-4 py-12">
+            <TituloSeccion id={`${seccion.id}-titulo`} titulo={seccion.titulo} />
+            {Contenido && <Contenido />}
+          </section>
+        );
+      })
     }
   </main>
   <Footer />

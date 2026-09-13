@@ -25,6 +25,10 @@ body {
   line-height: 1.6;
 }
 
+/* El script de horarios agrega la clase .hoy al bloque del día actual;
+   `hoy:` aplica al bloque y a todo lo que tiene adentro. */
+@custom-variant hoy (&:is(.hoy, .hoy *));
+
 /* Nombres de días en los listados de horarios. */
 @utility dia {
   font-weight: 700;

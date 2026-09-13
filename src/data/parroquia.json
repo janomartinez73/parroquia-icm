@@ -19,6 +19,34 @@
       { "id": "sacramentos", "titulo": "Sacramentos" },
       { "id": "contacto", "titulo": "Contacto" }
     ],
+    "horarios": {
+      "indicadorHoy": "Hoy",
+      "proxima": {
+        "hoy": "Hoy:",
+        "noQuedan": "Hoy no quedan misas",
+        "noHay": "Hoy no hay misa",
+        "siguiente": "Próxima:",
+        "manana": "mañana"
+      },
+      "misas": {
+        "titulo": "Horarios de misa",
+        "sinMisa": "Los {dias} no hay misa."
+      },
+      "apertura": {
+        "titulo": "Apertura del templo",
+        "lunesASabados": "Lunes a Sábados",
+        "domingos": "Domingos"
+      },
+      "dias": {
+        "domingo": { "singular": "domingo", "plural": "Domingos" },
+        "lunes": { "singular": "lunes", "plural": "Lunes" },
+        "martes": { "singular": "martes", "plural": "Martes" },
+        "miercoles": { "singular": "miércoles", "plural": "Miércoles" },
+        "jueves": { "singular": "jueves", "plural": "Jueves" },
+        "viernes": { "singular": "viernes", "plural": "Viernes" },
+        "sabado": { "singular": "sábado", "plural": "Sábados" }
+      }
+    },
     "pie": {
       "comunidad": "Comunidad a cargo de los"
     },

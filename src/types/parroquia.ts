@@ -53,7 +53,30 @@ export interface Seccion {
   titulo: string;
 }
 
-/** Textos de interfaz del sitio (head, cabecera, hero, pie, WhatsApp). */
+/** Textos de la sección de horarios. */
+export interface TextosHorarios {
+  /** Marca del bloque que corresponde al día de hoy. */
+  indicadorHoy: string;
+  /** Línea de próxima misa; se arma en el cliente. */
+  proxima: {
+    hoy: string;
+    noQuedan: string;
+    noHay: string;
+    siguiente: string;
+    manana: string;
+  };
+  misas: {
+    titulo: string;
+    /** `{dias}` se reemplaza por los días sin misa, en minúscula. */
+    sinMisa: string;
+  };
+  apertura: Record<keyof Apertura, string> & {
+    titulo: string;
+  };
+  dias: Record<DiaSemana, { singular: string; plural: string }>;
+}
+
+/** Textos de interfaz del sitio (head, cabecera, hero, horarios, pie, WhatsApp). */
 export interface Sitio {
   titulo: string;
   descripcion: string;
@@ -69,6 +92,7 @@ export interface Sitio {
     alt: string;
   };
   secciones: Seccion[];
+  horarios: TextosHorarios;
   pie: {
     /** Se completa con `comunidad`: "Comunidad a cargo de los Misioneros Claretianos". */
     comunidad: string;
