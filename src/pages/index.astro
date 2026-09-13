@@ -13,10 +13,8 @@ import Contacto from '../components/Contacto.astro';
 import Avisos from '../components/Avisos.astro';
 import Eventos from '../components/Eventos.astro';
 import FiltroVigencia from '../components/FiltroVigencia.astro';
-import { parroquia } from '../lib/parroquia';
 import { avisosVigentes, flyersVigentes, seccionesVisibles } from '../lib/eventos';
 
-const { sitio } = parroquia;
 // Sin avisos ni flyers vigentes no hace falta el script de vigencia.
 const hayVigencias = avisosVigentes.length > 0 || flyersVigentes.length > 0;
 
@@ -37,10 +35,10 @@ const separadoresAntes: Record<string, Componente | undefined> = {
 };
 ---
 
-<Layout title={sitio.titulo} description={sitio.descripcion}>
+<Layout>
   <Avisos />
   <Header />
-  <main>
+  <main id="contenido">
     <Hero />
     {
       seccionesVisibles.map((seccion) => {

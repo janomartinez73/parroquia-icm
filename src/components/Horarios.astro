@@ -8,7 +8,7 @@
  */
 import Subtitulo from './Subtitulo.astro';
 import { parroquia } from '../lib/parroquia';
-import { SEMANA } from '../lib/horarios';
+import { DIAS_APERTURA, SEMANA } from '../lib/horarios';
 import type { Apertura, DiaSemana, Hora } from '../types/parroquia';
 
 const { misas, apertura, sitio } = parroquia;
@@ -30,10 +30,6 @@ for (const dia of SEMANA) {
 const diasSinMisa = SEMANA.filter((dia) => misas[dia].length === 0);
 const textoSinMisa = textos.misas.sinMisa.replace('{dias}', nombrarDias(diasSinMisa).toLocaleLowerCase('es'));
 
-const DIAS_APERTURA: Record<keyof Apertura, DiaSemana[]> = {
-  lunesASabados: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'],
-  domingos: ['domingo'],
-};
 const gruposApertura = (Object.keys(DIAS_APERTURA) as (keyof Apertura)[]).map((clave) => ({
   dias: DIAS_APERTURA[clave],
   nombre: textos.apertura[clave],

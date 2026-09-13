@@ -14,11 +14,11 @@ const { sitio, barrio, direccion } = parroquia;
     alt={sitio.hero.alt}
     widths={[480, 800, 1200, fotoHero.width].filter((ancho) => ancho <= fotoHero.width)}
     sizes={`(max-width: ${fotoHero.width}px) 100vw, ${fotoHero.width}px`}
-    loading="eager"
-    fetchpriority="high"
+    priority
     class="h-[26rem] max-h-[70vh] w-full object-cover"
   />
-  <div class="absolute inset-0 bg-marron/60"></div>
+  <!-- Al 70 %, el texto crema pasa AA (4,9:1) aun sobre la parte más clara de la foto. -->
+  <div class="absolute inset-0 bg-marron/70"></div>
   <div class="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-crema">
     <h1 class="font-display leading-tight text-balance">
       <span class="block text-xl tracking-[0.3em] uppercase">{sitio.marca.antetitulo}</span>

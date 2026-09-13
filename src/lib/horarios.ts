@@ -10,7 +10,7 @@
  */
 // Import nombrado: el bundle del cliente incluye solo `misas`, no todo el JSON.
 import { misas as misasParroquia } from '../data/parroquia.json';
-import type { DiaSemana, Hora, Misas } from '../types/parroquia';
+import type { Apertura, DiaSemana, Hora, Misas } from '../types/parroquia';
 
 export const ZONA_HORARIA ='America/Argentina/Buenos_Aires';
 
@@ -24,6 +24,12 @@ export const SEMANA: readonly DiaSemana[] = [
   'viernes',
   'sabado',
 ];
+
+/** Días que abarca cada grupo del horario de apertura del templo. */
+export const DIAS_APERTURA: Record<keyof Apertura, DiaSemana[]> = {
+  lunesASabados: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'],
+  domingos: ['domingo'],
+};
 
 const formatoDia = new Intl.DateTimeFormat('en-US', {
   timeZone: ZONA_HORARIA,

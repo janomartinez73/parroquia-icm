@@ -41,7 +41,7 @@ const claseEnlace = 'text-bordo underline decoration-dorado underline-offset-4';
     {
       contacto.emails.map((email) => (
         <li>
-          <a href={`mailto:${email}`} class:list={[claseEnlace, 'inline-block py-1.5 [overflow-wrap:anywhere]']}>
+          <a href={`mailto:${email}`} class:list={[claseEnlace, 'inline-block py-2.5 [overflow-wrap:anywhere]']}>
             {email}
           </a>
         </li>
@@ -75,7 +75,7 @@ const claseEnlace = 'text-bordo underline decoration-dorado underline-offset-4';
         <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2">
           {redes.map((red) => (
             <li>
-              <a href={red.url} target="_blank" rel="noopener" class:list={[claseEnlace, 'inline-block py-1.5 text-lg']}>
+              <a href={red.url} target="_blank" rel="noopener" class:list={[claseEnlace, 'inline-block py-2 text-lg']}>
                 {red.nombre}
               </a>
             </li>

@@ -7,8 +7,8 @@ const { marca, menu } = parroquia.sitio;
 
 <header class="sticky top-0 z-40 border-b border-dorado/40 bg-crema/95">
   <div class="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-3 px-4 py-2">
-    <a href="#" class="font-display leading-tight text-marron no-underline">
-      <span class="block text-sm tracking-[0.25em] text-dorado [font-variant-caps:small-caps]">
+    <a href="#" class="font-display flex min-h-12 flex-col justify-center leading-tight text-marron no-underline">
+      <span class="block text-sm tracking-[0.25em] text-dorado-oscuro [font-variant-caps:small-caps]">
         {marca.antetitulo}
       </span>
       <span class="block text-base font-semibold min-[360px]:whitespace-nowrap sm:text-lg">{marca.titulo}</span>
@@ -21,7 +21,7 @@ const { marca, menu } = parroquia.sitio;
             <li>
               <a
                 href={`#${seccion.id}`}
-                class="font-display text-lg tracking-[0.12em] text-marron [font-variant-caps:small-caps] hover:text-bordo"
+                class="font-display flex min-h-12 items-center text-lg tracking-[0.12em] text-marron [font-variant-caps:small-caps] hover:text-bordo"
               >
                 {seccion.titulo}
               </a>

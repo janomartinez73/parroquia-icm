@@ -1,27 +1,72 @@
 ---
 import '@fontsource-variable/cormorant-garamond';
 import '@fontsource-variable/source-serif-4';
+// Fuente del cuerpo y de los horarios: la precargamos para que no cambie al cargar.
+import fuentePrincipal from '@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2?url';
 import '../styles/global.css';
+import fotoHero from '../assets/hero-parroquia.jpg';
+import { parroquia } from '../lib/parroquia';
+import { COLOR_CREMA, IMAGEN_OG, datosEstructurados, descripcion, titulo, urlAbsoluta } from '../lib/seo';
 
-interface Props {
-  title: string;
-  description: string;
-}
+const { nombre, sitio } = parroquia;
 
-const { title, description } = Astro.props;
+const canonical = urlAbsoluta('/');
+const imagenOg = urlAbsoluta(IMAGEN_OG.ruta);
+// "<" escapado: el JSON no puede cerrar el <script> que lo contiene.
+const jsonLd = JSON.stringify(datosEstructurados(fotoHero.src)).replace(/</g, '\\u003c');
 ---
 
 <html lang="es-AR">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta name="theme-color" content={COLOR_CREMA} />
+    <link rel="preload" href={fuentePrincipal} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content={nombre} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {
+      imagenOg && (
+        <>
+          <meta property="og:image" content={imagenOg} />
+          <meta property="og:image:type" content="image/jpeg" />
+          <meta property="og:image:width" content={String(IMAGEN_OG.ancho)} />
+          <meta property="og:image:height" content={String(IMAGEN_OG.alto)} />
+          <meta property="og:image:alt" content={sitio.hero.alt} />
+        </>
+      )
+    }
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descripcion} />
+    {
+      imagenOg && (
+        <>
+          <meta name="twitter:image" content={imagenOg} />
+          <meta name="twitter:image:alt" content={sitio.hero.alt} />
+        </>
+      )
+    }
+
     <meta name="generator" content={Astro.generator} />
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
   </head>
   <body>
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:flex focus:min-h-12 focus:items-center focus:rounded-sm focus:bg-crema focus:px-4 focus:text-bordo focus:shadow-md"
+    >
+      {sitio.saltarAlContenido}
+    </a>
     <slot />
   </body>
 </html>

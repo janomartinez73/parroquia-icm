@@ -11,10 +11,15 @@ export function enlaceWhatsApp(mensaje: string): string {
   return `https://wa.me/${contacto.whatsapp}?text=${encodeURIComponent(mensaje)}`;
 }
 
+/** Teléfono en formato internacional, por ejemplo "+543417930527". */
+export function telefonoInternacional(): string {
+  const { codigoPais, codigoArea, numero } = contacto.telefono;
+  return `+${codigoPais}${codigoArea}${numero}`;
+}
+
 /** Enlace tel: en formato internacional, por ejemplo "tel:+543417930527". */
 export function enlaceTelefono(): string {
-  const { codigoPais, codigoArea, numero } = contacto.telefono;
-  return `tel:+${codigoPais}${codigoArea}${numero}`;
+  return `tel:${telefonoInternacional()}`;
 }
 
 // Dirección completa, tal como se busca en Google Maps.

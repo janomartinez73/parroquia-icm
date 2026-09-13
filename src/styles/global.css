@@ -3,9 +3,13 @@
 @theme {
   --color-crema: #fdfaf4;
   --color-marron: #3d2b23;
+  /* Solo para líneas y fondos: sobre crema da 2,98:1 y no alcanza AA ni en texto grande. */
   --color-dorado: #b08d4f;
+  /* Mismo tono, más oscuro, para texto y bordes de botones: 4,64:1 sobre crema (AA). */
+  --color-dorado-oscuro: #8b6d39;
   --color-bordo: #6b2028;
-  --color-whatsapp: #25d366;
+  /* El verde de marca #25d366 da 1,98:1 con el ícono blanco; este da 3,9:1 (AA para gráficos). */
+  --color-whatsapp: #199447;
 
   /* Las familias se cargan desde fontsource en Layout.astro. */
   --font-display: "Cormorant Garamond Variable", Georgia, "Times New Roman", serif;
@@ -23,6 +27,24 @@ body {
   color: var(--color-marron);
   font-family: var(--font-serif);
   line-height: 1.6;
+}
+
+/* Foco bien visible para quien navega con teclado, en todo lo interactivo. */
+:focus-visible {
+  outline: 3px solid var(--color-bordo);
+  outline-offset: 3px;
+}
+
+/* El sitio no tiene animaciones; esto evita que alguna futura ignore la preferencia. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* El script de horarios agrega la clase .hoy al bloque del día actual;

@@ -15,7 +15,17 @@ export interface Direccion {
   esquina: string;
   ciudad: string;
   provincia: string;
+  /** Vacío mientras no se complete; en ese caso no se publica en los datos estructurados. */
+  codigoPostal: string;
   pais: string;
+  /** ISO 3166-1 alfa-2, por ejemplo "AR". */
+  codigoPais: string;
+}
+
+/** Coordenadas del templo en grados decimales. Null mientras no se completen. */
+export interface Geo {
+  latitud: number | null;
+  longitud: number | null;
 }
 
 /** Teléfono fijo en partes, sin espacios ni guiones. */
@@ -133,8 +143,16 @@ export interface TextosContacto {
 
 /** Textos de interfaz del sitio (head, cabecera, hero, secciones, pie, WhatsApp). */
 export interface Sitio {
-  titulo: string;
-  descripcion: string;
+  seo: {
+    /** URL pública con https y sin barra final. Vacía: sin canonical, og:url ni sitemap. */
+    url: string;
+    /** `{nombre}` y `{ciudad}` se reemplazan con los datos de la parroquia. */
+    titulo: string;
+    /** Admite `{nombre}`, `{calle}`, `{barrio}` y `{ciudad}`. */
+    descripcion: string;
+  };
+  /** Enlace para usuarios de teclado; solo se ve al recibir el foco. */
+  saltarAlContenido: string;
   marca: {
     antetitulo: string;
     titulo: string;
@@ -169,6 +187,7 @@ export interface Parroquia {
   comunidad: string;
   barrio: string;
   direccion: Direccion;
+  geo: Geo;
   contacto: Contacto;
   /** Si está vacío, no se muestra nada de redes. */
   redes: Red[];
