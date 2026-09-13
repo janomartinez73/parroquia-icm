@@ -37,7 +37,7 @@ Papel antiguo y sobrio. Nada corporativo, nada de gradientes ni glassmorphism.
   con letter-spacing amplio.
 
 ## Fases
-Actual: 0 (scaffolding y build local)
+Actual: 7 (automatización y documentación, cierre)
 Siguientes: 1 datos · 2 layout · 3 horarios · 4 ubicación+sacramentos+contacto
 · 5 flyers · 6 SEO/a11y · 7 automatización
 No adelantar trabajo de fases futuras.

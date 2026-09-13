@@ -1,0 +1,40 @@
+# Red de seguridad: en cada push a main compila el sitio y revisa los tipos.
+# Si algo falla, el commit queda con una cruz roja y GitHub avisa por mail.
+#
+# Hacen falta los dos pasos porque detectan errores distintos:
+#   - build: JSON mal escrito (una coma de más), flyer sin su imagen, fechas mal.
+#   - check: un dato con la forma equivocada (falta "hasta", un número en vez de texto).
+
+name: Validar
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          # El mínimo que pide package.json en "engines".
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        id: instalar
+        run: npm ci
+
+      - name: Compilar (npm run build)
+        run: npm run build
+
+      - name: Revisar tipos (astro check)
+        # Corre aunque el build haya fallado, para ver todos los errores juntos.
+        if: ${{ !cancelled() && steps.instalar.outcome == 'success' }}
+        run: npm run check

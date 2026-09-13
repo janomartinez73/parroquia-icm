@@ -1,0 +1,37 @@
+# Vuelve a publicar el sitio todos los días, para que avisos y flyers
+# vencidos desaparezcan del HTML sin tener que hacer un push.
+#
+# No compila nada acá: le pide a Cloudflare Pages que haga un deploy nuevo
+# llamando a su Deploy Hook. La URL del hook se guarda como secret del repo
+# (CLOUDFLARE_DEPLOY_HOOK). Los pasos para crearla están en el README.
+
+name: Rebuild diario
+
+on:
+  schedule:
+    # Actions usa hora UTC: 09:00 UTC son las 06:00 en Argentina.
+    # GitHub puede demorar unos minutos en arrancarlo.
+    - cron: '0 9 * * *'
+  # Botón "Run workflow" en la pestaña Actions, para dispararlo a mano.
+  workflow_dispatch:
+
+# Solo hace un POST a Cloudflare: no necesita permisos sobre el repo.
+permissions: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Pedir un deploy a Cloudflare Pages
+        env:
+          HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::error::Falta el secret CLOUDFLARE_DEPLOY_HOOK. Ver el README, sección Tareas automáticas."
+            exit 1
+          fi
+          # -f: falla si Cloudflare responde con error. Sin -v para no imprimir la URL.
+          curl --fail --silent --show-error --retry 3 --retry-all-errors -X POST "$HOOK"
+          echo
+          echo "Cloudflare recibió el pedido. El deploy se ve en el panel de Cloudflare Pages."
