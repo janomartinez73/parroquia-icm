@@ -1,4 +1,32 @@
 {
+  "sitio": {
+    "titulo": "Parroquia Inmaculado Corazón de María · Barrio Abasto, Rosario",
+    "descripcion": "Horarios de misa, ubicación, sacramentos y contacto de la Parroquia Inmaculado Corazón de María, en Viamonte 1585, Barrio Abasto, Rosario.",
+    "marca": {
+      "antetitulo": "Parroquia",
+      "titulo": "Inmaculado Corazón de María"
+    },
+    "menu": {
+      "boton": "Menú",
+      "etiqueta": "Navegación principal"
+    },
+    "hero": {
+      "alt": "Frente de la Parroquia Inmaculado Corazón de María"
+    },
+    "secciones": [
+      { "id": "horarios", "titulo": "Horarios" },
+      { "id": "ubicacion", "titulo": "Ubicación" },
+      { "id": "sacramentos", "titulo": "Sacramentos" },
+      { "id": "contacto", "titulo": "Contacto" }
+    ],
+    "pie": {
+      "comunidad": "Comunidad a cargo de los"
+    },
+    "whatsapp": {
+      "mensaje": "Hola, quisiera hacer una consulta",
+      "etiqueta": "Escribinos por WhatsApp"
+    }
+  },
   "nombre": "Parroquia Inmaculado Corazón de María",
   "comunidad": "Misioneros Claretianos",
   "barrio": "Barrio Abasto",

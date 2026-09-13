@@ -47,7 +47,40 @@ export interface Secretaria {
   sabados: string;
 }
 
+/** Sección de la página: su id es el ancla de navegación. */
+export interface Seccion {
+  id: string;
+  titulo: string;
+}
+
+/** Textos de interfaz del sitio (head, cabecera, hero, pie, WhatsApp). */
+export interface Sitio {
+  titulo: string;
+  descripcion: string;
+  marca: {
+    antetitulo: string;
+    titulo: string;
+  };
+  menu: {
+    boton: string;
+    etiqueta: string;
+  };
+  hero: {
+    alt: string;
+  };
+  secciones: Seccion[];
+  pie: {
+    /** Se completa con `comunidad`: "Comunidad a cargo de los Misioneros Claretianos". */
+    comunidad: string;
+  };
+  whatsapp: {
+    mensaje: string;
+    etiqueta: string;
+  };
+}
+
 export interface Parroquia {
+  sitio: Sitio;
   nombre: string;
   comunidad: string;
   barrio: string;

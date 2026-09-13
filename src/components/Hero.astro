@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import fotoHero from '../assets/hero-parroquia.jpg';
+import Tramos from './Tramos.astro';
+import { parroquia } from '../lib/parroquia';
+
+const { sitio, barrio, direccion } = parroquia;
+---
+
+<!-- El ancho máximo es el de la foto: nunca se muestra más grande que su resolución. -->
+<section class="relative mx-auto overflow-hidden" style={`max-width: ${fotoHero.width}px`}>
+  <Image
+    src={fotoHero}
+    alt={sitio.hero.alt}
+    widths={[480, 800, 1200, fotoHero.width].filter((ancho) => ancho <= fotoHero.width)}
+    sizes={`(max-width: ${fotoHero.width}px) 100vw, ${fotoHero.width}px`}
+    loading="eager"
+    fetchpriority="high"
+    class="h-[26rem] max-h-[70vh] w-full object-cover"
+  />
+  <div class="absolute inset-0 bg-marron/60"></div>
+  <div class="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-crema">
+    <h1 class="font-display leading-tight text-balance">
+      <span class="block text-xl tracking-[0.3em] uppercase">{sitio.marca.antetitulo}</span>
+      <span class="mt-2 block text-3xl font-semibold tracking-[0.08em] uppercase">
+        {sitio.marca.titulo}
+      </span>
+    </h1>
+    <p class="mt-4 border-t border-dorado/70 pt-4 text-base">
+      <Tramos tramos={[direccion.calle, barrio, direccion.ciudad]} />
+    </p>
+  </div>
+</section>

@@ -5,16 +5,28 @@
   --color-marron: #3d2b23;
   --color-dorado: #b08d4f;
   --color-bordo: #6b2028;
+  --color-whatsapp: #25d366;
 
-  --font-serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  /* Las familias se cargan desde fontsource en Layout.astro. */
+  --font-display: "Cormorant Garamond Variable", Georgia, "Times New Roman", serif;
+  --font-serif: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
 }
 
 html {
   font-size: 18px;
+  /* Deja lugar a la cabecera fija al saltar a un ancla. */
+  scroll-padding-top: 5rem;
 }
 
 body {
   background-color: var(--color-crema);
   color: var(--color-marron);
   font-family: var(--font-serif);
+  line-height: 1.6;
+}
+
+/* Nombres de días en los listados de horarios. */
+@utility dia {
+  font-weight: 700;
+  color: var(--color-bordo);
 }

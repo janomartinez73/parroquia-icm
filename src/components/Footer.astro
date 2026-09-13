@@ -1,0 +1,14 @@
+---
+import Tramos from './Tramos.astro';
+import { parroquia } from '../lib/parroquia';
+
+const { nombre, barrio, comunidad, direccion, sitio } = parroquia;
+---
+
+<!-- pb extra para que el botón de WhatsApp no tape el texto en mobile. -->
+<footer class="border-t border-dorado/50 px-4 pt-8 pb-24 text-center text-base">
+  <p class="font-display text-xl font-semibold text-balance">{nombre}</p>
+  <p class="mt-2"><Tramos tramos={[direccion.calle, direccion.esquina]} /></p>
+  <p><Tramos tramos={[barrio, `${direccion.ciudad}, ${direccion.provincia}`]} /></p>
+  <p class="mt-4 italic text-balance">{sitio.pie.comunidad} {comunidad}</p>
+</footer>

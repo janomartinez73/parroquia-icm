@@ -1,0 +1,17 @@
+---
+/** Une textos con " · ". Cada tramo no se parte: el salto de línea cae entre tramos. */
+interface Props {
+  tramos: string[];
+}
+
+const { tramos } = Astro.props;
+---
+
+{
+  tramos.map((tramo, i) => (
+    <>
+      {i > 0 && ' · '}
+      <span class="whitespace-nowrap">{tramo}</span>
+    </>
+  ))
+}

@@ -1,0 +1,66 @@
+---
+import { parroquia } from '../lib/parroquia';
+
+const { marca, menu, secciones } = parroquia.sitio;
+---
+
+<header class="sticky top-0 z-40 border-b border-dorado/40 bg-crema/95">
+  <div class="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-3 px-4 py-2">
+    <a href="#" class="font-display leading-tight text-marron no-underline">
+      <span class="block text-sm tracking-[0.25em] text-dorado [font-variant-caps:small-caps]">
+        {marca.antetitulo}
+      </span>
+      <span class="block text-base font-semibold min-[360px]:whitespace-nowrap sm:text-lg">{marca.titulo}</span>
+    </a>
+
+    <nav aria-label={menu.etiqueta}>
+      <ul class="hidden gap-8 md:flex">
+        {
+          secciones.map((seccion) => (
+            <li>
+              <a
+                href={`#${seccion.id}`}
+                class="font-display text-lg tracking-[0.12em] text-marron [font-variant-caps:small-caps] hover:text-bordo"
+              >
+                {seccion.titulo}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <details class="group md:hidden" data-menu>
+        <summary
+          class="flex min-h-12 cursor-pointer list-none items-center gap-1.5 rounded border border-dorado/60 px-2.5 text-marron [&::-webkit-details-marker]:hidden"
+        >
+          <svg class="size-6" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+            <path class="group-open:hidden" d="M4 7h16M4 12h16M4 17h16" />
+            <path class="hidden group-open:block" d="M6 6l12 12M18 6L6 18" />
+          </svg>
+          <span>{menu.boton}</span>
+        </summary>
+        <ul class="absolute inset-x-0 top-full border-b border-dorado/40 bg-crema px-4 py-2">
+          {
+            secciones.map((seccion) => (
+              <li class="border-b border-dorado/20 last:border-b-0">
+                <a
+                  href={`#${seccion.id}`}
+                  class="font-display flex min-h-12 items-center text-xl tracking-[0.12em] text-marron [font-variant-caps:small-caps]"
+                >
+                  {seccion.titulo}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </details>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  // Cierra el menú mobile al elegir una sección.
+  document.querySelectorAll('[data-menu] a').forEach((enlace) => {
+    enlace.addEventListener('click', () => enlace.closest('details').removeAttribute('open'));
+  });
+</script>

@@ -1,12 +1,27 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import Footer from '../components/Footer.astro';
+import BotonWhatsApp from '../components/BotonWhatsApp.astro';
+import { parroquia } from '../lib/parroquia';
+
+const { sitio } = parroquia;
 ---
 
-<Layout title="Parroquia Inmaculado Corazón de María">
-  <main class="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-    <p class="text-dorado text-lg tracking-[0.3em] [font-variant-caps:small-caps]">Parroquia</p>
-    <h1 class="text-bordo mt-3 text-3xl leading-tight tracking-[0.12em] [font-variant-caps:small-caps]">
-      Inmaculado Corazón de María
-    </h1>
+<Layout title={sitio.titulo} description={sitio.descripcion}>
+  <Header />
+  <main>
+    <Hero />
+    {
+      sitio.secciones.map((seccion) => (
+        <section id={seccion.id} aria-labelledby={`${seccion.id}-titulo`} class="mx-auto max-w-3xl px-4 py-12">
+          <TituloSeccion id={`${seccion.id}-titulo`} titulo={seccion.titulo} />
+        </section>
+      ))
+    }
   </main>
+  <Footer />
+  <BotonWhatsApp />
 </Layout>
