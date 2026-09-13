@@ -15,10 +15,20 @@ export interface Direccion {
   esquina: string;
   ciudad: string;
   provincia: string;
+  pais: string;
+}
+
+/** Teléfono fijo en partes, sin espacios ni guiones. */
+export interface Telefono {
+  /** Sin "+", por ejemplo "54". */
+  codigoPais: string;
+  /** Sin el 0 inicial, por ejemplo "341". */
+  codigoArea: string;
+  numero: string;
 }
 
 export interface Contacto {
-  telefono: string;
+  telefono: Telefono;
   /** Número internacional sin "+" ni espacios, listo para wa.me. */
   whatsapp: string;
   emails: string[];
@@ -42,9 +52,27 @@ export interface CharlasPreBautismales {
   nota: string;
 }
 
-export interface Secretaria {
-  martesAViernes: string;
-  sabados: string;
+/** Un grupo de días de atención de secretaría con sus franjas horarias. */
+export interface HorarioSecretaria {
+  dias: string;
+  tramos: string[];
+}
+
+export interface Red {
+  nombre: string;
+  url: string;
+}
+
+/** Foto con su texto alternativo y, opcionalmente, pie de foto. */
+export interface TextosFoto {
+  alt: string;
+  pie?: string;
+}
+
+/** Enlace de WhatsApp con mensaje precargado. */
+export interface TextosWhatsApp {
+  mensaje: string;
+  etiqueta: string;
 }
 
 /** Sección de la página: su id es el ancla de navegación. */
@@ -76,7 +104,34 @@ export interface TextosHorarios {
   dias: Record<DiaSemana, { singular: string; plural: string }>;
 }
 
-/** Textos de interfaz del sitio (head, cabecera, hero, horarios, pie, WhatsApp). */
+export interface TextosUbicacion {
+  comoLlegar: string;
+  /** Atributo title del iframe del mapa. */
+  mapaTitulo: string;
+  foto: TextosFoto;
+}
+
+export interface TextosSacramentos {
+  bautismos: {
+    titulo: string;
+    foto: TextosFoto;
+  };
+  charlas: {
+    titulo: string;
+    whatsapp: TextosWhatsApp;
+  };
+}
+
+export interface TextosContacto {
+  secretaria: string;
+  telefono: string;
+  emails: string;
+  whatsapp: string;
+  redes: string;
+  foto: TextosFoto;
+}
+
+/** Textos de interfaz del sitio (head, cabecera, hero, secciones, pie, WhatsApp). */
 export interface Sitio {
   titulo: string;
   descripcion: string;
@@ -93,14 +148,14 @@ export interface Sitio {
   };
   secciones: Seccion[];
   horarios: TextosHorarios;
+  ubicacion: TextosUbicacion;
+  sacramentos: TextosSacramentos;
+  contacto: TextosContacto;
   pie: {
     /** Se completa con `comunidad`: "Comunidad a cargo de los Misioneros Claretianos". */
     comunidad: string;
   };
-  whatsapp: {
-    mensaje: string;
-    etiqueta: string;
-  };
+  whatsapp: TextosWhatsApp;
 }
 
 export interface Parroquia {
@@ -110,9 +165,11 @@ export interface Parroquia {
   barrio: string;
   direccion: Direccion;
   contacto: Contacto;
+  /** Si está vacío, no se muestra nada de redes. */
+  redes: Red[];
   apertura: Apertura;
   misas: Misas;
   bautismos: Bautismos;
   charlasPreBautismales: CharlasPreBautismales;
-  secretaria: Secretaria;
+  secretaria: HorarioSecretaria[];
 }

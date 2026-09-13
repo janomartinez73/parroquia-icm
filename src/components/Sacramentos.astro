@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import fotoAltar from '../assets/altar-mayor.jpg';
+import IconoWhatsApp from './IconoWhatsApp.astro';
+import Subtitulo from './Subtitulo.astro';
+import { enlaceWhatsApp, parroquia } from '../lib/parroquia';
+
+const { bautismos, charlasPreBautismales: charlas, sitio } = parroquia;
+const textos = sitio.sacramentos;
+
+const claseTurnos = 'border-t border-dorado/30 text-center text-xl tabular-nums';
+const claseTurno = 'border-b border-dorado/30 px-3 py-3';
+---
+
+<div class="mx-auto mt-6 max-w-md">
+  <div>
+    <Subtitulo texto={textos.bautismos.titulo} />
+    <Image
+      src={fotoAltar}
+      alt={textos.bautismos.foto.alt}
+      widths={[360, fotoAltar.width]}
+      sizes="(max-width: 536px) calc(100vw - 32px), 504px"
+      class="mt-4 aspect-[4/3] w-full rounded-sm object-cover"
+    />
+    <p class="dia mt-6 mb-2 text-center text-xl">{bautismos.dia}</p>
+    <ul class={claseTurnos}>
+      {bautismos.turnos.map((turno) => <li class={claseTurno}>{turno}</li>)}
+    </ul>
+    <p class="mt-3 text-center text-base italic text-balance">{bautismos.nota}</p>
+  </div>
+
+  <div class="mt-12 border-t-2 border-dorado/50 pt-10">
+    <Subtitulo texto={textos.charlas.titulo} />
+    <ul class={claseTurnos}>
+      {charlas.turnos.map((turno) => <li class={claseTurno}>{turno}</li>)}
+    </ul>
+    <div class="mt-6 rounded-sm border-2 border-bordo/60 bg-bordo/5 px-4 py-4 text-center">
+      <p class="text-lg font-semibold text-balance text-bordo">{charlas.nota}</p>
+      <a
+        href={enlaceWhatsApp(textos.charlas.whatsapp.mensaje)}
+        target="_blank"
+        rel="noopener"
+        class="mt-2 inline-flex min-h-12 items-center gap-2 text-bordo underline decoration-dorado underline-offset-4"
+      >
+        <IconoWhatsApp class="size-6 shrink-0" />
+        {textos.charlas.whatsapp.etiqueta}
+      </a>
+    </div>
+  </div>
+</div>

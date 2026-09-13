@@ -1,0 +1,16 @@
+---
+/** Banda decorativa con el campanario. Puramente visual: oculta para lectores de pantalla. */
+import { Image } from 'astro:assets';
+import fotoCampanario from '../assets/campanario.jpg';
+---
+
+<!-- El ancho máximo es el de la foto: nunca se muestra más grande que su resolución. -->
+<div class="mx-auto" style={`max-width: ${fotoCampanario.width}px`} aria-hidden="true">
+  <Image
+    src={fotoCampanario}
+    alt=""
+    widths={[360, fotoCampanario.width]}
+    sizes={`(max-width: ${fotoCampanario.width}px) 100vw, ${fotoCampanario.width}px`}
+    class="h-[200px] w-full object-cover object-[center_20%] md:h-[320px]"
+  />
+</div>

@@ -6,6 +6,7 @@
  * fecha (bloque de hoy y próxima misa) lo resuelve el script en el cliente:
  * si el JS falla, los horarios se ven igual.
  */
+import Subtitulo from './Subtitulo.astro';
 import { parroquia } from '../lib/parroquia';
 import { SEMANA } from '../lib/horarios';
 import type { Apertura, DiaSemana, Hora } from '../types/parroquia';
@@ -44,8 +45,6 @@ const textosProxima = {
   dias: Object.fromEntries(SEMANA.map((dia) => [dia, textos.dias[dia].singular])),
 };
 
-const claseSubtitulo =
-  'font-display mb-2 text-center text-2xl font-semibold tracking-[0.15em] text-dorado [font-variant-caps:small-caps]';
 const claseGrupo = 'relative border-b border-dorado/30 px-3 py-3 hoy:bg-dorado/10';
 // Apoyado sobre el separador de arriba, para no quitarle ancho al nombre del grupo.
 const claseIndicador =
@@ -61,7 +60,7 @@ const claseIndicador =
   >
   </p>
 
-  <h3 class={claseSubtitulo}>{textos.misas.titulo}</h3>
+  <Subtitulo texto={textos.misas.titulo} />
   <ul class="border-t border-dorado/30">
     {
       gruposMisas.map((grupo) => (
@@ -87,7 +86,7 @@ const claseIndicador =
     )
   }
 
-  <h3 class:list={[claseSubtitulo, 'mt-10']}>{textos.apertura.titulo}</h3>
+  <Subtitulo class="mt-10" texto={textos.apertura.titulo} />
   <ul class="border-t border-dorado/30">
     {
       gruposApertura.map((grupo) => (

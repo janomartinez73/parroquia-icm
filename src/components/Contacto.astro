@@ -1,0 +1,87 @@
+---
+import { Image } from 'astro:assets';
+import fotoEntrada from '../assets/entrada-secretaria.jpg';
+import Boton from './Boton.astro';
+import IconoWhatsApp from './IconoWhatsApp.astro';
+import Subtitulo from './Subtitulo.astro';
+import { enlaceTelefono, enlaceWhatsApp, parroquia } from '../lib/parroquia';
+
+const { contacto, secretaria, redes, sitio } = parroquia;
+const textos = sitio.contacto;
+
+const claseEnlace = 'text-bordo underline decoration-dorado underline-offset-4';
+---
+
+<div class="mx-auto mt-6 max-w-md">
+  <Subtitulo texto={textos.secretaria} />
+  <ul class="border-t border-dorado/30">
+    {
+      secretaria.map((horario) => (
+        <li class="border-b border-dorado/30 px-3 py-3">
+          <span class="dia">{horario.dias}</span>
+          <ul class="flex flex-wrap gap-x-6 text-xl leading-snug tabular-nums">
+            {horario.tramos.map((tramo) => (
+              <li class="whitespace-nowrap">{tramo}</li>
+            ))}
+          </ul>
+        </li>
+      ))
+    }
+  </ul>
+
+  <Subtitulo class="mt-10" texto={textos.telefono} />
+  <p class="text-center">
+    <a href={enlaceTelefono()} class:list={[claseEnlace, 'inline-block py-1 text-2xl whitespace-nowrap tabular-nums']}>
+      ({contacto.telefono.codigoArea}) {contacto.telefono.numero}
+    </a>
+  </p>
+
+  <Subtitulo class="mt-10" texto={textos.emails} />
+  <ul class="text-center">
+    {
+      contacto.emails.map((email) => (
+        <li>
+          <a href={`mailto:${email}`} class:list={[claseEnlace, 'inline-block py-1.5 [overflow-wrap:anywhere]']}>
+            {email}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="mt-10 text-center">
+    <Boton href={enlaceWhatsApp(sitio.whatsapp.mensaje)} externo class="w-full sm:w-auto">
+      <IconoWhatsApp class="size-7 shrink-0" />
+      {textos.whatsapp}
+    </Boton>
+  </p>
+
+  <figure class="mt-10">
+    <Image
+      src={fotoEntrada}
+      alt={textos.foto.alt}
+      width={1008}
+      widths={[480, 1008]}
+      sizes="(max-width: 536px) calc(100vw - 32px), 504px"
+      class="w-full rounded-sm"
+    />
+    {textos.foto.pie && <figcaption class="mt-2 text-center text-base text-balance italic">{textos.foto.pie}</figcaption>}
+  </figure>
+
+  {
+    redes.length > 0 && (
+      <>
+        <Subtitulo class="mt-10" texto={textos.redes} />
+        <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+          {redes.map((red) => (
+            <li>
+              <a href={red.url} target="_blank" rel="noopener" class:list={[claseEnlace, 'inline-block py-1.5 text-lg']}>
+                {red.nombre}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+</div>

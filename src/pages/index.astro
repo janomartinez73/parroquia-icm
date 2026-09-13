@@ -6,13 +6,27 @@ import TituloSeccion from '../components/TituloSeccion.astro';
 import Footer from '../components/Footer.astro';
 import BotonWhatsApp from '../components/BotonWhatsApp.astro';
 import Horarios from '../components/Horarios.astro';
+import Ubicacion from '../components/Ubicacion.astro';
+import Campanario from '../components/Campanario.astro';
+import Sacramentos from '../components/Sacramentos.astro';
+import Contacto from '../components/Contacto.astro';
 import { parroquia } from '../lib/parroquia';
 
 const { sitio } = parroquia;
 
+type Componente = typeof Horarios;
+
 // Contenido de cada sección, por id. Las que no figuran quedan solo con el título.
-const contenidos: Record<string, typeof Horarios | undefined> = {
+const contenidos: Record<string, Componente | undefined> = {
   horarios: Horarios,
+  ubicacion: Ubicacion,
+  sacramentos: Sacramentos,
+  contacto: Contacto,
+};
+
+// Bandas decorativas que van justo antes de una sección, por id.
+const separadoresAntes: Record<string, Componente | undefined> = {
+  sacramentos: Campanario,
 };
 ---
 
@@ -23,11 +37,15 @@ const contenidos: Record<string, typeof Horarios | undefined> = {
     {
       sitio.secciones.map((seccion) => {
         const Contenido = contenidos[seccion.id];
+        const Separador = separadoresAntes[seccion.id];
         return (
-          <section id={seccion.id} aria-labelledby={`${seccion.id}-titulo`} class="mx-auto max-w-3xl px-4 py-12">
-            <TituloSeccion id={`${seccion.id}-titulo`} titulo={seccion.titulo} />
-            {Contenido && <Contenido />}
-          </section>
+          <>
+            {Separador && <Separador />}
+            <section id={seccion.id} aria-labelledby={`${seccion.id}-titulo`} class="mx-auto max-w-3xl px-4 py-12">
+              <TituloSeccion id={`${seccion.id}-titulo`} titulo={seccion.titulo} />
+              {Contenido && <Contenido />}
+            </section>
+          </>
         );
       })
     }

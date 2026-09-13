@@ -47,6 +47,39 @@
         "sabado": { "singular": "sábado", "plural": "Sábados" }
       }
     },
+    "ubicacion": {
+      "comoLlegar": "Cómo llegar",
+      "mapaTitulo": "Mapa de Google Maps con la ubicación de la parroquia",
+      "foto": {
+        "alt": "Fachada de la parroquia vista desde la vereda: torre de ladrillo con reloj, rosetón y el cartel «Parroquia Inmaculado Corazón de María» sobre la puerta de entrada"
+      }
+    },
+    "sacramentos": {
+      "bautismos": {
+        "titulo": "Bautismos",
+        "foto": {
+          "alt": "Interior del templo: altar mayor con el crucifijo al centro y el retablo blanco detrás, visto desde los bancos"
+        }
+      },
+      "charlas": {
+        "titulo": "Charlas pre-bautismales",
+        "whatsapp": {
+          "mensaje": "Hola, quisiera inscribirme en las charlas pre-bautismales",
+          "etiqueta": "Inscribirse por WhatsApp"
+        }
+      }
+    },
+    "contacto": {
+      "secretaria": "Horarios de secretaría",
+      "telefono": "Teléfono",
+      "emails": "Correo electrónico",
+      "whatsapp": "Enviar WhatsApp",
+      "redes": "Redes sociales",
+      "foto": {
+        "alt": "Entrada a la secretaría: puerta con reja blanca bajo el cartel «Misioneros Claretianos», con el número 1585 y el letrero «parroquia» sobre el pasillo",
+        "pie": "Entrada a secretaría por Viamonte 1585"
+      }
+    },
     "pie": {
       "comunidad": "Comunidad a cargo de los"
     },
@@ -62,16 +95,22 @@
     "calle": "Viamonte 1585",
     "esquina": "Esquina Presidente Roca",
     "ciudad": "Rosario",
-    "provincia": "Santa Fe"
+    "provincia": "Santa Fe",
+    "pais": "Argentina"
   },
   "contacto": {
-    "telefono": "7930527",
+    "telefono": {
+      "codigoPais": "54",
+      "codigoArea": "341",
+      "numero": "7930527"
+    },
     "whatsapp": "5493416539615",
     "emails": [
       "secretariacoraderosario@gmail.com",
       "coraderosario@outlook.com"
     ]
   },
+  "redes": [],
   "apertura": {
     "lunesASabados": ["08:00 a 13:00", "16:30 a 20:30"],
     "domingos": ["09:00 a 12:00", "18:00 a 20:30"]
@@ -94,8 +133,8 @@
     "turnos": ["Primeros sábados: 17:00 hs", "Terceros martes: 18:30 hs"],
     "nota": "Es requisito indispensable la inscripción previa."
   },
-  "secretaria": {
-    "martesAViernes": "16:00 a 19:30",
-    "sabados": "09:00 a 12:00"
-  }
+  "secretaria": [
+    { "dias": "Martes a Viernes", "tramos": ["16:00 a 19:30"] },
+    { "dias": "Sábados", "tramos": ["09:00 a 12:00"] }
+  ]
 }

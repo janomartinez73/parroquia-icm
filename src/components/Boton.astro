@@ -1,0 +1,23 @@
+---
+/** Enlace con aspecto de botón: recuadro dorado con borde. */
+interface Props {
+  href: string;
+  /** Abre en otra pestaña (Google Maps, WhatsApp). */
+  externo?: boolean;
+  class?: string;
+}
+
+const { href, externo = false, class: clase } = Astro.props;
+---
+
+<a
+  href={href}
+  target={externo ? '_blank' : undefined}
+  rel={externo ? 'noopener' : undefined}
+  class:list={[
+    'font-display inline-flex min-h-14 items-center justify-center gap-3 rounded-sm border-2 border-dorado bg-dorado/10 px-6 py-2 text-xl font-semibold tracking-[0.12em] text-marron [font-variant-caps:small-caps] hover:bg-dorado/25',
+    clase,
+  ]}
+>
+  <slot />
+</a>

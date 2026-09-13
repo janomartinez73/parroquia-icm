@@ -1,0 +1,29 @@
+---
+/**
+ * Título de un bloque dentro de una sección (h3), en versalitas doradas.
+ * Cada palabra no se parte, así "pre-bautismales" no corta en el guion.
+ */
+interface Props {
+  texto: string;
+  class?: string;
+}
+
+const { texto, class: clase } = Astro.props;
+const palabras = texto.split(' ');
+---
+
+<h3
+  class:list={[
+    'font-display mb-2 text-center text-2xl font-semibold tracking-[0.15em] text-balance text-dorado [font-variant-caps:small-caps]',
+    clase,
+  ]}
+>
+  {
+    palabras.map((palabra, i) => (
+      <>
+        {i > 0 && ' '}
+        <span class="whitespace-nowrap">{palabra}</span>
+      </>
+    ))
+  }
+</h3>
