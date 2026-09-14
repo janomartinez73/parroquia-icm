@@ -68,13 +68,14 @@ const { sitio, barrio, comunidad, direccion } = parroquia;
         class="animate-giro absolute top-1/2 left-1/2 w-[160%] max-w-none -translate-1/2 text-oro/35 [animation-delay:200ms] [&_circle]:[stroke-width:0.35]"
       />
       <Arco class="animate-arco relative bg-noche p-2 [animation-delay:350ms]">
+        <!-- Proporción propia de la foto (9:16): el arco recorta solo cielo, la torre entra entera. -->
         <Image
           src={fotoFrente}
           alt={sitio.hero.alt}
           widths={[320, 640, 768]}
           sizes="(min-width: 1024px) 368px, (min-width: 768px) 304px, 272px"
           priority
-          class="aspect-[3/4] w-full object-cover object-bottom transition-transform duration-1000 ease-suave group-hover/arco:scale-105"
+          class="aspect-[9/16] w-full object-cover object-top transition-transform duration-1000 ease-suave group-hover/arco:scale-105"
         />
       </Arco>
     </div>

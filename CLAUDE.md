@@ -29,8 +29,6 @@ El 80% entra a ver horarios de misa. Todo lo demás es secundario.
 - NO ejecutar comandos de git ni de gh bajo ninguna circunstancia.
   El control de versiones lo maneja el usuario manualmente.
 
-
-
 ## Fases
 Actual: 7 (automatización y documentación, cierre)
 Siguientes: 1 datos · 2 layout · 3 horarios · 4 ubicación+sacramentos+contacto
