@@ -1,87 +1,100 @@
 ---
+/** Secretaría, teléfono, correos, WhatsApp y redes en un marco; la foto de la entrada al costado. */
 import { Image } from 'astro:assets';
 import fotoEntrada from '../assets/entrada-secretaria.jpg';
+import Arco from './Arco.astro';
 import Boton from './Boton.astro';
 import IconoWhatsApp from './IconoWhatsApp.astro';
+import Marco from './Marco.astro';
 import Subtitulo from './Subtitulo.astro';
 import { enlaceTelefono, enlaceWhatsApp, parroquia } from '../lib/parroquia';
 
 const { contacto, secretaria, redes, sitio } = parroquia;
 const textos = sitio.contacto;
 
-const claseEnlace = 'text-bordo underline decoration-dorado underline-offset-4';
+// El subrayado pasa de dorado a bordó y se engrosa al pasar el mouse.
+const claseEnlace =
+  'text-bordo underline decoration-dorado decoration-1 underline-offset-4 transition-[text-decoration-color,text-decoration-thickness] duration-300 hover:decoration-bordo hover:decoration-2';
 ---
 
-<div class="mx-auto mt-6 max-w-md">
-  <Subtitulo texto={textos.secretaria} />
-  <ul class="border-t border-dorado/30">
-    {
-      secretaria.map((horario) => (
-        <li class="border-b border-dorado/30 px-3 py-3">
-          <span class="dia">{horario.dias}</span>
-          <ul class="flex flex-wrap gap-x-6 text-xl leading-snug tabular-nums">
-            {horario.tramos.map((tramo) => (
-              <li class="whitespace-nowrap">{tramo}</li>
-            ))}
-          </ul>
-        </li>
-      ))
-    }
-  </ul>
+<div class="grid items-center gap-14 lg:grid-cols-2 lg:gap-10">
+  <Marco>
+    <Subtitulo texto={textos.secretaria} />
+    <ul class="mt-4 border-t border-dorado/40">
+      {
+        secretaria.map((horario) => (
+          <li class="border-b border-dorado/40 px-3 py-3">
+            <span class="dia block">{horario.dias}</span>
+            <ul class="flex flex-wrap gap-x-6 text-xl leading-snug tabular-nums">
+              {horario.tramos.map((tramo) => (
+                <li class="whitespace-nowrap">{tramo}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
 
-  <Subtitulo class="mt-10" texto={textos.telefono} />
-  <p class="text-center">
-    <a href={enlaceTelefono()} class:list={[claseEnlace, 'inline-block py-1 text-2xl whitespace-nowrap tabular-nums']}>
-      ({contacto.telefono.codigoArea}) {contacto.telefono.numero}
-    </a>
-  </p>
-
-  <Subtitulo class="mt-10" texto={textos.emails} />
-  <ul class="text-center">
-    {
-      contacto.emails.map((email) => (
-        <li>
-          <a href={`mailto:${email}`} class:list={[claseEnlace, 'inline-block py-2.5 [overflow-wrap:anywhere]']}>
-            {email}
+    <div class="mt-10 grid gap-10 sm:grid-cols-2 sm:gap-6">
+      <div>
+        <Subtitulo texto={textos.telefono} />
+        <p class="text-center">
+          <a href={enlaceTelefono()} class:list={[claseEnlace, 'inline-block py-1 text-2xl whitespace-nowrap tabular-nums']}>
+            ({contacto.telefono.codigoArea}) {contacto.telefono.numero}
           </a>
-        </li>
-      ))
-    }
-  </ul>
+        </p>
+      </div>
 
-  <p class="mt-10 text-center">
-    <Boton href={enlaceWhatsApp(sitio.whatsapp.mensaje)} externo class="w-full sm:w-auto">
-      <IconoWhatsApp class="size-7 shrink-0" />
-      {textos.whatsapp}
-    </Boton>
-  </p>
+      {
+        redes.length > 0 && (
+          <div>
+            <Subtitulo texto={textos.redes} />
+            <ul class="flex flex-wrap justify-center gap-x-6">
+              {redes.map((red) => (
+                <li>
+                  <a href={red.url} target="_blank" rel="noopener" class:list={[claseEnlace, 'inline-block py-1 text-2xl']}>
+                    {red.nombre}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
 
-  <figure class="mt-10">
-    <Image
-      src={fotoEntrada}
-      alt={textos.foto.alt}
-      width={1008}
-      widths={[480, 1008]}
-      sizes="(max-width: 536px) calc(100vw - 32px), 504px"
-      class="w-full rounded-sm"
-    />
-    {textos.foto.pie && <figcaption class="mt-2 text-center text-base text-balance italic">{textos.foto.pie}</figcaption>}
+    <Subtitulo class="mt-10" texto={textos.emails} />
+    <ul class="text-center">
+      {
+        contacto.emails.map((email) => (
+          <li>
+            <a href={`mailto:${email}`} class:list={[claseEnlace, 'inline-block py-2.5 [overflow-wrap:anywhere]']}>
+              {email}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="mt-8 text-center">
+      <Boton href={enlaceWhatsApp(sitio.whatsapp.mensaje)} externo principal class="w-full sm:w-auto">
+        <IconoWhatsApp class="size-7 shrink-0" />
+        {textos.whatsapp}
+      </Boton>
+    </p>
+  </Marco>
+
+  <figure class="revelar">
+    <Arco class="mx-auto max-w-lg p-2">
+      <Image
+        src={fotoEntrada}
+        alt={textos.foto.alt}
+        width={1024}
+        widths={[480, 1024]}
+        sizes="(min-width: 1024px) 496px, (min-width: 560px) 496px, calc(100vw - 52px)"
+        class="aspect-[4/5] w-full object-cover transition-transform duration-1000 ease-suave group-hover/arco:scale-105"
+      />
+    </Arco>
+    {textos.foto.pie && <figcaption class="mt-3 text-center text-base text-balance italic">{textos.foto.pie}</figcaption>}
   </figure>
-
-  {
-    redes.length > 0 && (
-      <>
-        <Subtitulo class="mt-10" texto={textos.redes} />
-        <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2">
-          {redes.map((red) => (
-            <li>
-              <a href={red.url} target="_blank" rel="noopener" class:list={[claseEnlace, 'inline-block py-2 text-lg']}>
-                {red.nombre}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </>
-    )
-  }
 </div>

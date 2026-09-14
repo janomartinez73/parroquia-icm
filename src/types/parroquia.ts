@@ -163,6 +163,8 @@ export interface Sitio {
   };
   hero: {
     alt: string;
+    /** Botón que lleva a la sección de horarios. */
+    verHorarios: string;
   };
   avisos: {
     /** Nombre accesible de la banda de avisos. */

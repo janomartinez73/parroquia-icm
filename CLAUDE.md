@@ -21,7 +21,9 @@ El 80% entra a ver horarios de misa. Todo lo demás es secundario.
 - Todo el contenido sale de src/data/*.json. Nunca hardcodear textos ni
   horarios dentro de componentes
 - Mobile-first. Tamaño de fuente base 18px
-- Sin animaciones, sin carruseles, sin dependencias innecesarias
+- Animaciones sí, pero con CSS (transiciones, keyframes y animaciones ligadas
+  al scroll) y respetando prefers-reduced-motion. Sin carruseles ni
+  dependencias innecesarias
 - Imágenes siempre con el componente <Image> de Astro
 - Español rioplatense en toda la interfaz
 - NO ejecutar comandos de git ni de gh bajo ninguna circunstancia.

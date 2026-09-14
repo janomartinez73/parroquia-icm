@@ -1,0 +1,29 @@
+---
+/**
+ * Recuadro de doble filete dorado con un medallón y una cruz sobre el borde
+ * de arriba, como las tablas de avisos de una iglesia. Aparece con el scroll;
+ * al pasar el mouse, el medallón se llena de dorado.
+ */
+import Cruz from './Cruz.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: clase } = Astro.props;
+---
+
+<div
+  class:list={[
+    'revelar group/marco relative border-4 border-double border-dorado bg-crema px-3 pt-9 pb-6 transition-[border-color] duration-500 hover:border-dorado-oscuro sm:px-8',
+    clase,
+  ]}
+>
+  <span
+    class="absolute -top-5 left-1/2 flex size-10 -translate-x-1/2 items-center justify-center rounded-full border-2 border-dorado bg-crema text-dorado-oscuro transition-colors duration-500 group-hover/marco:border-dorado-oscuro group-hover/marco:bg-dorado-oscuro group-hover/marco:text-crema"
+    aria-hidden="true"
+  >
+    <Cruz class="size-5 transition-transform duration-700 ease-suave group-hover/marco:rotate-[360deg]" />
+  </span>
+  <slot />
+</div>

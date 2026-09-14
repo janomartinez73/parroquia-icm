@@ -1,0 +1,29 @@
+---
+/** Inmaculado Corazón: corazón con llama y cruz, en trazo. Decorativo. */
+interface Props {
+  class?: string;
+}
+
+const { class: clase } = Astro.props;
+---
+
+<svg
+  class={clase}
+  viewBox="0 0 48 60"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linejoin="round"
+  stroke-linecap="round"
+  aria-hidden="true"
+>
+  <!-- Cruz -->
+  <path d="M24 2v11M20 5.5h8" />
+  <!-- Llama: tiembla desde la base, como la de una vela. -->
+  <path
+    class="animate-llama origin-[24px_25px] [transform-box:view-box]"
+    d="M24 16c-3.2 2.6-4.4 5.2-2.6 8.4M24 16c3.2 2.6 4.4 5.2 2.6 8.4M24 19.5c-1.2 1.5-1.2 3 0 4.5 1.2-1.5 1.2-3 0-4.5z"
+  />
+  <!-- Corazón -->
+  <path d="M24 57C11 47.5 5 40 5 32.5 5 27.3 9 23.5 14 23.5c4.3 0 7.8 2.4 10 6 2.2-3.6 5.7-6 10-6 5 0 9 3.8 9 9 0 7.5-6 15-19 24.5z" />
+</svg>

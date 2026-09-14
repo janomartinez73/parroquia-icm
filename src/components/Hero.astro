@@ -1,33 +1,62 @@
 ---
+/**
+ * Portada: nombre, dirección, próxima misa y accesos directos. En pantallas
+ * anchas, la fachada va a la derecha dentro de un arco de medio punto.
+ *
+ * Al cargar, cada parte entra una tras otra: las demoras en ms van en orden.
+ */
 import { Image } from 'astro:assets';
-import fotoHero from '../assets/hero-parroquia.jpg';
+import fotoFrente from '../assets/frente-parroquia.jpg';
+import Arco from './Arco.astro';
+import Boton from './Boton.astro';
+import Emblema from './Emblema.astro';
+import Ornamento from './Ornamento.astro';
+import ProximaMisa from './ProximaMisa.astro';
 import Tramos from './Tramos.astro';
-import { parroquia } from '../lib/parroquia';
+import { enlaceComoLlegar, parroquia } from '../lib/parroquia';
 
-const { sitio, barrio, direccion } = parroquia;
+const { sitio, barrio, comunidad, direccion } = parroquia;
 ---
 
-<!-- El ancho máximo es el de la foto: nunca se muestra más grande que su resolución. -->
-<section class="relative mx-auto overflow-hidden" style={`max-width: ${fotoHero.width}px`}>
-  <Image
-    src={fotoHero}
-    alt={sitio.hero.alt}
-    widths={[480, 800, 1200, fotoHero.width].filter((ancho) => ancho <= fotoHero.width)}
-    sizes={`(max-width: ${fotoHero.width}px) 100vw, ${fotoHero.width}px`}
-    priority
-    class="h-[26rem] max-h-[70vh] w-full object-cover"
-  />
-  <!-- Al 70 %, el texto crema pasa AA (4,9:1) aun sobre la parte más clara de la foto. -->
-  <div class="absolute inset-0 bg-marron/70"></div>
-  <div class="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-crema">
-    <h1 class="font-display leading-tight text-balance">
-      <span class="block text-xl tracking-[0.3em] uppercase">{sitio.marca.antetitulo}</span>
-      <span class="mt-2 block text-3xl font-semibold tracking-[0.08em] uppercase">
-        {sitio.marca.titulo}
-      </span>
-    </h1>
-    <p class="mt-4 border-t border-dorado/70 pt-4 text-base">
-      <Tramos tramos={[direccion.calle, barrio, direccion.ciudad]} />
-    </p>
+<section class="fondo-damasco border-b-4 border-double border-dorado px-4 py-10 md:py-16">
+  <div class="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-[1fr_auto] lg:gap-20">
+    <div class="text-center md:text-left">
+      <Emblema class="animate-emblema mx-auto h-16 text-dorado-oscuro md:mx-0 md:h-20" />
+      <h1 class="font-display mt-4 leading-none text-balance">
+        <span
+          class="animate-aparecer block text-2xl tracking-[0.35em] text-dorado-oscuro [animation-delay:120ms] [font-variant-caps:small-caps] md:text-3xl"
+        >
+          {sitio.marca.antetitulo}
+        </span>
+        <span class="animate-aparecer mt-3 block text-5xl leading-[1.05] font-semibold [animation-delay:240ms] md:text-6xl lg:text-7xl">
+          {sitio.marca.titulo}
+        </span>
+      </h1>
+      <Ornamento alCargar={450} class="mx-auto my-6 max-w-sm md:mx-0" />
+      <p class="animate-aparecer text-lg text-balance [animation-delay:600ms]">
+        <Tramos tramos={[direccion.calle, barrio, direccion.ciudad]} />
+      </p>
+      <p class="animate-aparecer mt-1 text-base italic text-balance [animation-delay:680ms]">{sitio.pie.comunidad} {comunidad}</p>
+
+      <ProximaMisa class="animate-aparecer mx-auto mt-6 max-w-md [animation-delay:760ms] md:mx-0" />
+
+      <div
+        class="animate-aparecer mt-6 flex flex-col gap-3 [animation-delay:860ms] sm:flex-row sm:justify-center md:flex-col md:items-start md:justify-start lg:flex-row"
+      >
+        <Boton href="#horarios" principal>{sitio.hero.verHorarios}</Boton>
+        <Boton href={enlaceComoLlegar} externo>{sitio.ubicacion.comoLlegar}</Boton>
+      </div>
+    </div>
+
+    <Arco class="animate-arco mx-auto w-full max-w-72 p-2 [animation-delay:300ms] md:max-w-80 lg:max-w-96">
+      <Image
+        src={fotoFrente}
+        alt={sitio.hero.alt}
+        widths={[320, 640, 768]}
+        sizes="(min-width: 1024px) 368px, (min-width: 768px) 304px, 272px"
+        priority
+        class="aspect-[3/4] w-full object-cover object-bottom transition-transform duration-1000 ease-suave group-hover/arco:scale-105"
+      />
+    </Arco>
   </div>
 </section>

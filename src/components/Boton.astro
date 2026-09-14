@@ -1,13 +1,14 @@
 ---
-/** Enlace con aspecto de botón: recuadro dorado con borde. */
+/** Enlace con aspecto de botón. "principal" va en bordó; el resto, con borde dorado. */
 interface Props {
   href: string;
   /** Abre en otra pestaña (Google Maps, WhatsApp). */
   externo?: boolean;
+  principal?: boolean;
   class?: string;
 }
 
-const { href, externo = false, class: clase } = Astro.props;
+const { href, externo = false, principal = false, class: clase } = Astro.props;
 ---
 
 <a
@@ -15,7 +16,11 @@ const { href, externo = false, class: clase } = Astro.props;
   target={externo ? '_blank' : undefined}
   rel={externo ? 'noopener' : undefined}
   class:list={[
-    'font-display inline-flex min-h-14 items-center justify-center gap-3 rounded-sm border-2 border-dorado-oscuro bg-dorado/10 px-6 py-2 text-xl font-semibold tracking-[0.12em] text-marron [font-variant-caps:small-caps] hover:bg-dorado/25',
+    // Se eleva al pasar el mouse y se hunde al tocarlo.
+    'font-display inline-flex min-h-14 items-center justify-center gap-3 rounded-sm border-2 px-6 py-2 text-xl font-semibold tracking-[0.12em] transition-[color,background-color,border-color,translate,box-shadow] duration-300 ease-suave [font-variant-caps:small-caps] hover:-translate-y-0.5 hover:shadow-[0_0.6rem_1.2rem_-0.6rem_rgb(61_43_35/0.45)] active:translate-y-0 active:shadow-none',
+    principal
+      ? 'border-bordo bg-bordo text-crema hover:border-marron hover:bg-marron'
+      : 'border-dorado-oscuro bg-crema text-marron hover:bg-dorado/20',
     clase,
   ]}
 >

@@ -1,0 +1,12 @@
+---
+/** Cruz patada, de brazos que se abren hacia los extremos. Decorativa. */
+interface Props {
+  class?: string;
+}
+
+const { class: clase } = Astro.props;
+---
+
+<svg class={clase} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <path d="M9 2h6l-1.8 5.2L19 5.5v6l-5.8-1.7L15 22H9l1.8-12.2L5 11.5v-6l5.8 1.7z"></path>
+</svg>

@@ -10,7 +10,7 @@ import { parroquia, telefonoInternacional } from './parroquia';
 import { DIAS_APERTURA } from './horarios';
 import type { Apertura, DiaSemana } from '../types/parroquia';
 
-const { sitio, nombre, comunidad, barrio, direccion, geo, apertura } = parroquia;
+const { sitio, nombre, comunidad, barrio, direccion, geo, apertura, redes } = parroquia;
 
 /** Mismo valor que --color-crema en global.css: theme-color y fondo de la imagen OG. */
 export const COLOR_CREMA = '#fdfaf4';
@@ -88,7 +88,7 @@ const horariosApertura = (Object.keys(DIAS_APERTURA) as (keyof Apertura)[]).flat
  * Datos estructurados de la parroquia. Es Church (el templo) y Organization
  * (la comunidad): schema.org solo admite parentOrganization en Organization.
  *
- * @param rutaImagen ruta publicada del hero, por ejemplo "/_astro/hero-parroquia.C1qS-67g.jpg".
+ * @param rutaImagen ruta publicada del hero, por ejemplo "/_astro/frente-parroquia.nm02wkbs.jpg".
  */
 export function datosEstructurados(rutaImagen: string) {
   const url = urlAbsoluta('/');
@@ -113,6 +113,8 @@ export function datosEstructurados(rutaImagen: string) {
       geo: { '@type': 'GeoCoordinates', latitude: geo.latitud, longitude: geo.longitud },
     }),
     openingHoursSpecification: horariosApertura,
+    // Perfiles oficiales: Google los usa para vincular la ficha con las redes.
+    ...(redes.length > 0 && { sameAs: redes.map((red) => red.url) }),
     parentOrganization: { '@type': 'Organization', name: comunidad },
   };
 }

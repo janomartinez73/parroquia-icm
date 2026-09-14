@@ -15,7 +15,8 @@
       "etiqueta": "Navegación principal"
     },
     "hero": {
-      "alt": "El templo visto desde la esquina: campanario de ladrillo con reloj y fachada blanca bajo el cielo celeste"
+      "alt": "Fachada de la parroquia vista desde la vereda: torre de ladrillo con reloj, rosetón y el cartel «Parroquia Inmaculado Corazón de María» sobre la puerta de entrada",
+      "verHorarios": "Horarios de misa"
     },
     "avisos": {
       "etiqueta": "Avisos"
@@ -59,7 +60,7 @@
       "comoLlegar": "Cómo llegar",
       "mapaTitulo": "Mapa de Google Maps con la ubicación de la parroquia",
       "foto": {
-        "alt": "Fachada de la parroquia vista desde la vereda: torre de ladrillo con reloj, rosetón y el cartel «Parroquia Inmaculado Corazón de María» sobre la puerta de entrada"
+        "alt": "El templo visto desde la esquina: campanario de ladrillo con reloj y fachada blanca bajo el cielo celeste"
       }
     },
     "sacramentos": {
@@ -124,7 +125,9 @@
       "coraderosario@outlook.com"
     ]
   },
-  "redes": [],
+  "redes": [
+    { "nombre": "Facebook", "url": "https://www.facebook.com/ParroquiaInmaculadoCorazondeMariadeRosario/" }
+  ],
   "apertura": {
     "lunesASabados": ["08:00 a 13:00", "16:30 a 20:30"],
     "domingos": ["09:00 a 12:00", "18:00 a 20:30"]

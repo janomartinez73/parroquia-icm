@@ -121,18 +121,18 @@ Las fechas funcionan igual que en los flyers: aparece y desaparece solo. Puede h
 
 ## 6. Cómo agregar una red social
 
-En `src/data/parroquia.json` está `"redes": []`, vacío. Mientras esté vacío, el sitio no muestra nada de redes. Para agregar, por ejemplo, Facebook e Instagram:
+Las redes están en `"redes"`, dentro de `src/data/parroquia.json`. Hoy está cargado el Facebook. Para sumar, por ejemplo, Instagram, se agrega una línea después de la de Facebook, con una coma entre las dos:
 
 ```json
 "redes": [
-  { "nombre": "Facebook", "url": "https://www.facebook.com/nombre-de-la-pagina" },
+  { "nombre": "Facebook", "url": "https://www.facebook.com/ParroquiaInmaculadoCorazondeMariadeRosario/" },
   { "nombre": "Instagram", "url": "https://www.instagram.com/nombre-de-la-cuenta" }
 ],
 ```
 
 - `nombre` es el texto del enlace que se ve en la página.
-- `url` es la dirección completa, empezando con `https://`. Lo más seguro es copiarla desde el navegador.
-- Aparecen en la sección Contacto, bajo el título "Redes sociales".
+- `url` es la dirección completa, empezando con `https://`. Lo más seguro es copiarla desde el navegador y borrar lo que viene después de un `?` (por ejemplo `?locale=es_LA`), que no hace falta.
+- Aparecen en la sección Contacto y en el pie de la página. Si la lista queda vacía (`"redes": []`), no se muestra nada de redes.
 
 ## 7. Dónde está cada cosa
 
@@ -158,7 +158,7 @@ En `src/data/parroquia.json` está `"redes": []`, vacío. Mientras esté vacío,
 | `avisos` | Mensajes de la franja bordó (sección 5) |
 | `flyers` | Flyers de eventos (sección 4) |
 
-**Fotos:** las fijas están en `src/assets/` (fachada, altar, campanario, entrada de secretaría). Los flyers, en `src/assets/eventos/`. Para cambiar una foto fija, subí la nueva con el mismo nombre de archivo.
+**Fotos:** las fijas están en `src/assets/`: `frente-parroquia.jpg` (la fachada, arriba de todo y en la miniatura al compartir el enlace), `esquina-parroquia.jpg` (Ubicación), `campanario.jpg` (banda bordó), `altar-mayor.jpg` (Bautismos) y `entrada-secretaria.jpg` (Contacto). `padre-claret.jpg` hoy no se usa. Los flyers, en `src/assets/eventos/`. Para cambiar una foto fija, subí la nueva con el mismo nombre de archivo.
 
 El resto de las carpetas (`src/components`, `src/lib`, etc.) es el código que arma la página. Para el uso diario no hace falta tocarlo.
 

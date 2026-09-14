@@ -1,16 +1,33 @@
 ---
-/** Banda decorativa con el campanario. Puramente visual: oculta para lectores de pantalla. */
+/**
+ * Banda bordó con el campanario dentro de un arco, entre filetes y cruces.
+ * Con el scroll, los filetes se dibujan hacia afuera y la foto se desplaza
+ * más lento que la página. Puramente visual: oculta para lectores de pantalla.
+ */
 import { Image } from 'astro:assets';
 import fotoCampanario from '../assets/campanario.jpg';
+import Arco from './Arco.astro';
+import Cruz from './Cruz.astro';
+
+const filete = 'revelar-trazo h-0.5 flex-1 bg-current';
+const cruz = 'revelar-giro hidden shrink-0 sm:block';
 ---
 
-<!-- El ancho máximo es el de la foto: nunca se muestra más grande que su resolución. -->
-<div class="mx-auto" style={`max-width: ${fotoCampanario.width}px`} aria-hidden="true">
-  <Image
-    src={fotoCampanario}
-    alt=""
-    widths={[360, fotoCampanario.width]}
-    sizes={`(max-width: ${fotoCampanario.width}px) 100vw, ${fotoCampanario.width}px`}
-    class="h-[200px] w-full object-cover object-[center_20%] md:h-[320px]"
-  />
+<div class="overflow-hidden bg-bordo px-4 py-10 md:py-14" aria-hidden="true">
+  <div class="mx-auto flex max-w-6xl items-center gap-4 text-dorado md:gap-8">
+    <span class:list={[filete, 'origin-right']}></span>
+    <span class={cruz}><Cruz class="size-6" /></span>
+    <Arco class="revelar shrink-0 p-1.5">
+      <!-- La torre está sobre la derecha de la foto. -->
+      <Image
+        src={fotoCampanario}
+        alt=""
+        widths={[fotoCampanario.width]}
+        sizes="240px"
+        class="revelar-paralaje h-72 w-52 object-cover object-right md:h-80 md:w-60"
+      />
+    </Arco>
+    <span class={cruz}><Cruz class="size-6" /></span>
+    <span class:list={[filete, 'origin-left']}></span>
+  </div>
 </div>

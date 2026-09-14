@@ -1,6 +1,8 @@
 ---
+/** Dirección, botón para llegar y foto de la esquina; en pantallas anchas, el mapa al costado. */
 import { Image } from 'astro:assets';
-import fotoFrente from '../assets/frente-parroquia.jpg';
+import fotoEsquina from '../assets/esquina-parroquia.jpg';
+import Arco from './Arco.astro';
 import Boton from './Boton.astro';
 import { enlaceComoLlegar, enlaceMapaEmbebido, parroquia } from '../lib/parroquia';
 
@@ -8,30 +10,33 @@ const { direccion, barrio, sitio } = parroquia;
 const textos = sitio.ubicacion;
 ---
 
-<div class="mt-6 grid items-center gap-8 md:grid-cols-2">
-  <div class="text-center">
-    <address class="not-italic">
-      <p class="font-display text-4xl leading-tight font-semibold text-balance">{direccion.calle}</p>
-      <p class="mt-1 text-xl text-balance">{direccion.esquina}</p>
-      <p class="mt-3 text-base text-balance">{[barrio, direccion.ciudad, direccion.provincia].join(', ')}</p>
-    </address>
-    <Boton href={enlaceComoLlegar} externo class="mt-6">{textos.comoLlegar}</Boton>
+<div class="grid gap-10 lg:grid-cols-5 lg:items-stretch">
+  <div class="flex flex-col items-center gap-8 text-center lg:col-span-2">
+    <div class="revelar">
+      <address class="not-italic">
+        <p class="font-display text-4xl leading-tight font-semibold text-balance md:text-5xl">{direccion.calle}</p>
+        <p class="mt-1 text-xl text-balance">{direccion.esquina}</p>
+        <p class="mt-3 text-base text-balance">{[barrio, direccion.ciudad, direccion.provincia].join(', ')}</p>
+      </address>
+      <Boton href={enlaceComoLlegar} externo class="mt-6">{textos.comoLlegar}</Boton>
+    </div>
+
+    <Arco class="revelar w-full max-w-72 p-2">
+      <Image
+        src={fotoEsquina}
+        alt={textos.foto.alt}
+        widths={[fotoEsquina.width]}
+        sizes="272px"
+        class="aspect-[3/4] w-full object-cover transition-transform duration-1000 ease-suave group-hover/arco:scale-105"
+      />
+    </Arco>
   </div>
 
-  <!-- Recorte vertical desde abajo: queda a la vista la torre, el rosetón y el cartel sobre la puerta. -->
-  <Image
-    src={fotoFrente}
-    alt={textos.foto.alt}
-    width={720}
-    widths={[360, 720]}
-    sizes="(max-width: 392px) calc(100vw - 32px), 360px"
-    class="mx-auto aspect-[3/4] w-full max-w-xs rounded-sm object-cover object-bottom"
-  />
+  <iframe
+    src={enlaceMapaEmbebido}
+    title={textos.mapaTitulo}
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    class="revelar block h-80 w-full border-4 border-double border-dorado md:h-96 lg:col-span-3 lg:h-full lg:min-h-[32rem]"
+  ></iframe>
 </div>
-
-<iframe
-  src={enlaceMapaEmbebido}
-  title={textos.mapaTitulo}
-  loading="lazy"
-  referrerpolicy="no-referrer-when-downgrade"
-  class="mt-8 block h-64 w-full rounded-sm border border-dorado/40 md:h-96"></iframe>

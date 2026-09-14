@@ -1,17 +1,26 @@
 ---
+import Cruz from './Cruz.astro';
 import { parroquia } from '../lib/parroquia';
 import { seccionesVisibles as secciones } from '../lib/eventos';
 
 const { marca, menu } = parroquia.sitio;
+
+// Las tres rayas del ícono giran sobre su centro para formar la X.
+const raya = 'origin-center transition-[translate,rotate,scale,opacity] duration-300 ease-suave [transform-box:fill-box]';
 ---
 
-<header class="sticky top-0 z-40 border-b border-dorado/40 bg-crema/95">
+<header class="sombra-al-bajar sticky top-0 z-40 border-b-4 border-double border-dorado/70 bg-crema/95">
   <div class="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-3 px-4 py-2">
-    <a href="#" class="font-display flex min-h-12 flex-col justify-center leading-tight text-marron no-underline">
-      <span class="block text-sm tracking-[0.25em] text-dorado-oscuro [font-variant-caps:small-caps]">
-        {marca.antetitulo}
+    <a href="#" class="group/marca font-display flex min-h-12 items-center gap-2.5 leading-tight text-marron no-underline">
+      <Cruz
+        class="hidden size-6 shrink-0 text-dorado-oscuro transition-transform duration-500 ease-suave group-hover/marca:rotate-[360deg] min-[400px]:block"
+      />
+      <span class="flex flex-col">
+        <span class="block text-sm tracking-[0.25em] text-dorado-oscuro [font-variant-caps:small-caps]">
+          {marca.antetitulo}
+        </span>
+        <span class="block text-base font-semibold min-[360px]:whitespace-nowrap sm:text-lg">{marca.titulo}</span>
       </span>
-      <span class="block text-base font-semibold min-[360px]:whitespace-nowrap sm:text-lg">{marca.titulo}</span>
     </a>
 
     <nav aria-label={menu.etiqueta}>
@@ -21,7 +30,7 @@ const { marca, menu } = parroquia.sitio;
             <li>
               <a
                 href={`#${seccion.id}`}
-                class="font-display flex min-h-12 items-center text-lg tracking-[0.12em] text-marron [font-variant-caps:small-caps] hover:text-bordo"
+                class="font-display relative flex min-h-12 items-center text-lg tracking-[0.12em] text-marron transition-colors duration-300 [font-variant-caps:small-caps] after:absolute after:inset-x-0 after:bottom-2 after:h-px after:origin-center after:scale-x-0 after:bg-bordo after:transition-transform after:duration-300 after:ease-suave hover:text-bordo hover:after:scale-x-100"
               >
                 {seccion.titulo}
               </a>
@@ -32,21 +41,28 @@ const { marca, menu } = parroquia.sitio;
 
       <details class="group lg:hidden" data-menu>
         <summary
-          class="flex min-h-12 cursor-pointer list-none items-center gap-1.5 rounded border border-dorado/60 px-2.5 text-marron [&::-webkit-details-marker]:hidden"
+          class="flex min-h-12 cursor-pointer list-none items-center gap-1.5 rounded border border-dorado/60 px-2.5 text-marron transition-colors duration-300 group-open:bg-dorado/15 hover:bg-dorado/10 [&::-webkit-details-marker]:hidden"
         >
           <svg class="size-6" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
-            <path class="group-open:hidden" d="M4 7h16M4 12h16M4 17h16" />
-            <path class="hidden group-open:block" d="M6 6l12 12M18 6L6 18" />
+            <path class:list={[raya, 'group-open:translate-y-[5px] group-open:rotate-45']} d="M4 7h16" />
+            <path class:list={[raya, 'group-open:scale-x-0 group-open:opacity-0']} d="M4 12h16" />
+            <path class:list={[raya, 'group-open:-translate-y-[5px] group-open:-rotate-45']} d="M4 17h16" />
           </svg>
           <span>{menu.boton}</span>
         </summary>
-        <ul class="absolute inset-x-0 top-full border-b border-dorado/40 bg-crema px-4 py-2">
+        <!-- Aparece con fundido al abrir (starting:) y se desvanece al cerrar. -->
+        <ul
+          class="absolute inset-x-0 top-full -translate-y-3 border-b border-dorado/40 bg-crema px-4 py-2 opacity-0 shadow-[0_1rem_1.5rem_-1rem_rgb(61_43_35/0.35)] transition-[opacity,translate] duration-300 ease-suave group-open:translate-y-0 group-open:opacity-100 starting:group-open:-translate-y-3 starting:group-open:opacity-0"
+        >
           {
-            secciones.map((seccion) => (
-              <li class="border-b border-dorado/20 last:border-b-0">
+            secciones.map((seccion, i) => (
+              <li
+                style={`--i: ${i}`}
+                class="border-b border-dorado/20 transition-[opacity,translate] delay-[calc(var(--i)*50ms_+_80ms)] duration-400 ease-suave last:border-b-0 starting:-translate-x-4 starting:opacity-0"
+              >
                 <a
                   href={`#${seccion.id}`}
-                  class="font-display flex min-h-12 items-center text-xl tracking-[0.12em] text-marron [font-variant-caps:small-caps]"
+                  class="font-display flex min-h-12 items-center gap-3 text-xl tracking-[0.12em] text-marron transition-[color,padding] duration-300 [font-variant-caps:small-caps] hover:pl-2 hover:text-bordo"
                 >
                   {seccion.titulo}
                 </a>

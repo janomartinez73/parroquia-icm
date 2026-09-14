@@ -1,0 +1,78 @@
+---
+/**
+ * Línea con las misas de hoy y la próxima, arriba de todo en el hero.
+ *
+ * Depende de la fecha, así que se arma en el cliente. Sale oculta del build:
+ * si el JS falla, no se ve nada y los horarios completos siguen abajo.
+ */
+import { parroquia } from '../lib/parroquia';
+import { SEMANA } from '../lib/horarios';
+
+interface Props {
+  class?: string;
+}
+
+const { class: clase } = Astro.props;
+const textos = parroquia.sitio.horarios;
+
+const textosProxima = {
+  ...textos.proxima,
+  dias: Object.fromEntries(SEMANA.map((dia) => [dia, textos.dias[dia].singular])),
+};
+---
+
+<p
+  data-proxima
+  data-textos={JSON.stringify(textosProxima)}
+  hidden
+  class:list={[
+    // La hora destacada late tres veces, para llamar la atención sin molestar.
+    'border-y border-dorado/60 py-3 text-xl tabular-nums [&_strong]:inline-block [&_strong]:animate-latido [&_strong]:font-bold [&_strong]:text-bordo [&>span]:whitespace-nowrap',
+    clase,
+  ]}
+>
+</p>
+
+<script>
+  import { misasDeHoy, siguienteMisa } from '../lib/horarios';
+  import type { DiaSemana, TextosHorarios } from '../types/parroquia';
+
+  type TextosProxima = TextosHorarios['proxima'] & { dias: Record<DiaSemana, string> };
+
+  const ahora = new Date();
+  const linea = document.querySelector<HTMLElement>('[data-proxima]');
+  const siguiente = siguienteMisa(ahora);
+
+  if (linea?.dataset.textos && siguiente) {
+    const textos = JSON.parse(linea.dataset.textos) as TextosProxima;
+    const tramo = (...contenido: (string | Node)[]) => {
+      const span = document.createElement('span');
+      span.append(...contenido);
+      return span;
+    };
+    const destacada = (hora: string) => {
+      const strong = document.createElement('strong');
+      strong.textContent = hora;
+      return strong;
+    };
+    const deHoy = misasDeHoy(ahora);
+
+    if (siguiente.enDias === 0) {
+      linea.append(textos.hoy, ' ');
+      deHoy.forEach((hora, i) => {
+        if (i > 0) linea.append(' · ');
+        linea.append(tramo(hora === siguiente.hora ? destacada(hora) : hora));
+      });
+    } else {
+      // "mañana" solo si hoy hubo misas; un día sin misa nombra el día siguiente.
+      const huboHoy = deHoy.length > 0;
+      const cuando = huboHoy && siguiente.enDias === 1 ? textos.manana : textos.dias[siguiente.dia];
+      linea.append(
+        tramo(huboHoy ? textos.noQuedan : textos.noHay),
+        ' · ',
+        tramo(`${textos.siguiente} ${cuando} `, destacada(siguiente.hora)),
+      );
+    }
+    linea.hidden = false;
+  }
+</script>

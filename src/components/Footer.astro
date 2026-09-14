@@ -1,14 +1,31 @@
 ---
+import Emblema from './Emblema.astro';
+import Ornamento from './Ornamento.astro';
 import Tramos from './Tramos.astro';
 import { parroquia } from '../lib/parroquia';
 
-const { nombre, barrio, comunidad, direccion, sitio } = parroquia;
+const { nombre, barrio, comunidad, direccion, redes, sitio } = parroquia;
 ---
 
 <!-- pb extra para que el botón de WhatsApp no tape el texto en mobile. -->
-<footer class="border-t border-dorado/50 px-4 pt-8 pb-24 text-center text-base">
-  <p class="font-display text-xl font-semibold text-balance">{nombre}</p>
-  <p class="mt-2"><Tramos tramos={[direccion.calle, direccion.esquina]} /></p>
+<footer class="border-t-4 border-double border-dorado bg-marron px-4 pt-12 pb-24 text-center text-base text-crema">
+  <Emblema class="revelar mx-auto h-14 text-dorado" />
+  <p class="font-display mt-4 text-2xl font-semibold text-balance">{nombre}</p>
+  <Ornamento class="mx-auto my-4 max-w-56" />
+  <p><Tramos tramos={[direccion.calle, direccion.esquina]} /></p>
   <p><Tramos tramos={[barrio, `${direccion.ciudad}, ${direccion.provincia}`]} /></p>
   <p class="mt-4 italic text-balance">{sitio.pie.comunidad} {comunidad}</p>
+  {
+    redes.length > 0 && (
+      <ul class="mt-4 flex flex-wrap justify-center gap-x-6">
+        {redes.map((red) => (
+          <li>
+            <a href={red.url} target="_blank" rel="noopener" class="inline-block py-2 text-crema underline decoration-dorado underline-offset-4 transition-colors duration-300 hover:text-dorado">
+              {red.nombre}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
 </footer>
