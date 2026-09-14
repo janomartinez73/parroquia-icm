@@ -14,8 +14,8 @@ const textos = sitio.ubicacion;
   <div class="flex flex-col items-center gap-8 text-center lg:col-span-2">
     <div class="revelar">
       <address class="not-italic">
-        <p class="font-display text-4xl leading-tight font-semibold text-balance md:text-5xl">{direccion.calle}</p>
-        <p class="mt-1 text-xl text-balance">{direccion.esquina}</p>
+        <p class="font-display text-4xl leading-tight font-semibold text-balance text-azul md:text-5xl">{direccion.calle}</p>
+        <p class="font-capitales mt-2 text-sm font-semibold tracking-[0.14em] text-oro-oscuro uppercase text-balance">{direccion.esquina}</p>
         <p class="mt-3 text-base text-balance">{[barrio, direccion.ciudad, direccion.provincia].join(', ')}</p>
       </address>
       <Boton href={enlaceComoLlegar} externo class="mt-6">{textos.comoLlegar}</Boton>
@@ -37,6 +37,6 @@ const textos = sitio.ubicacion;
     title={textos.mapaTitulo}
     loading="lazy"
     referrerpolicy="no-referrer-when-downgrade"
-    class="revelar block h-80 w-full border-4 border-double border-dorado md:h-96 lg:col-span-3 lg:h-full lg:min-h-[32rem]"
+    class="revelar hornacina block h-80 w-full border-2 border-oro bg-celeste md:h-96 lg:col-span-3 lg:h-full lg:min-h-[32rem]"
   ></iframe>
 </div>

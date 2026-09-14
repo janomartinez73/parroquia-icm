@@ -1,29 +1,65 @@
 ---
-/** Inmaculado Corazón: corazón con llama y cruz, en trazo. Decorativo. */
+/**
+ * Inmaculado Corazón de María: corazón rojo rodeado de rosas, con la llama y
+ * la cruz arriba. El trazo toma el color del texto. Decorativo.
+ */
 interface Props {
   class?: string;
 }
 
 const { class: clase } = Astro.props;
+
+const redondear = (n: number) => +n.toFixed(2);
+
+// Curva paramétrica del corazón, centrada en (32, 44).
+const puntos: [number, number][] = Array.from({ length: 241 }, (_, i) => {
+  const t = (i / 240) * Math.PI * 2;
+  const x = 16 * Math.sin(t) ** 3;
+  const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+  return [redondear(32 + x * 1.25), redondear(44 - y * 1.25)];
+});
+const corazon = `M${puntos.map((p) => p.join(' ')).join('L')}Z`;
+
+// Once rosas repartidas en partes iguales del contorno, sin tocar la muesca de arriba.
+const recorrido = [0];
+for (let i = 1; i < puntos.length; i++) {
+  const [x0, y0] = puntos[i - 1]!;
+  const [x1, y1] = puntos[i]!;
+  recorrido.push(recorrido[i - 1]! + Math.hypot(x1 - x0, y1 - y0));
+}
+const largo = recorrido.at(-1)!;
+const ROSAS = 11;
+const rosas = Array.from({ length: ROSAS }, (_, k) => {
+  const i = recorrido.findIndex((d) => d >= ((k + 0.5) / ROSAS) * largo);
+  const [x, y] = puntos[i]!;
+  const distancia = Math.hypot(x - 32, y - 40) || 1;
+  return { x: redondear(x + ((x - 32) / distancia) * 3.4), y: redondear(y + ((y - 40) / distancia) * 3.4) };
+});
 ---
 
 <svg
   class={clase}
-  viewBox="0 0 48 60"
+  viewBox="0 0 64 72"
   fill="none"
   stroke="currentColor"
-  stroke-width="1.6"
-  stroke-linejoin="round"
+  stroke-width="1.5"
   stroke-linecap="round"
+  stroke-linejoin="round"
   aria-hidden="true"
 >
-  <!-- Cruz -->
-  <path d="M24 2v11M20 5.5h8" />
+  <path d="M32 2v9M28.5 5h7"></path>
   <!-- Llama: tiembla desde la base, como la de una vela. -->
-  <path
-    class="animate-llama origin-[24px_25px] [transform-box:view-box]"
-    d="M24 16c-3.2 2.6-4.4 5.2-2.6 8.4M24 16c3.2 2.6 4.4 5.2 2.6 8.4M24 19.5c-1.2 1.5-1.2 3 0 4.5 1.2-1.5 1.2-3 0-4.5z"
-  />
-  <!-- Corazón -->
-  <path d="M24 57C11 47.5 5 40 5 32.5 5 27.3 9 23.5 14 23.5c4.3 0 7.8 2.4 10 6 2.2-3.6 5.7-6 10-6 5 0 9 3.8 9 9 0 7.5-6 15-19 24.5z" />
+  <g class="animate-llama origin-[32px_27px] [transform-box:view-box]">
+    <path d="M32 13c-4 3.5-5.6 7-3.4 11.2 1 1.9 2.4 2.8 3.4 2.8s2.4-.9 3.4-2.8C37.6 20 36 16.5 32 13z"></path>
+    <path d="M32 18.5c-1.6 2-1.9 4 0 6.3 1.9-2.3 1.6-4.3 0-6.3z"></path>
+  </g>
+  <path d={corazon} class="fill-rosa"></path>
+  {
+    rosas.map(({ x, y }) => (
+      <>
+        <circle cx={x} cy={y} r="2.2" class="fill-rosa" />
+        <circle cx={x} cy={y} r=".8" fill="currentColor" stroke="none" />
+      </>
+    ))
+  }
 </svg>

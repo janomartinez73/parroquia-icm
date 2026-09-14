@@ -12,18 +12,18 @@ import { enlaceTelefono, enlaceWhatsApp, parroquia } from '../lib/parroquia';
 const { contacto, secretaria, redes, sitio } = parroquia;
 const textos = sitio.contacto;
 
-// El subrayado pasa de dorado a bordó y se engrosa al pasar el mouse.
+// El subrayado pasa de dorado a azul y se engrosa al pasar el mouse.
 const claseEnlace =
-  'text-bordo underline decoration-dorado decoration-1 underline-offset-4 transition-[text-decoration-color,text-decoration-thickness] duration-300 hover:decoration-bordo hover:decoration-2';
+  'text-azul underline decoration-oro decoration-1 underline-offset-4 transition-[text-decoration-color,text-decoration-thickness] duration-300 hover:decoration-azul hover:decoration-2';
 ---
 
 <div class="grid items-center gap-14 lg:grid-cols-2 lg:gap-10">
   <Marco>
     <Subtitulo texto={textos.secretaria} />
-    <ul class="mt-4 border-t border-dorado/40">
+    <ul class="mt-4 border-t border-celeste">
       {
         secretaria.map((horario) => (
-          <li class="border-b border-dorado/40 px-3 py-3">
+          <li class="border-b border-celeste px-3 py-3">
             <span class="dia block">{horario.dias}</span>
             <ul class="flex flex-wrap gap-x-6 text-xl leading-snug tabular-nums">
               {horario.tramos.map((tramo) => (
@@ -77,7 +77,7 @@ const claseEnlace =
     </ul>
 
     <p class="mt-8 text-center">
-      <Boton href={enlaceWhatsApp(sitio.whatsapp.mensaje)} externo principal class="w-full sm:w-auto">
+      <Boton href={enlaceWhatsApp(sitio.whatsapp.mensaje)} externo variante="principal" class="w-full sm:w-auto">
         <IconoWhatsApp class="size-7 shrink-0" />
         {textos.whatsapp}
       </Boton>

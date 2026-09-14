@@ -1,0 +1,20 @@
+---
+/** Rosetón de ocho lóbulos, como el de la fachada del templo. Decorativo. */
+interface Props {
+  class?: string;
+}
+
+const { class: clase } = Astro.props;
+
+const lobulos = Array.from({ length: 8 }, (_, i) => {
+  const angulo = (i / 8) * Math.PI * 2;
+  return { x: +(24 + Math.cos(angulo) * 10.5).toFixed(2), y: +(24 + Math.sin(angulo) * 10.5).toFixed(2) };
+});
+---
+
+<svg class={clase} viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+  <circle cx="24" cy="24" r="22"></circle>
+  <circle cx="24" cy="24" r="18.5"></circle>
+  {lobulos.map(({ x, y }) => <circle cx={x} cy={y} r="6.5" />)}
+  <circle cx="24" cy="24" r="4" fill="currentColor"></circle>
+</svg>

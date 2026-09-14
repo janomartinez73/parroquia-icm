@@ -12,8 +12,11 @@ import type { Apertura, DiaSemana } from '../types/parroquia';
 
 const { sitio, nombre, comunidad, barrio, direccion, geo, apertura, redes } = parroquia;
 
-/** Mismo valor que --color-crema en global.css: theme-color y fondo de la imagen OG. */
-export const COLOR_CREMA = '#fdfaf4';
+/** theme-color: el marfil de la cabecera. Mismo valor que --color-marfil en global.css. */
+export const COLOR_MARFIL = '#fbf8f1';
+
+/** Fondo de la imagen para compartir: el azul noche del hero. Mismo valor que --color-noche. */
+export const COLOR_NOCHE = '#13213f';
 
 /** Imagen para compartir el enlace, generada en el build por src/pages/og.jpg.ts. */
 export const IMAGEN_OG = { ruta: '/og.jpg', ancho: 1200, alto: 630 };

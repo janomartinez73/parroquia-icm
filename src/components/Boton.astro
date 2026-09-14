@@ -1,14 +1,27 @@
 ---
-/** Enlace con aspecto de botón. "principal" va en bordó; el resto, con borde dorado. */
+/**
+ * Enlace con aspecto de botón, en capitales romanas.
+ * - principal: azul mariano, para la acción más importante sobre fondo claro.
+ * - dorado: la acción principal sobre el cielo azul noche.
+ * - contorno: secundario sobre fondo claro.
+ * - claro: secundario sobre el cielo azul noche.
+ */
 interface Props {
   href: string;
   /** Abre en otra pestaña (Google Maps, WhatsApp). */
   externo?: boolean;
-  principal?: boolean;
+  variante?: 'principal' | 'dorado' | 'contorno' | 'claro';
   class?: string;
 }
 
-const { href, externo = false, principal = false, class: clase } = Astro.props;
+const { href, externo = false, variante = 'contorno', class: clase } = Astro.props;
+
+const variantes = {
+  principal: 'border-azul bg-azul text-marfil hover:border-noche hover:bg-noche',
+  dorado: 'border-oro bg-oro text-noche hover:border-marfil hover:bg-marfil',
+  contorno: 'border-azul bg-transparent text-azul hover:bg-azul hover:text-marfil',
+  claro: 'border-marfil/70 bg-transparent text-marfil hover:border-oro hover:text-oro',
+};
 ---
 
 <a
@@ -17,10 +30,8 @@ const { href, externo = false, principal = false, class: clase } = Astro.props;
   rel={externo ? 'noopener' : undefined}
   class:list={[
     // Se eleva al pasar el mouse y se hunde al tocarlo.
-    'font-display inline-flex min-h-14 items-center justify-center gap-3 rounded-sm border-2 px-6 py-2 text-xl font-semibold tracking-[0.12em] transition-[color,background-color,border-color,translate,box-shadow] duration-300 ease-suave [font-variant-caps:small-caps] hover:-translate-y-0.5 hover:shadow-[0_0.6rem_1.2rem_-0.6rem_rgb(61_43_35/0.45)] active:translate-y-0 active:shadow-none',
-    principal
-      ? 'border-bordo bg-bordo text-crema hover:border-marron hover:bg-marron'
-      : 'border-dorado-oscuro bg-crema text-marron hover:bg-dorado/20',
+    'font-capitales inline-flex min-h-14 items-center justify-center gap-3 rounded-sm border-2 px-6 py-2 text-base font-semibold tracking-[0.12em] transition-[color,background-color,border-color,translate,box-shadow] duration-300 ease-suave hover:-translate-y-0.5 hover:shadow-[0_0.6rem_1.2rem_-0.6rem_rgb(19_33_63/0.5)] active:translate-y-0 active:shadow-none',
+    variantes[variante],
     clase,
   ]}
 >

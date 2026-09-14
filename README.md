@@ -102,7 +102,7 @@ De vez en cuando conviene borrar las entradas vencidas del JSON y sus imágenes,
 
 ## 5. Cómo agregar un aviso en el banner
 
-El banner es la franja bordó arriba de todo. Sirve para algo corto y urgente: "El sábado 14 no hay misa de 19:30". Va en `"avisos"` de `src/data/eventos.json`:
+El banner es la franja roja arriba de todo. Sirve para algo corto y urgente: "El sábado 14 no hay misa de 19:30". Va en `"avisos"` de `src/data/eventos.json`:
 
 ```json
 {
@@ -155,10 +155,10 @@ Las redes están en `"redes"`, dentro de `src/data/parroquia.json`. Hoy está ca
 
 | Bloque | Qué tiene |
 |---|---|
-| `avisos` | Mensajes de la franja bordó (sección 5) |
+| `avisos` | Mensajes de la franja roja (sección 5) |
 | `flyers` | Flyers de eventos (sección 4) |
 
-**Fotos:** las fijas están en `src/assets/`: `frente-parroquia.jpg` (la fachada, arriba de todo y en la miniatura al compartir el enlace), `esquina-parroquia.jpg` (Ubicación), `campanario.jpg` (banda bordó), `altar-mayor.jpg` (Bautismos) y `entrada-secretaria.jpg` (Contacto). `padre-claret.jpg` hoy no se usa. Los flyers, en `src/assets/eventos/`. Para cambiar una foto fija, subí la nueva con el mismo nombre de archivo.
+**Fotos:** las fijas están en `src/assets/`: `frente-parroquia.jpg` (la fachada, arriba de todo y en la miniatura al compartir el enlace), `esquina-parroquia.jpg` (Ubicación), `campanario.jpg` (banda de cielo estrellado), `altar-mayor.jpg` (Bautismos) y `entrada-secretaria.jpg` (Contacto). `padre-claret.jpg` hoy no se usa. Los flyers, en `src/assets/eventos/`. Para cambiar una foto fija, subí la nueva con el mismo nombre de archivo.
 
 El resto de las carpetas (`src/components`, `src/lib`, etc.) es el código que arma la página. Para el uso diario no hace falta tocarlo.
 

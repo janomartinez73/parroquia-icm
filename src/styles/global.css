@@ -1,17 +1,32 @@
 @import "tailwindcss";
 
+/*
+ * Estilo mariano: el azul y el celeste de la Virgen, el marfil de la piedra
+ * del templo, el oro de los retablos y el rojo del Inmaculado Corazón.
+ * Contrastes medidos sobre marfil salvo que se indique otra cosa.
+ */
 @theme {
-  --color-crema: #fdfaf4;
-  --color-marron: #3d2b23;
-  /* Solo para líneas y fondos: sobre crema da 2,98:1 y no alcanza AA ni en texto grande. */
-  --color-dorado: #b08d4f;
-  /* Mismo tono, más oscuro, para texto y bordes de botones: 4,64:1 sobre crema (AA). */
-  --color-dorado-oscuro: #8b6d39;
-  --color-bordo: #6b2028;
+  --color-marfil: #fbf8f1;
+  /* Texto de cuerpo: 13,7:1. */
+  --color-tinta: #1c2940;
+  /* Azul mariano, para títulos y botones: 9,7:1. */
+  --color-azul: #1f3f77;
+  /* Azul noche de los fondos estrellados. Marfil encima: 15:1; oro: 6,8:1. */
+  --color-noche: #13213f;
+  --color-celeste: #dbe7f4;
+  --color-celeste-claro: #eef4fa;
+  /* Oro de adorno: sobre marfil da 2,2:1, así que solo para líneas y ornamentos. */
+  --color-oro: #c9a54a;
+  /* Oro para texto sobre fondos claros: 5,4:1. */
+  --color-oro-oscuro: #7d6320;
+  /* Rojo del Corazón, para lo que requiere atención: 7,4:1. */
+  --color-rosa: #9b2335;
   /* El verde de marca #25d366 da 1,98:1 con el ícono blanco; este da 3,9:1 (AA para gráficos). */
   --color-whatsapp: #199447;
 
   /* Las familias se cargan desde fontsource en Layout.astro. */
+  /* Capitales romanas, como las letras talladas del cartel de la fachada. */
+  --font-capitales: "Cinzel Variable", "Trajan Pro", Georgia, serif;
   --font-display: "Cormorant Garamond Variable", Georgia, "Times New Roman", serif;
   --font-serif: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
 
@@ -23,6 +38,7 @@
   --animate-trazo: trazo 0.9s var(--ease-suave) both;
   --animate-giro: giro 0.8s var(--ease-suave) both;
   --animate-emblema: emblema 1s var(--ease-suave) both;
+  --animate-estrella: estrella 0.6s var(--ease-suave) both;
   --animate-arco: arco 1.1s var(--ease-suave) both;
   --animate-bajar: bajar 0.6s var(--ease-suave) both;
   --animate-sello: sello 0.5s var(--ease-suave) 0.3s both;
@@ -39,7 +55,7 @@
   }
 }
 
-/* Filetes que se dibujan desde la cruz hacia afuera. */
+/* Filetes que se dibujan desde el centro hacia afuera. */
 @keyframes trazo {
   from {
     transform: scaleX(0);
@@ -57,6 +73,18 @@
   from {
     opacity: 0;
     transform: translateY(-0.75rem) scale(0.85);
+  }
+}
+
+/* Cada estrella de la corona se enciende con un destello. */
+@keyframes estrella {
+  from {
+    opacity: 0;
+    transform: scale(0.2) rotate(-72deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.35) rotate(0deg);
   }
 }
 
@@ -88,7 +116,7 @@
   }
 }
 
-/* Llama del emblema, como la de una vela. */
+/* Llama del Corazón, como la de una vela. */
 @keyframes llama {
   0%,
   100% {
@@ -131,7 +159,7 @@
 
 @keyframes sombra {
   to {
-    box-shadow: 0 0.5rem 1.25rem -0.75rem rgb(61 43 35 / 0.35);
+    box-shadow: 0 0.5rem 1.25rem -0.75rem rgb(19 33 63 / 0.35);
   }
 }
 
@@ -142,15 +170,15 @@ html {
 }
 
 body {
-  background-color: var(--color-crema);
-  color: var(--color-marron);
+  background-color: var(--color-marfil);
+  color: var(--color-tinta);
   font-family: var(--font-serif);
   line-height: 1.6;
 }
 
 /* Foco bien visible para quien navega con teclado, en todo lo interactivo. */
 :focus-visible {
-  outline: 3px solid var(--color-bordo);
+  outline: 3px solid var(--color-rosa);
   outline-offset: 3px;
 }
 
@@ -181,27 +209,38 @@ body {
    `hoy:` aplica al bloque y a todo lo que tiene adentro. */
 @custom-variant hoy (&:is(.hoy, .hoy *));
 
-/* Nombres de días en los listados de horarios: en bordó, como las rúbricas de un misal. */
+/* Nombres de días en los listados de horarios. */
 @utility dia {
   font-weight: 700;
-  color: var(--color-bordo);
+  color: var(--color-azul);
 }
 
-/* Fondo de pergamino con cruces patadas tenues, como un damasco litúrgico. */
-@utility fondo-damasco {
-  background-color: color-mix(in oklab, var(--color-dorado) 10%, var(--color-crema));
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='%23b08d4f' fill-opacity='.13'%3E%3Cpath transform='translate(10 10) scale(.5)' d='M9 2h6l-1.8 5.2L19 5.5v6l-5.8-1.7L15 22H9l1.8-12.2L5 11.5v-6l5.8 1.7z'/%3E%3Cpath transform='translate(42 42) scale(.5)' d='M9 2h6l-1.8 5.2L19 5.5v6l-5.8-1.7L15 22H9l1.8-12.2L5 11.5v-6l5.8 1.7z'/%3E%3C/g%3E%3C/svg%3E");
+/*
+ * Cielo de noche con estrellas doradas y un resplandor, como la bóveda
+ * pintada de un templo. Fondo del hero, la banda del campanario y el pie.
+ */
+@utility fondo-cielo {
+  background-color: var(--color-noche);
+  background-image:
+    radial-gradient(ellipse 70% 60% at 25% 15%, rgb(31 63 119 / 0.85), transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cg fill='%23c9a54a'%3E%3Cpath fill-opacity='.5' transform='translate(20 24) scale(.3)' d='M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z'/%3E%3Cpath fill-opacity='.3' transform='translate(118 58) scale(.22)' d='M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z'/%3E%3Cpath fill-opacity='.4' transform='translate(64 122) scale(.26)' d='M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z'/%3E%3Cpath fill-opacity='.25' transform='translate(150 150) scale(.2)' d='M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z'/%3E%3Ccircle cx='92' cy='18' r='1' fill-opacity='.45'/%3E%3Ccircle cx='38' cy='84' r='.8' fill-opacity='.35'/%3E%3Ccircle cx='160' cy='104' r='1' fill-opacity='.4'/%3E%3Ccircle cx='12' cy='160' r='.8' fill-opacity='.3'/%3E%3Ccircle cx='128' cy='12' r='.7' fill-opacity='.3'/%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* Pergamino liso para alternar bandas. */
-@utility fondo-pergamino {
-  background-color: color-mix(in oklab, var(--color-dorado) 8%, var(--color-crema));
+/* Celeste muy claro para alternar bandas. */
+@utility fondo-celeste {
+  background-color: var(--color-celeste-claro);
 }
 
 /* Arco de medio punto, como las ventanas y puertas del templo. */
 @utility arco {
   border-top-left-radius: 9999px 9999px;
   border-top-right-radius: 9999px 9999px;
+}
+
+/* Hornacina: arco rebajado, como los nichos de los santos en el templo. */
+@utility hornacina {
+  border-top-left-radius: 2.5rem;
+  border-top-right-radius: 2.5rem;
 }
 
 /*

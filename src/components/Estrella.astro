@@ -1,0 +1,12 @@
+---
+/** Estrella de cinco puntas, como las de la corona de la Virgen. Decorativa. */
+interface Props {
+  class?: string;
+}
+
+const { class: clase } = Astro.props;
+---
+
+<svg class={clase} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z"></path>
+</svg>

@@ -8,7 +8,7 @@ const ID = 'avisos';
 
 {
   avisosVigentes.length > 0 && (
-    <aside id={ID} data-vigencia={ID} aria-label={parroquia.sitio.avisos.etiqueta} class="overflow-hidden bg-bordo px-4 py-3 text-crema">
+    <aside id={ID} data-vigencia={ID} aria-label={parroquia.sitio.avisos.etiqueta} class="overflow-hidden border-b-2 border-oro bg-rosa px-4 py-3 text-marfil">
       <div class="animate-bajar mx-auto max-w-3xl space-y-1 text-center text-lg leading-snug text-balance">
         {avisosVigentes.map((aviso) => (
           <p data-hasta={aviso.hasta}>{aviso.texto}</p>

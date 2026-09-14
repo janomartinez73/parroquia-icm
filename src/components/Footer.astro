@@ -1,4 +1,5 @@
 ---
+import CoronaEstrellas from './CoronaEstrellas.astro';
 import Emblema from './Emblema.astro';
 import Ornamento from './Ornamento.astro';
 import Tramos from './Tramos.astro';
@@ -8,19 +9,27 @@ const { nombre, barrio, comunidad, direccion, redes, sitio } = parroquia;
 ---
 
 <!-- pb extra para que el botón de WhatsApp no tape el texto en mobile. -->
-<footer class="border-t-4 border-double border-dorado bg-marron px-4 pt-12 pb-24 text-center text-base text-crema">
-  <Emblema class="revelar mx-auto h-14 text-dorado" />
-  <p class="font-display mt-4 text-2xl font-semibold text-balance">{nombre}</p>
-  <Ornamento class="mx-auto my-4 max-w-56" />
+<footer class="fondo-cielo border-t-4 border-double border-oro px-4 pt-14 pb-24 text-center text-base text-celeste">
+  <div class="revelar relative mx-auto h-20 w-40 text-oro" aria-hidden="true">
+    <CoronaEstrellas class="absolute inset-x-0 top-0 w-full" />
+    <Emblema class="absolute bottom-0 left-1/2 h-14 w-12 -translate-x-1/2" />
+  </div>
+  <p class="font-display mt-5 text-2xl font-semibold text-balance text-marfil md:text-3xl">{nombre}</p>
+  <Ornamento class="mx-auto my-5 max-w-60 text-oro" />
   <p><Tramos tramos={[direccion.calle, direccion.esquina]} /></p>
   <p><Tramos tramos={[barrio, `${direccion.ciudad}, ${direccion.provincia}`]} /></p>
   <p class="mt-4 italic text-balance">{sitio.pie.comunidad} {comunidad}</p>
   {
     redes.length > 0 && (
-      <ul class="mt-4 flex flex-wrap justify-center gap-x-6">
+      <ul class="mt-5 flex flex-wrap justify-center gap-x-6">
         {redes.map((red) => (
           <li>
-            <a href={red.url} target="_blank" rel="noopener" class="inline-block py-2 text-crema underline decoration-dorado underline-offset-4 transition-colors duration-300 hover:text-dorado">
+            <a
+              href={red.url}
+              target="_blank"
+              rel="noopener"
+              class="font-capitales inline-block py-2 text-sm font-semibold tracking-[0.14em] text-oro uppercase underline decoration-oro/50 underline-offset-4 transition-colors duration-300 hover:text-marfil hover:decoration-marfil"
+            >
               {red.nombre}
             </a>
           </li>

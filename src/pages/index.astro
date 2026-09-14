@@ -34,7 +34,7 @@ const separadoresAntes: Record<string, Componente | undefined> = {
   sacramentos: Campanario,
 };
 
-// Fondo de pergamino en algunas secciones, para alternar bandas.
+// Fondo celeste en algunas secciones, para alternar bandas.
 const conFondo = new Set(['ubicacion', 'contacto']);
 ---
 
@@ -53,7 +53,7 @@ const conFondo = new Set(['ubicacion', 'contacto']);
             <section
               id={seccion.id}
               aria-labelledby={`${seccion.id}-titulo`}
-              class:list={['px-4 py-14 md:py-20', conFondo.has(seccion.id) && 'fondo-pergamino']}
+              class:list={['px-4 py-14 md:py-20', conFondo.has(seccion.id) && 'fondo-celeste']}
             >
               <div class="mx-auto max-w-6xl">
                 <TituloSeccion id={`${seccion.id}-titulo`} titulo={seccion.titulo} />

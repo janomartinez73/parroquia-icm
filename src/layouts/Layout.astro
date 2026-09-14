@@ -1,4 +1,5 @@
 ---
+import '@fontsource-variable/cinzel';
 import '@fontsource-variable/cormorant-garamond';
 import '@fontsource-variable/source-serif-4';
 // Fuente del cuerpo y de los horarios: la precargamos para que no cambie al cargar.
@@ -6,7 +7,7 @@ import fuentePrincipal from '@fontsource-variable/source-serif-4/files/source-se
 import '../styles/global.css';
 import fotoHero from '../assets/frente-parroquia.jpg';
 import { parroquia } from '../lib/parroquia';
-import { COLOR_CREMA, IMAGEN_OG, datosEstructurados, descripcion, titulo, urlAbsoluta } from '../lib/seo';
+import { COLOR_MARFIL, IMAGEN_OG, datosEstructurados, descripcion, titulo, urlAbsoluta } from '../lib/seo';
 
 const { nombre, sitio } = parroquia;
 
@@ -23,10 +24,12 @@ const jsonLd = JSON.stringify(datosEstructurados(fotoHero.src)).replace(/</g, '\
     <title>{titulo}</title>
     <meta name="description" content={descripcion} />
     {canonical && <link rel="canonical" href={canonical} />}
-    <meta name="theme-color" content={COLOR_CREMA} />
+    <meta name="theme-color" content={COLOR_MARFIL} />
     <link rel="preload" href={fuentePrincipal} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
+    <!-- Ícono cuando se agrega el sitio a la pantalla de inicio del celular. -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_AR" />
@@ -63,7 +66,7 @@ const jsonLd = JSON.stringify(datosEstructurados(fotoHero.src)).replace(/</g, '\
   <body>
     <a
       href="#contenido"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:flex focus:min-h-12 focus:items-center focus:rounded-sm focus:bg-crema focus:px-4 focus:text-bordo focus:shadow-md"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:flex focus:min-h-12 focus:items-center focus:rounded-sm focus:bg-marfil focus:px-4 focus:text-azul focus:shadow-md"
     >
       {sitio.saltarAlContenido}
     </a>

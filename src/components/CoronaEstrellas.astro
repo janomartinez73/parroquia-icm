@@ -1,0 +1,34 @@
+---
+/**
+ * Corona de doce estrellas en arco, la de la Virgen del Apocalipsis. Decorativa.
+ * Con `alCargar`, las estrellas se encienden una tras otra de izquierda a derecha.
+ */
+interface Props {
+  class?: string;
+  /** Demora en ms antes de la primera estrella. Sin valor, no se anima. */
+  alCargar?: number;
+}
+
+const { class: clase, alCargar } = Astro.props;
+
+const CANTIDAD = 12;
+// Arco de 140° centrado arriba, sobre una circunferencia de radio 100.
+const estrellas = Array.from({ length: CANTIDAD }, (_, i) => {
+  const angulo = ((200 + (140 * i) / (CANTIDAD - 1)) * Math.PI) / 180;
+  return { x: +(120 + 100 * Math.cos(angulo)).toFixed(2), y: +(118 + 100 * Math.sin(angulo)).toFixed(2) };
+});
+---
+
+<svg class={clase} viewBox="0 0 240 90" fill="currentColor" aria-hidden="true">
+  {
+    estrellas.map(({ x, y }, i) => (
+      <g transform={`translate(${x - 6} ${y - 6}) scale(.5)`}>
+        <path
+          class:list={[alCargar !== undefined && 'animate-estrella origin-center [transform-box:fill-box]']}
+          style={alCargar !== undefined ? `animation-delay: ${alCargar + i * 70}ms` : undefined}
+          d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z"
+        />
+      </g>
+    ))
+  }
+</svg>

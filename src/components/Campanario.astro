@@ -1,22 +1,23 @@
 ---
 /**
- * Banda bordó con el campanario dentro de un arco, entre filetes y cruces.
- * Con el scroll, los filetes se dibujan hacia afuera y la foto se desplaza
- * más lento que la página. Puramente visual: oculta para lectores de pantalla.
+ * Banda de cielo estrellado con el campanario dentro de un arco, entre
+ * filetes y estrellas. Con el scroll, los filetes se dibujan hacia afuera y la
+ * foto se desplaza más lento que la página. Puramente visual: oculta para
+ * lectores de pantalla.
  */
 import { Image } from 'astro:assets';
 import fotoCampanario from '../assets/campanario.jpg';
 import Arco from './Arco.astro';
-import Cruz from './Cruz.astro';
+import Estrella from './Estrella.astro';
 
-const filete = 'revelar-trazo h-0.5 flex-1 bg-current';
-const cruz = 'revelar-giro hidden shrink-0 sm:block';
+const filete = 'revelar-trazo h-px flex-1 bg-current';
+const estrella = 'revelar-giro hidden shrink-0 sm:block';
 ---
 
-<div class="overflow-hidden bg-bordo px-4 py-10 md:py-14" aria-hidden="true">
-  <div class="mx-auto flex max-w-6xl items-center gap-4 text-dorado md:gap-8">
+<div class="fondo-cielo overflow-hidden border-y-4 border-double border-oro px-4 py-12 md:py-16" aria-hidden="true">
+  <div class="mx-auto flex max-w-6xl items-center gap-4 text-oro md:gap-8">
     <span class:list={[filete, 'origin-right']}></span>
-    <span class={cruz}><Cruz class="size-6" /></span>
+    <span class={estrella}><Estrella class="size-5" /></span>
     <Arco class="revelar shrink-0 p-1.5">
       <!-- La torre está sobre la derecha de la foto. -->
       <Image
@@ -27,7 +28,7 @@ const cruz = 'revelar-giro hidden shrink-0 sm:block';
         class="revelar-paralaje h-72 w-52 object-cover object-right md:h-80 md:w-60"
       />
     </Arco>
-    <span class={cruz}><Cruz class="size-6" /></span>
+    <span class={estrella}><Estrella class="size-5" /></span>
     <span class:list={[filete, 'origin-left']}></span>
   </div>
 </div>

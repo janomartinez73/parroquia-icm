@@ -20,16 +20,16 @@ const anchos = (original: number) => [...new Set([400, 800].map((ancho) => Math.
     flyersVigentes.map((flyer, i) => (
       <li data-hasta={flyer.hasta} hidden={i >= MAXIMO_FLYERS} class={claseFlyer}>
         <figure class="revelar">
-          <div class="border-4 border-double border-dorado bg-crema p-2 transition-[translate,box-shadow] duration-300 ease-suave hover:-translate-y-1.5 hover:shadow-[0_1rem_1.75rem_-1rem_rgb(61_43_35/0.5)]">
+          <div class="hornacina border-2 border-oro bg-white p-2 shadow-[0_1rem_2rem_-1.5rem_rgb(19_33_63/0.35)] transition-[translate,box-shadow] duration-300 ease-suave hover:-translate-y-1.5 hover:shadow-[0_1.25rem_2rem_-1rem_rgb(19_33_63/0.45)]">
             <Image
               src={flyer.imagen}
               alt={flyer.titulo}
               widths={anchos(flyer.imagen.width)}
               sizes="(min-width: 1024px) 350px, (min-width: 640px) calc(50vw - 56px), calc(100vw - 56px)"
-              class="aspect-[4/5] w-full bg-dorado/10 object-contain"
+              class="hornacina aspect-[4/5] w-full bg-celeste-claro object-contain"
             />
           </div>
-          <figcaption class="font-display mt-3 text-center text-2xl leading-tight font-semibold text-balance">
+          <figcaption class="font-display mt-3 text-center text-2xl leading-tight font-semibold text-balance text-azul">
             {flyer.titulo}
           </figcaption>
         </figure>

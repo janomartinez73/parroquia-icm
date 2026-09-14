@@ -29,14 +29,7 @@ El 80% entra a ver horarios de misa. Todo lo demás es secundario.
 - NO ejecutar comandos de git ni de gh bajo ninguna circunstancia.
   El control de versiones lo maneja el usuario manualmente.
 
-## Identidad visual
-Papel antiguo y sobrio. Nada corporativo, nada de gradientes ni glassmorphism.
-- Fondo: #FDFAF4 (crema)
-- Texto: #3D2B23 (marrón oscuro)
-- Acento y títulos de sección: #B08D4F (dorado)
-- Destacados: #6B2028 (bordó)
-- Tipografía: serif en títulos y cuerpo. Títulos de sección en versalitas
-  con letter-spacing amplio.
+
 
 ## Fases
 Actual: 7 (automatización y documentación, cierre)

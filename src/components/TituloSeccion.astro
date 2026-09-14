@@ -1,5 +1,5 @@
 ---
-/** Título de sección (h2) en versalitas doradas, con un filete y una cruz debajo. */
+/** Título de sección (h2) en capitales romanas azules, con el filete del rosetón debajo. */
 import Ornamento from './Ornamento.astro';
 
 interface Props {
@@ -10,12 +10,12 @@ interface Props {
 const { id, titulo } = Astro.props;
 ---
 
-<div class="mb-12 text-center">
+<div class="mb-14 text-center">
   <h2
     id={id}
-    class="revelar font-display text-4xl leading-tight font-semibold tracking-[0.18em] text-dorado-oscuro [font-variant-caps:small-caps] md:text-5xl"
+    class="revelar font-capitales text-3xl leading-tight font-semibold tracking-[0.14em] text-azul uppercase md:text-4xl"
   >
     {titulo}
   </h2>
-  <Ornamento class="mx-auto mt-3 max-w-64" />
+  <Ornamento class="mx-auto mt-4 max-w-72 text-oro" />
 </div>

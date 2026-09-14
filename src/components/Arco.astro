@@ -1,8 +1,8 @@
 ---
 /**
- * Marco en arco de medio punto con filete dorado, para una foto (<Image> en el
- * slot). La foto se acerca apenas al pasar el mouse si lleva la clase
- * `group-hover/arco:scale-105`.
+ * Marco en arco de medio punto para una foto (<Image> en el slot): filete
+ * dorado y un segundo filete fino por fuera. La foto se acerca apenas al pasar
+ * el mouse si lleva la clase `group-hover/arco:scale-105`.
  */
 interface Props {
   class?: string;
@@ -11,7 +11,7 @@ interface Props {
 const { class: clase } = Astro.props;
 ---
 
-<div class:list={['group/arco arco border-2 border-dorado', clase]}>
+<div class:list={['group/arco arco border-2 border-oro outline outline-offset-4 outline-oro/40', clase]}>
   <!-- isolate: Safari recorta bien la foto agrandada contra el arco. -->
   <div class="arco isolate overflow-hidden">
     <slot />

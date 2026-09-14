@@ -1,10 +1,13 @@
 ---
 /**
- * Filete con una cruz al centro, para separar títulos y bloques. Decorativo.
- * Los filetes se dibujan desde la cruz hacia afuera y la cruz entra girando:
- * al cargar la página (alCargar) o a medida que aparece con el scroll.
+ * Filete con un rosetón entre dos estrellas, para separar títulos y bloques.
+ * El color sale de la clase (text-*). Decorativo.
+ *
+ * Los filetes se dibujan desde el centro hacia afuera y el rosetón entra
+ * girando: al cargar la página (alCargar) o a medida que aparece con el scroll.
  */
-import Cruz from './Cruz.astro';
+import Estrella from './Estrella.astro';
+import Roseton from './Roseton.astro';
 
 interface Props {
   class?: string;
@@ -17,15 +20,13 @@ const { class: clase, alCargar } = Astro.props;
 const trazo = alCargar === undefined ? 'revelar-trazo' : 'animate-trazo';
 const giro = alCargar === undefined ? 'revelar-giro' : 'animate-giro';
 const demora = alCargar === undefined ? undefined : `animation-delay: ${alCargar}ms`;
-const demoraCruz = alCargar === undefined ? undefined : `animation-delay: ${alCargar + 150}ms`;
-
-const rombo = 'size-1.5 shrink-0 rotate-45 bg-current';
+const demoraCentro = alCargar === undefined ? undefined : `animation-delay: ${alCargar + 150}ms`;
 ---
 
-<div class:list={['flex items-center gap-2.5 text-dorado', clase]} aria-hidden="true">
+<div class:list={['flex items-center gap-2.5', clase]} aria-hidden="true">
   <span class:list={['h-px flex-1 origin-right bg-current', trazo]} style={demora}></span>
-  <span class={rombo}></span>
-  <span class:list={['shrink-0', giro]} style={demoraCruz}><Cruz class="size-5" /></span>
-  <span class={rombo}></span>
+  <Estrella class="size-3 shrink-0" />
+  <span class:list={['shrink-0', giro]} style={demoraCentro}><Roseton class="size-7" /></span>
+  <Estrella class="size-3 shrink-0" />
   <span class:list={['h-px flex-1 origin-left bg-current', trazo]} style={demora}></span>
 </div>

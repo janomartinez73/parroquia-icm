@@ -11,8 +11,8 @@ import { enlaceWhatsApp, parroquia } from '../lib/parroquia';
 const { bautismos, charlasPreBautismales: charlas, sitio } = parroquia;
 const textos = sitio.sacramentos;
 
-const claseTurnos = 'border-t border-dorado/40 text-center text-xl tabular-nums';
-const claseTurno = 'border-b border-dorado/40 px-3 py-3';
+const claseTurnos = 'border-t border-celeste text-center text-xl tabular-nums';
+const claseTurno = 'border-b border-celeste px-3 py-3 transition-colors duration-300 hover:bg-celeste-claro';
 ---
 
 <div class="grid items-start gap-14 lg:grid-cols-2 lg:gap-10">
@@ -39,13 +39,13 @@ const claseTurno = 'border-b border-dorado/40 px-3 py-3';
     <ul class:list={[claseTurnos, 'mt-4']}>
       {charlas.turnos.map((turno) => <li class={claseTurno}>{turno}</li>)}
     </ul>
-    <div class="mt-6 border-l-4 border-bordo bg-bordo/5 px-4 py-4 text-center">
-      <p class="text-lg font-semibold text-balance text-bordo">{charlas.nota}</p>
+    <div class="mt-6 border-l-4 border-rosa bg-rosa/5 px-4 py-4 text-center">
+      <p class="text-lg font-semibold text-balance text-rosa">{charlas.nota}</p>
       <a
         href={enlaceWhatsApp(textos.charlas.whatsapp.mensaje)}
         target="_blank"
         rel="noopener"
-        class="group/wa mt-2 inline-flex min-h-12 items-center gap-2 text-bordo underline decoration-dorado underline-offset-4 transition-colors duration-300 hover:decoration-bordo"
+        class="group/wa mt-2 inline-flex min-h-12 items-center gap-2 text-azul underline decoration-oro underline-offset-4 transition-colors duration-300 hover:decoration-azul"
       >
         <IconoWhatsApp class="size-6 shrink-0 transition-transform duration-300 ease-suave group-hover/wa:scale-125 group-hover/wa:-rotate-12" />
         {textos.charlas.whatsapp.etiqueta}

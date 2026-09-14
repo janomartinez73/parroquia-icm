@@ -1,8 +1,10 @@
 ---
 /**
- * Título de un bloque dentro de una sección (h3), en versalitas doradas.
- * Cada palabra no se parte, así "pre-bautismales" no corta en el guion.
+ * Título de un bloque dentro de una sección (h3), en azul con una estrella
+ * dorada debajo. Cada palabra no se parte, así "pre-bautismales" no corta en el guion.
  */
+import Estrella from './Estrella.astro';
+
 interface Props {
   texto: string;
   class?: string;
@@ -12,18 +14,20 @@ const { texto, class: clase } = Astro.props;
 const palabras = texto.split(' ');
 ---
 
-<h3
-  class:list={[
-    'font-display mb-2 text-center text-2xl font-semibold tracking-[0.15em] text-balance text-dorado-oscuro [font-variant-caps:small-caps]',
-    clase,
-  ]}
->
-  {
-    palabras.map((palabra, i) => (
-      <>
-        {i > 0 && ' '}
-        <span class="whitespace-nowrap">{palabra}</span>
-      </>
-    ))
-  }
-</h3>
+<div class:list={['mb-3 text-center', clase]}>
+  <h3 class="font-display text-3xl leading-tight font-semibold text-balance text-azul">
+    {
+      palabras.map((palabra, i) => (
+        <>
+          {i > 0 && ' '}
+          <span class="whitespace-nowrap">{palabra}</span>
+        </>
+      ))
+    }
+  </h3>
+  <div class="mt-2 flex items-center justify-center gap-2 text-oro" aria-hidden="true">
+    <span class="h-px w-8 bg-current"></span>
+    <Estrella class="size-3" />
+    <span class="h-px w-8 bg-current"></span>
+  </div>
+</div>
