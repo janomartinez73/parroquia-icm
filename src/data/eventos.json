@@ -1,4 +1,9 @@
 {
-  "avisos": [],
-  "flyers": []
+  "avisos": [
+    {
+      "texto": "Prueba",
+      "desde": "2026-09-29",
+      "hasta": "2026-09-30"
+    }
+  ]
 }
