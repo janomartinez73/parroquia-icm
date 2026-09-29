@@ -13,13 +13,14 @@ const { sitio } = parroquia;
 const textos = sitio.sacramentos;
 
 const claseTurnos = 'border-t border-celeste text-center text-xl tabular-nums';
-const claseTurno = 'border-b border-celeste px-3 py-3 transition-colors duration-300 hover:bg-celeste-claro';
+const claseTurno = 'border-b border-celeste px-3 py-2 transition-colors duration-300 hover:bg-celeste-claro md:py-3';
 ---
 
-<div class="grid items-start gap-14 lg:grid-cols-2 lg:gap-10">
+<div class="grid items-start gap-8 md:gap-14 lg:grid-cols-2 lg:gap-10">
   <Marco>
     <Subtitulo texto={textos.bautismos.titulo} />
-    <Arco class="mx-auto mt-4 max-w-sm p-1.5">
+    <!-- Solo ambienta: en celular no va, y como es lazy ni se descarga. -->
+    <Arco class="mx-auto mt-4 hidden max-w-sm p-1.5 md:block">
       <Image
         src={fotoAltar}
         alt={textos.bautismos.foto.alt}
@@ -28,7 +29,7 @@ const claseTurno = 'border-b border-celeste px-3 py-3 transition-colors duration
         class="aspect-[4/3] w-full object-cover transition-transform duration-1000 ease-suave group-hover/arco:scale-105"
       />
     </Arco>
-    <p class="dia mt-6 mb-2 text-center text-xl">{bautismos.dia}</p>
+    <p class="dia mt-3 mb-2 text-center text-xl md:mt-6">{bautismos.dia}</p>
     <ul class={claseTurnos}>
       {bautismos.turnos.map((turno) => <li class={claseTurno}>{turno}</li>)}
     </ul>
@@ -37,10 +38,10 @@ const claseTurno = 'border-b border-celeste px-3 py-3 transition-colors duration
 
   <Marco>
     <Subtitulo texto={textos.charlas.titulo} />
-    <ul class:list={[claseTurnos, 'mt-4']}>
+    <ul class:list={[claseTurnos, 'mt-3 md:mt-4']}>
       {charlas.turnos.map((turno) => <li class={claseTurno}>{turno}</li>)}
     </ul>
-    <div class="mt-6 border-l-4 border-rosa bg-rosa/5 px-4 py-4 text-center">
+    <div class="mt-5 border-l-4 border-rosa bg-rosa/5 px-4 py-3 text-center md:mt-6 md:py-4">
       <p class="text-lg font-semibold text-balance text-rosa">{charlas.nota}</p>
       <a
         href={enlaceWhatsApp(textos.charlas.whatsapp.mensaje)}

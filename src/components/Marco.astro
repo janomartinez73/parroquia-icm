@@ -16,15 +16,15 @@ const { class: clase } = Astro.props;
 
 <div
   class:list={[
-    'revelar group/marco hornacina relative border-2 border-oro bg-white px-3 pt-12 pb-7 shadow-[inset_0_0_0_6px_#fff,inset_0_0_0_7px_var(--color-celeste),0_1.25rem_2.5rem_-1.75rem_rgb(19_33_63/0.35)] transition-shadow duration-500 hover:shadow-[inset_0_0_0_6px_#fff,inset_0_0_0_7px_var(--color-celeste),0_1.5rem_3rem_-1.5rem_rgb(19_33_63/0.45)] sm:px-8',
+    'revelar group/marco hornacina relative border-2 border-oro bg-white px-3 pt-8 pb-4 shadow-[inset_0_0_0_6px_#fff,inset_0_0_0_7px_var(--color-celeste),0_1.25rem_2.5rem_-1.75rem_rgb(19_33_63/0.35)] transition-shadow duration-500 hover:shadow-[inset_0_0_0_6px_#fff,inset_0_0_0_7px_var(--color-celeste),0_1.5rem_3rem_-1.5rem_rgb(19_33_63/0.45)] sm:px-8 md:pt-12 md:pb-7',
     clase,
   ]}
 >
   <span
-    class="absolute -top-6 left-1/2 flex size-12 -translate-x-1/2 items-center justify-center rounded-full border-2 border-oro bg-noche text-oro"
+    class="absolute -top-5 left-1/2 flex size-10 -translate-x-1/2 items-center justify-center rounded-full border-2 border-oro bg-noche text-oro md:-top-6 md:size-12"
     aria-hidden="true"
   >
-    <Roseton class="size-8 transition-transform duration-1000 ease-suave group-hover/marco:rotate-180" />
+    <Roseton class="size-7 transition-transform duration-1000 ease-suave group-hover/marco:rotate-180 md:size-8" />
   </span>
   <slot />
 </div>

@@ -2,20 +2,24 @@
 /**
  * Título de un bloque dentro de una sección (h3), en azul con una estrella
  * dorada debajo. Cada palabra no se parte, así "pre-bautismales" no corta en el guion.
+ *
+ * `menor`, para los títulos internos de un marco: en celular va un punto más
+ * chico y sin la estrella, para no alargar la página; en md y más, igual que el resto.
  */
 import Estrella from './Estrella.astro';
 
 interface Props {
   texto: string;
+  menor?: boolean;
   class?: string;
 }
 
-const { texto, class: clase } = Astro.props;
+const { texto, menor = false, class: clase } = Astro.props;
 const palabras = texto.split(' ');
 ---
 
-<div class:list={['mb-3 text-center', clase]}>
-  <h3 class="font-display text-3xl leading-tight font-semibold text-balance text-azul">
+<div class:list={['mb-2 text-center md:mb-3', clase]}>
+  <h3 class:list={['font-display leading-tight font-semibold text-balance text-azul', menor ? 'text-2xl md:text-3xl' : 'text-3xl']}>
     {
       palabras.map((palabra, i) => (
         <>
@@ -25,7 +29,7 @@ const palabras = texto.split(' ');
       ))
     }
   </h3>
-  <div class="mt-2 flex items-center justify-center gap-2 text-oro" aria-hidden="true">
+  <div class:list={['mt-2 items-center justify-center gap-2 text-oro', menor ? 'hidden md:flex' : 'flex']} aria-hidden="true">
     <span class="h-px w-8 bg-current"></span>
     <Estrella class="size-3" />
     <span class="h-px w-8 bg-current"></span>

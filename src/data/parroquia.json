@@ -105,13 +105,13 @@
     "esquina": "Esquina Presidente Roca",
     "ciudad": "Rosario",
     "provincia": "Santa Fe",
-    "codigoPostal": "",
+    "codigoPostal": "S2000EUE",
     "pais": "Argentina",
     "codigoPais": "AR"
   },
   "geo": {
-    "latitud": null,
-    "longitud": null
+    "latitud": -32.96437,
+    "longitud": -60.64958
   },
   "contacto": {
     "telefono": {

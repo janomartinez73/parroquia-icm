@@ -18,13 +18,13 @@ const claseEnlace =
   'text-azul underline decoration-oro decoration-1 underline-offset-4 transition-[text-decoration-color,text-decoration-thickness] duration-300 hover:decoration-azul hover:decoration-2';
 ---
 
-<div class="grid items-center gap-14 lg:grid-cols-2 lg:gap-10">
+<div class="grid items-center gap-8 md:gap-14 lg:grid-cols-2 lg:gap-10">
   <Marco>
     <Subtitulo texto={textos.secretaria} />
-    <ul class="mt-4 border-t border-celeste">
+    <ul class="mt-3 border-t border-celeste md:mt-4">
       {
         secretaria.map((horario) => (
-          <li class="border-b border-celeste px-3 py-3">
+          <li class="flex flex-wrap items-baseline justify-between gap-x-4 border-b border-celeste px-3 py-2 md:block md:py-3">
             <span class="dia block">{horario.dias}</span>
             <ul class="flex flex-wrap gap-x-6 text-xl leading-snug tabular-nums">
               {horario.tramos.map((tramo) => (
@@ -36,9 +36,9 @@ const claseEnlace =
       }
     </ul>
 
-    <div class="mt-10 grid gap-10 sm:grid-cols-2 sm:gap-6">
+    <div class="mt-5 grid gap-5 sm:grid-cols-2 sm:gap-6 md:mt-10">
       <div>
-        <Subtitulo texto={textos.telefono} />
+        <Subtitulo menor texto={textos.telefono} />
         <p class="text-center">
           <a href={enlaceTelefono()} class:list={[claseEnlace, 'inline-block py-1 text-2xl whitespace-nowrap tabular-nums']}>
             ({contacto.telefono.codigoArea}) {contacto.telefono.numero}
@@ -49,7 +49,7 @@ const claseEnlace =
       {
         redes.length > 0 && (
           <div>
-            <Subtitulo texto={textos.redes} />
+            <Subtitulo menor texto={textos.redes} />
             <ul class="flex flex-wrap justify-center gap-x-6">
               {redes.map((red) => (
                 <li>
@@ -64,7 +64,7 @@ const claseEnlace =
       }
     </div>
 
-    <Subtitulo class="mt-10" texto={textos.emails} />
+    <Subtitulo menor class="mt-5 md:mt-10" texto={textos.emails} />
     <ul class="text-center">
       {
         contacto.emails.map((email) => (
@@ -77,7 +77,7 @@ const claseEnlace =
       }
     </ul>
 
-    <p class="mt-8 text-center">
+    <p class="mt-5 text-center md:mt-8">
       <Boton href={enlaceWhatsApp(sitio.whatsapp.mensaje)} externo variante="principal" class="w-full sm:w-auto">
         <IconoWhatsApp class="size-7 shrink-0" />
         {textos.whatsapp}
@@ -86,14 +86,15 @@ const claseEnlace =
   </Marco>
 
   <figure class="revelar">
-    <Arco class="mx-auto max-w-lg p-2">
+    <Arco class="mx-auto max-w-80 p-2 md:max-w-lg">
+      <!-- En celular, un arco más bajo: la foto es apaisada y el 1585 y el cartel siguen entrando. -->
       <Image
         src={fotoEntrada}
         alt={textos.foto.alt}
         width={1024}
         widths={[480, 1024]}
-        sizes="(min-width: 1024px) 496px, (min-width: 560px) 496px, calc(100vw - 52px)"
-        class="aspect-[4/5] w-full object-cover transition-transform duration-1000 ease-suave group-hover/arco:scale-105"
+        sizes="(min-width: 768px) 496px, min(calc(100vw - 52px), 300px)"
+        class="aspect-[4/3] w-full object-cover transition-transform duration-1000 ease-suave group-hover/arco:scale-105 md:aspect-[4/5]"
       />
     </Arco>
     {textos.foto.pie && <figcaption class="mt-3 text-center text-base text-balance italic">{textos.foto.pie}</figcaption>}

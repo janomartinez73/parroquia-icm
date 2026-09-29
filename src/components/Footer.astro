@@ -9,26 +9,26 @@ const { nombre, barrio, comunidad, direccion, redes, sitio } = parroquia;
 ---
 
 <!-- pb extra para que el botón de WhatsApp no tape el texto en mobile. -->
-<footer class="fondo-cielo border-t-4 border-double border-oro px-4 pt-14 pb-24 text-center text-base text-celeste">
-  <div class="revelar relative mx-auto h-20 w-40 text-oro" aria-hidden="true">
+<footer class="fondo-cielo border-t-4 border-double border-oro px-4 pt-6 pb-16 text-center text-base text-celeste md:pt-14 md:pb-24">
+  <div class="revelar relative mx-auto h-12 w-24 text-oro md:h-20 md:w-40" aria-hidden="true">
     <CoronaEstrellas class="absolute inset-x-0 top-0 w-full" />
-    <Emblema class="absolute bottom-0 left-1/2 h-14 w-12 -translate-x-1/2" />
+    <Emblema class="absolute bottom-0 left-1/2 h-9 w-8 -translate-x-1/2 md:h-14 md:w-12" />
   </div>
-  <p class="font-display mt-5 text-2xl font-semibold text-balance text-marfil md:text-3xl">{nombre}</p>
-  <Ornamento class="mx-auto my-5 max-w-60 text-oro" />
+  <p class="font-display mt-3 text-2xl font-semibold text-balance text-marfil md:mt-5 md:text-3xl">{nombre}</p>
+  <Ornamento class="mx-auto my-2 max-w-60 text-oro md:my-5" />
   <p><Tramos tramos={[direccion.calle, direccion.esquina]} /></p>
   <p><Tramos tramos={[barrio, `${direccion.ciudad}, ${direccion.provincia}`]} /></p>
-  <p class="mt-4 italic text-balance">{sitio.pie.comunidad} {comunidad}</p>
+  <p class="mt-3 italic text-balance md:mt-4">{sitio.pie.comunidad} {comunidad}</p>
   {
     redes.length > 0 && (
-      <ul class="mt-5 flex flex-wrap justify-center gap-x-6">
+      <ul class="mt-3 flex flex-wrap justify-center gap-x-6 md:mt-5">
         {redes.map((red) => (
           <li>
             <a
               href={red.url}
               target="_blank"
               rel="noopener"
-              class="font-capitales inline-block py-2 text-sm font-semibold tracking-[0.14em] text-oro uppercase underline decoration-oro/50 underline-offset-4 transition-colors duration-300 hover:text-marfil hover:decoration-marfil"
+              class="font-capitales inline-block py-2.5 text-sm font-semibold tracking-[0.14em] text-oro uppercase underline decoration-oro/50 underline-offset-4 transition-colors duration-300 hover:text-marfil hover:decoration-marfil md:py-2"
             >
               {red.nombre}
             </a>

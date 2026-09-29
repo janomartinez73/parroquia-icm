@@ -10,12 +10,12 @@ interface Props {
 const { id, titulo } = Astro.props;
 ---
 
-<div class="mb-14 text-center">
+<div class="mb-8 text-center md:mb-14">
   <h2
     id={id}
     class="revelar font-capitales text-3xl leading-tight font-semibold tracking-[0.14em] text-azul uppercase md:text-4xl"
   >
     {titulo}
   </h2>
-  <Ornamento class="mx-auto mt-4 max-w-72 text-oro" />
+  <Ornamento class="mx-auto mt-2 max-w-72 text-oro md:mt-4" />
 </div>

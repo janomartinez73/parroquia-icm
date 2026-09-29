@@ -40,17 +40,17 @@ const gruposApertura = (Object.keys(DIAS_APERTURA) as (keyof Apertura)[]).map((c
 }));
 
 const claseGrupo =
-  'relative border-b border-celeste px-2.5 py-4 transition-colors duration-300 hover:bg-celeste-claro hoy:bg-celeste/70 sm:px-3';
+  'relative border-b border-celeste px-2.5 py-2 transition-colors duration-300 hover:bg-celeste-claro hoy:bg-celeste/70 sm:px-3 md:py-4';
 // Apoyado sobre el separador de arriba, para no quitarle ancho al nombre del grupo.
 // Cae como un sello cuando el script marca el día de hoy.
 const claseIndicador =
   'font-capitales absolute -top-3 right-3 hidden rounded-sm bg-rosa px-2 text-xs leading-6 font-semibold tracking-[0.2em] text-marfil uppercase hoy:block hoy:animate-sello';
 ---
 
-<div class="grid items-start gap-14 lg:grid-cols-5 lg:gap-10">
+<div class="grid items-start gap-8 md:gap-14 lg:grid-cols-5 lg:gap-10">
   <Marco class="lg:col-span-3">
     <Subtitulo texto={textos.misas.titulo} />
-    <ul class="mt-4 border-t border-celeste">
+    <ul class="mt-3 border-t border-celeste md:mt-4">
       {
         gruposMisas.map((grupo) => (
           <li data-dias={grupo.dias.join(' ')} class:list={[claseGrupo, 'sm:grid sm:grid-cols-[12rem_1fr] sm:items-center sm:gap-6']}>
@@ -69,7 +69,7 @@ const claseIndicador =
     </ul>
     {
       diasSinMisa.length > 0 && (
-        <p data-dias={diasSinMisa.join(' ')} class="mt-4 text-center text-base italic hoy:font-semibold hoy:text-rosa">
+        <p data-dias={diasSinMisa.join(' ')} class="mt-3 text-center text-base italic hoy:font-semibold hoy:text-rosa md:mt-4">
           {textoSinMisa}
         </p>
       )
@@ -78,7 +78,7 @@ const claseIndicador =
 
   <Marco class="lg:col-span-2">
     <Subtitulo texto={textos.apertura.titulo} />
-    <ul class="mt-4 border-t border-celeste">
+    <ul class="mt-3 border-t border-celeste md:mt-4">
       {
         gruposApertura.map((grupo) => (
           <li data-dias={grupo.dias.join(' ')} class={claseGrupo}>

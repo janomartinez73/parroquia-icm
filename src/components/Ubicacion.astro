@@ -1,5 +1,11 @@
 ---
-/** Dirección, botón para llegar y foto de la esquina; en pantallas anchas, el mapa al costado. */
+/**
+ * Dirección, botón para llegar y foto de la esquina; en pantallas anchas, el mapa al costado.
+ *
+ * En celular van solo la dirección y el botón, que abre Google Maps con el
+ * recorrido: el mapa embebido atrapa el dedo al hacer scroll y la torre se ve
+ * en la banda del campanario, justo abajo. Foto y mapa son lazy: ocultos, ni se descargan.
+ */
 import { Image } from 'astro:assets';
 import fotoEsquina from '../assets/esquina-parroquia.jpg';
 import Arco from './Arco.astro';
@@ -18,10 +24,10 @@ const textos = sitio.ubicacion;
         <p class="font-capitales mt-2 text-sm font-semibold tracking-[0.14em] text-oro-oscuro uppercase text-balance">{direccion.esquina}</p>
         <p class="mt-3 text-base text-balance">{[barrio, direccion.ciudad, direccion.provincia].join(', ')}</p>
       </address>
-      <Boton href={enlaceComoLlegar} externo class="mt-6">{textos.comoLlegar}</Boton>
+      <Boton href={enlaceComoLlegar} externo class="mt-5 md:mt-6">{textos.comoLlegar}</Boton>
     </div>
 
-    <Arco class="revelar w-full max-w-72 p-2">
+    <Arco class="revelar hidden w-full max-w-72 p-2 md:block">
       <Image
         src={fotoEsquina}
         alt={textos.foto.alt}
@@ -37,6 +43,6 @@ const textos = sitio.ubicacion;
     title={textos.mapaTitulo}
     loading="lazy"
     referrerpolicy="no-referrer-when-downgrade"
-    class="revelar hornacina block h-80 w-full border-2 border-oro bg-celeste md:h-96 lg:col-span-3 lg:h-full lg:min-h-[32rem]"
+    class="revelar hornacina hidden w-full border-2 border-oro bg-celeste md:block md:h-96 lg:col-span-3 lg:h-full lg:min-h-[32rem]"
   ></iframe>
 </div>
