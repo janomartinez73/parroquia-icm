@@ -1,9 +1,12 @@
-# Red de seguridad: en cada push a main compila el sitio y revisa los tipos.
-# Si algo falla, el commit queda con una cruz roja y GitHub avisa por mail.
+# Red de seguridad: en cada push a main compila el sitio, revisa los tipos y
+# verifica la configuración de Pages CMS. Si algo falla, el commit queda con
+# una cruz roja y se abre un issue en el repositorio (ver el último paso).
 #
-# Hacen falta los dos pasos porque detectan errores distintos:
+# Hacen falta los tres pasos porque detectan errores distintos:
 #   - build: JSON mal escrito (una coma de más), flyer sin su imagen, fechas mal.
 #   - check: un dato con la forma equivocada (falta "hasta", un número en vez de texto).
+#   - verificar:cms: .pages.yml desincronizado con los JSON o los tipos. El CMS
+#     borraría al guardar los campos que no conoce.
 
 name: Validar
 
@@ -11,8 +14,10 @@ on:
   push:
     branches: [main]
 
+# issues: write solo para el aviso del último paso. Nada más puede escribir.
 permissions:
   contents: read
+  issues: write
 
 jobs:
   validar:
@@ -38,3 +43,53 @@ jobs:
         # Corre aunque el build haya fallado, para ver todos los errores juntos.
         if: ${{ !cancelled() && steps.instalar.outcome == 'success' }}
         run: npm run check
+
+      - name: Verificar Pages CMS (npm run verificar:cms)
+        # Corre aunque el build haya fallado, para ver todos los errores juntos.
+        if: ${{ !cancelled() && steps.instalar.outcome == 'success' }}
+        run: npm run verificar:cms
+
+      - name: Avisar con un issue
+        # Los cambios hechos desde Pages CMS los pushea la app de Pages CMS, no
+        # una persona, así que el mail de GitHub por el workflow fallido puede
+        # no llegarle a nadie. Un issue sí le llega a quien vigile el repo.
+        # Si ya hay uno abierto con el mismo título, se comenta ahí en vez de
+        # abrir otro. Los datos del commit van por env y no dentro del script,
+        # para que un mensaje de commit raro no se ejecute como código.
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TITULO: Falló la validación del sitio
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          COMMIT_URL: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
+          COMMIT_SHA: ${{ github.sha }}
+          COMMIT_MENSAJE: ${{ github.event.head_commit.message }}
+          AUTOR_NOMBRE: ${{ github.event.head_commit.author.name }}
+          AUTOR_USUARIO: ${{ github.event.head_commit.author.username }}
+          PUSHER: ${{ github.actor }}
+        run: |
+          autor="$AUTOR_NOMBRE"
+          if [ -n "$AUTOR_USUARIO" ]; then autor="$autor (@$AUTOR_USUARIO)"; fi
+          mensaje="${COMMIT_MENSAJE%%$'\n'*}"
+
+          cuerpo=$(cat <<EOF
+          La validación falló en el commit [\`${COMMIT_SHA:0:7}\`]($COMMIT_URL).
+
+          - **Autor del commit:** $autor
+          - **Pusheado por:** $PUSHER
+          - **Mensaje:** $mensaje
+          - **Detalle del error:** $RUN_URL
+
+          Mientras no se corrija, puede que el sitio publicado no refleje el cambio.
+          EOF
+          )
+
+          numero=$(gh issue list --state open --limit 100 --json number,title \
+            --jq '.[] | select(.title == env.TITULO) | .number' | head -n 1)
+
+          if [ -n "$numero" ]; then
+            gh issue comment "$numero" --body "$cuerpo"
+          else
+            gh issue create --title "$TITULO" --body "$cuerpo"
+          fi

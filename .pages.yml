@@ -154,7 +154,7 @@ content:
             description: Se muestra debajo de los turnos.
 
       - name: charlasPreBautismales
-        label: Charlas prebautismales
+        label: Charlas pre-bautismales
         type: object
         fields:
           - name: turnos

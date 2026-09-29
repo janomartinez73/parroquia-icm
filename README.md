@@ -5,10 +5,10 @@
 Es la página web de la Parroquia Inmaculado Corazón de María (Viamonte 1585, Barrio Abasto, Rosario), a cargo de los Misioneros Claretianos. Es una sola página con los horarios de misa, la ubicación, los sacramentos, el contacto y, cuando hay, flyers de eventos y avisos.
 
 - **Código:** https://github.com/janomartinez73/parroquia-icm
-- **Publicación:** Cloudflare Pages. Cada vez que se guarda un cambio en la rama `main` de GitHub, Cloudflare vuelve a armar el sitio y lo publica solo, en uno o dos minutos. Además se republica todos los días a las 06:00 (ver sección 9).
+- **Publicación:** Cloudflare Pages. Cada vez que se guarda un cambio en la rama `main` de GitHub, Cloudflare vuelve a armar el sitio y lo publica solo, en uno o dos minutos. Además se republica todos los días a las 06:00 (ver sección 10).
 - **Dirección pública:** _(completar con la dirección de Cloudflare Pages o el dominio propio cuando esté definido)_.
 
-No hay base de datos ni panel de administración. Todo el contenido está en dos archivos de texto dentro de `src/data/`. Para cambiar algo del sitio se edita uno de esos archivos y listo.
+No hay base de datos. Todo el contenido está en tres archivos de texto dentro de `src/data/`. Los horarios, los avisos y los flyers se editan desde un panel web, Pages CMS (sección 3), que guarda los cambios en esos mismos archivos. El resto se cambia editando los archivos.
 
 ## 2. Cómo verlo en tu computadora
 
@@ -21,9 +21,69 @@ npm run dev
 
 El segundo comando muestra una dirección (normalmente http://localhost:4321). Abrila en el navegador. Cada vez que guardes un archivo, la página se actualiza sola. Para cortar, `Ctrl + C`.
 
-No hace falta hacer esto para cambiar horarios o agregar flyers: se puede todo desde la web de GitHub.
+No hace falta hacer esto para cambiar horarios o agregar flyers: se hace desde el panel de Pages CMS (sección 3) o, si no, desde la web de GitHub.
 
-## 3. Cómo cambiar un horario de misa
+## 3. Pages CMS: el panel de edición
+
+[Pages CMS](https://pagescms.org) es un panel web gratuito que edita archivos de un repositorio de GitHub con formularios. Es la forma normal de cambiar horarios, avisos y flyers: quien lo usa no ve JSON ni necesita cuenta de GitHub. Cada vez que alguien toca **Save**, el panel hace un commit en `main` y Cloudflare publica como con cualquier otro cambio. Se entra desde https://app.pagescms.org.
+
+La guía para quien edita desde el panel se arma aparte, con capturas del panel real. Esta sección es para el desarrollador.
+
+### Qué edita
+
+Todo lo define `.pages.yml`, en la raíz del repositorio:
+
+| En el panel | Archivo |
+|---|---|
+| **Horarios** | `src/data/horarios.json` (misas, apertura, secretaría, bautismos, charlas pre-bautismales) |
+| **Avisos y flyers** | `src/data/eventos.json` |
+| **Flyers** (biblioteca de imágenes) | carpeta `src/assets/eventos/` |
+
+`src/data/parroquia.json` (textos del sitio, contacto, redes) queda fuera del panel a propósito: lo maneja el desarrollador.
+
+Las horas llevan un `pattern` en `.pages.yml`, así que el panel no deja guardar `7:30` o `8 a 13`: pide `07:30` y `08:00 a 13:00`. Las fechas se eligen con un calendario y se guardan como `AAAA-MM-DD`.
+
+### Reescribe los JSON enteros
+
+Al guardar, Pages CMS no modifica solo el campo que cambió: arma el archivo de nuevo a partir de lo que declara `.pages.yml` y lo escribe entero. Eso tiene dos consecuencias:
+
+- **Borra lo que no conoce.** Un campo que esté en el JSON y no en `.pages.yml` desaparece en la próxima edición desde el panel, sin aviso.
+- **El formato del archivo puede cambiar.** Por ejemplo, listas que estaban en un renglón (`["07:30", "19:30"]`) pueden quedar con un elemento por renglón, o las claves en otro orden. El contenido es el mismo y el sitio no cambia; no hace falta "arreglarlo".
+
+Los flyers subidos desde el panel quedan en `archivo` con la ruta completa (`src/assets/eventos/semana-santa.jpg`, a veces con `/` adelante) en vez de solo el nombre. El sitio acepta las dos formas.
+
+### Regla: `.pages.yml` sincronizado con los JSON
+
+Si se agrega, renombra o borra un campo de `horarios.json` o `eventos.json`, hay que actualizar `.pages.yml` **en el mismo cambio** (y el tipo correspondiente en `src/types/`). Si no, la primera edición desde el panel borra del JSON el campo que `.pages.yml` no declara.
+
+Esto lo controla `npm run verificar:cms` (`scripts/verificar-pages-cms.mjs`), que también corre en la validación automática (sección 10). Revisa que:
+
+- `.pages.yml` sea YAML válido y el panel edite solo `horarios.json` y `eventos.json`.
+- Los campos de `.pages.yml` sean exactamente los del JSON actual y los de los tipos `Horarios` y `Eventos` de `src/types/`. Si falta o sobra alguno, dice cuál y dónde.
+- Los valores actuales del JSON cumplan los `pattern` del YAML (si no, el panel no dejaría guardar sin corregirlos primero).
+- Las fechas usen el formato `yyyy-MM-dd`, los campos de imagen apunten a una fuente de media que exista, y todos los campos tengan etiqueta.
+
+Para probar una variante de la configuración sin tocar la real: `npm run verificar:cms -- ruta/a/otra.yml`.
+
+### Instalar la app en el repositorio (una sola vez)
+
+1. Entrá a https://app.pagescms.org e iniciá sesión con la cuenta de GitHub dueña del repositorio.
+2. El panel pide instalar la app de GitHub **Pages CMS**. Instalala en la cuenta y, en **Repository access**, elegí **Only select repositories** y marcá solo `parroquia-icm`. Se puede cambiar después desde GitHub: **Settings → Applications → Installed GitHub Apps → Pages CMS → Configure** (en la configuración de la cuenta, no del repositorio).
+3. Volvé al panel, elegí el repositorio y la rama `main`. Tienen que aparecer **Horarios**, **Avisos y flyers** y **Flyers**. Si dice que no encuentra la configuración, revisá que `.pages.yml` esté en `main`.
+
+### Invitar a quien edita
+
+No necesita cuenta de GitHub:
+
+1. En el panel, con el repositorio abierto, entrá a **Collaborators** (en el menú lateral; el nombre puede variar con las versiones del panel).
+2. Escribí su correo y tocá **Invite**.
+3. Le llega un mail con un enlace para entrar. Cada vez que quiera volver, entra a https://app.pagescms.org con el mismo correo y recibe un enlace nuevo.
+
+Sus cambios los guarda la app de Pages CMS en GitHub, no una persona con usuario de GitHub. Por eso el aviso cuando algo falla es un issue y no solo el mail de GitHub (sección 10). Para sacarle el acceso, se lo borra de la misma lista.
+
+## 4. Cómo cambiar un horario de misa editando el JSON
+
+La forma normal es el panel de Pages CMS (sección 3). Esta sección y las dos siguientes son la alternativa para el desarrollador: editar el JSON directo, en la computadora o desde la web de GitHub. Sirve si el panel no anda o para cambios que el panel no cubre.
 
 Los horarios están en `src/data/horarios.json`, en el bloque `"misas"`:
 
@@ -62,9 +122,13 @@ En el mismo archivo están también `"apertura"` (horario del templo), `"secreta
 3. Hacé el cambio.
 4. Tocá **Commit changes…**, escribí una línea que diga qué cambiaste ("Agrego misa de los jueves 11 hs") y confirmá con **Commit changes**.
 
-En uno o dos minutos está publicado. Si te equivocaste en algo (una coma de más, una comilla sin cerrar), el sitio publicado **no se rompe**: sigue la versión anterior y GitHub te manda un mail avisando que falló la validación (ver sección 9). Volvés a editar el archivo y corregís.
+En uno o dos minutos está publicado. Si te equivocaste en algo (una coma de más, una comilla sin cerrar), el sitio publicado **no se rompe**: sigue la versión anterior y se abre un issue en el repositorio avisando que falló la validación (ver sección 10). Volvés a editar el archivo y corregís.
 
-## 4. Cómo agregar un flyer
+Si agregás, renombrás o borrás un campo (no un valor), actualizá también `.pages.yml` en el mismo cambio (sección 3).
+
+## 5. Cómo agregar un flyer editando el JSON
+
+La forma normal es el panel de Pages CMS (sección 3), que sube la imagen y agrega la entrada en un solo paso. A mano:
 
 1. **Subí la imagen** a la carpeta `src/assets/eventos/`. Desde GitHub: entrá a esa carpeta, **Add file → Upload files**, arrastrá la imagen y **Commit changes**. Conviene un nombre simple, sin espacios ni tildes: `semana-santa-2027.jpg`. Sirven JPG, PNG o WEBP.
 2. **Agregá la entrada** en `"flyers"` dentro de `src/data/eventos.json`:
@@ -89,7 +153,7 @@ En uno o dos minutos está publicado. Si te equivocaste en algo (una coma de má
    - Si ya hay otros flyers, cada bloque `{ … }` se separa del siguiente con una coma.
 3. **Guardá el cambio** (Commit changes). Se publica solo.
 
-Importante: primero la imagen, después el JSON. Si la entrada apunta a una imagen que todavía no está, el sitio no se publica hasta que la subas.
+Importante: primero la imagen, después el JSON. En `archivo` también sirve la ruta completa que guarda el panel (`src/assets/eventos/semana-santa-2027.jpg`). Si la entrada apunta a una imagen que todavía no está, el sitio no se publica hasta que la subas.
 
 Qué pasa después, sin que hagas nada:
 
@@ -98,9 +162,11 @@ Qué pasa después, sin que hagas nada:
 - Se muestran como máximo 6, los de `desde` más reciente primero.
 - Si no hay ningún flyer vigente, la sección "Eventos" y su botón del menú no aparecen.
 
-De vez en cuando conviene borrar las entradas vencidas del JSON y sus imágenes, para que no se acumulen.
+De vez en cuando conviene borrar las entradas vencidas y sus imágenes (desde el panel o a mano), para que no se acumulen.
 
-## 5. Cómo agregar un aviso en el banner
+## 6. Cómo agregar un aviso en el banner editando el JSON
+
+La forma normal es el panel de Pages CMS (sección 3). A mano:
 
 El banner es la franja roja arriba de todo. Sirve para algo corto y urgente: "El sábado 14 no hay misa de 19:30". Va en `"avisos"` de `src/data/eventos.json`:
 
@@ -119,7 +185,7 @@ El banner es la franja roja arriba de todo. Sirve para algo corto y urgente: "El
 
 Las fechas funcionan igual que en los flyers: aparece y desaparece solo. Puede haber varios avisos a la vez, separados por coma; se muestran uno debajo del otro. Sin avisos vigentes, la franja no aparece.
 
-## 6. Cómo agregar una red social
+## 7. Cómo agregar una red social
 
 Las redes están en `"redes"`, dentro de `src/data/parroquia.json`. Hoy está cargado el Facebook. Para sumar, por ejemplo, Instagram, se agrega una línea después de la de Facebook, con una coma entre las dos:
 
@@ -134,7 +200,7 @@ Las redes están en `"redes"`, dentro de `src/data/parroquia.json`. Hoy está ca
 - `url` es la dirección completa, empezando con `https://`. Lo más seguro es copiarla desde el navegador y borrar lo que viene después de un `?` (por ejemplo `?locale=es_LA`), que no hace falta.
 - Aparecen en la sección Contacto y en el pie de la página. Si la lista queda vacía (`"redes": []`), no se muestra nada de redes.
 
-## 7. Dónde está cada cosa
+## 8. Dónde está cada cosa
 
 **`src/data/parroquia.json`** — todo lo fijo de la parroquia:
 
@@ -144,14 +210,14 @@ Las redes están en `"redes"`, dentro de `src/data/parroquia.json`. Hoy está ca
 | `direccion` | Calle, esquina, ciudad, provincia, código postal |
 | `geo` | Coordenadas del templo (para buscadores) |
 | `contacto` | Teléfono fijo, WhatsApp y correos |
-| `redes` | Redes sociales (sección 6) |
+| `redes` | Redes sociales (sección 7) |
 | `sitio` | Todos los textos de la página que no son datos: títulos de sección, menú, textos de botones, descripciones de fotos, título y descripción para Google (`sitio.seo`) |
 
 **`src/data/horarios.json`** — horarios de la parroquia:
 
 | Bloque | Qué tiene |
 |---|---|
-| `misas` | Horarios de misa por día (sección 3) |
+| `misas` | Horarios de misa por día (sección 4) |
 | `apertura` | Horario en que está abierto el templo |
 | `secretaria` | Días y horarios de secretaría |
 | `bautismos`, `charlasPreBautismales` | Días, turnos y notas |
@@ -160,34 +226,40 @@ Las redes están en `"redes"`, dentro de `src/data/parroquia.json`. Hoy está ca
 
 | Bloque | Qué tiene |
 |---|---|
-| `avisos` | Mensajes de la franja roja (sección 5) |
-| `flyers` | Flyers de eventos (sección 4) |
+| `avisos` | Mensajes de la franja roja (sección 6) |
+| `flyers` | Flyers de eventos (sección 5) |
 
 **Fotos:** las fijas están en `src/assets/`: `frente-parroquia.jpg` (la fachada, arriba de todo y en la miniatura al compartir el enlace), `esquina-parroquia.jpg` (Ubicación), `campanario.jpg` (banda de cielo estrellado), `altar-mayor.jpg` (Bautismos) y `entrada-secretaria.jpg` (Contacto). `padre-claret.jpg` hoy no se usa. Los flyers, en `src/assets/eventos/`. Para cambiar una foto fija, subí la nueva con el mismo nombre de archivo.
 
 El resto de las carpetas (`src/components`, `src/lib`, etc.) es el código que arma la página. Para el uso diario no hace falta tocarlo.
 
-## 8. Problemas conocidos y cómo se resolvieron
+## 9. Problemas conocidos y cómo se resolvieron
 
 **Tailwind con Astro.** Los estilos usan Tailwind v4 conectado con el plugin `@tailwindcss/vite`, con los colores y fuentes definidos en `src/styles/global.css`. El paquete viejo `@astrojs/tailwind` está discontinuado y no sirve para Tailwind v4: no hay que instalarlo, y tampoco hace falta un archivo `tailwind.config.js`. Con las versiones actuales (Astro 7.3, Tailwind 4.3) funciona sin ningún parche: no hay `overrides` en `package.json` ni hace falta instalar con `--legacy-peer-deps`. Si al actualizar Astro `npm install` se queja de versiones incompatibles con `@tailwindcss/vite`, lo normal es que falte que Tailwind publique una versión compatible: actualizá `@tailwindcss/vite` y `tailwindcss` a la última antes de forzar nada.
 
 **Títulos sin dorado ni versalitas.** Hasta la fase 7, los títulos de sección y los subtítulos salían marrones y en letra normal por un espacio que faltaba entre dos clases de estilo. Se corrigió en `TituloSeccion.astro` y `Subtitulo.astro`.
 
-**Una coma de más no la detecta `astro check`.** Revisa que cada dato tenga la forma correcta, pero acepta un JSON con una coma sobrante. Esa la detecta el build. Por eso la validación automática corre los dos.
+**Una coma de más no la detecta `astro check`.** Revisa que cada dato tenga la forma correcta, pero acepta un JSON con una coma sobrante. Esa la detecta el build. Por eso la validación automática corre los dos (y además `verificar:cms`, que controla otra cosa: sección 3).
 
 **Aviso "Datos pendientes de completar" al compilar.** Es esperable mientras falten el dominio, las coordenadas y el código postal en `parroquia.json`. No es un error: el sitio se publica igual, solo que sin esos datos para buscadores y sin miniatura al compartir el enlace por WhatsApp.
 
 **Flyers vencidos entre publicaciones.** El sitio se arma en el momento de publicar, así que un flyer podía seguir en la página después de vencido. Hay dos defensas: la página los oculta al abrirse si ya pasó la fecha, y el sitio se republica solo todos los días a las 06:00.
 
-## 9. Tareas automáticas (GitHub Actions)
+## 10. Tareas automáticas (GitHub Actions)
 
 Hay dos, en `.github/workflows/`. Se ven en la pestaña **Actions** del repositorio.
 
 ### Validar (`validar.yml`)
 
-Corre en cada cambio que se guarda en `main`: arma el sitio (`npm run build`) y revisa los datos (`npm run check`). Si algo está mal, el cambio queda marcado con una cruz roja en GitHub y te llega un mail. Tocando la cruz se ve el error; casi siempre dice el archivo y la línea.
+Corre en cada cambio que se guarda en `main`, venga del panel, de la web de GitHub o de un push: arma el sitio (`npm run build`), revisa los datos (`npm run check`) y verifica la configuración del panel (`npm run verificar:cms`, sección 3). Los tres corren aunque falle alguno, para ver todos los errores juntos. Si algo está mal, el cambio queda marcado con una cruz roja en GitHub. Tocando la cruz se ve el error; casi siempre dice el archivo y la línea.
 
-Ojo: esto avisa, no frena. Cloudflare arma el sitio por su cuenta. Si el error es de JSON mal escrito, Cloudflare también falla y sigue publicada la versión anterior. Si es un dato con la forma equivocada (por ejemplo, una hora de misa sin comillas, `7.30` en vez de `"07:30"`), Cloudflare puede publicarlo igual y la página se ve rara: corregilo apenas llegue el mail.
+**Aviso con un issue.** GitHub manda un mail cuando falla un workflow, pero se lo manda a quien hizo el push. Los cambios del panel los pushea la app de Pages CMS, no una persona, así que ese mail probablemente no le llegue a nadie. Por eso, si algo falla, el último paso abre un issue en el repositorio titulado **"Falló la validación del sitio"**, con el enlace a la ejecución, el commit y su autor. Si ya hay uno abierto con ese título, agrega un comentario en vez de abrir otro.
+
+- El mail del issue le llega a quien tenga el repositorio en **Watch**. El dueño lo tiene activado por defecto; si no te llegan, en el repositorio tocá **Watch** y elegí **All Activity** o, en **Custom**, al menos **Issues**.
+- Cuando esté corregido, cerrá el issue. Si vuelve a fallar después, se abre uno nuevo.
+- Hace falta que el repositorio tenga los issues activados (**Settings → General → Features → Issues**; vienen activados por defecto). El workflow usa el token automático de GitHub con permiso solo para leer el código y escribir issues.
+
+Ojo: esto avisa, no frena. Cloudflare arma el sitio por su cuenta. Si el error es de JSON mal escrito, Cloudflare también falla y sigue publicada la versión anterior. Si es un dato con la forma equivocada (por ejemplo, una hora de misa sin comillas, `7.30` en vez de `"07:30"`), Cloudflare puede publicarlo igual y la página se ve rara: corregilo apenas aparezca el issue. Un error de `verificar:cms` no afecta lo publicado, pero hay que corregirlo antes de la próxima edición desde el panel.
 
 ### Rebuild diario (`rebuild-diario.yml`)
 
