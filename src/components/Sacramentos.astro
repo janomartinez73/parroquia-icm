@@ -6,9 +6,10 @@ import Arco from './Arco.astro';
 import IconoWhatsApp from './IconoWhatsApp.astro';
 import Marco from './Marco.astro';
 import Subtitulo from './Subtitulo.astro';
-import { enlaceWhatsApp, parroquia } from '../lib/parroquia';
+import { enlaceWhatsApp, horarios, parroquia } from '../lib/parroquia';
 
-const { bautismos, charlasPreBautismales: charlas, sitio } = parroquia;
+const { bautismos, charlasPreBautismales: charlas } = horarios;
+const { sitio } = parroquia;
 const textos = sitio.sacramentos;
 
 const claseTurnos = 'border-t border-celeste text-center text-xl tabular-nums';

@@ -7,9 +7,10 @@ import Boton from './Boton.astro';
 import IconoWhatsApp from './IconoWhatsApp.astro';
 import Marco from './Marco.astro';
 import Subtitulo from './Subtitulo.astro';
-import { enlaceTelefono, enlaceWhatsApp, parroquia } from '../lib/parroquia';
+import { enlaceTelefono, enlaceWhatsApp, horarios, parroquia } from '../lib/parroquia';
 
-const { contacto, secretaria, redes, sitio } = parroquia;
+const { contacto, redes, sitio } = parroquia;
+const { secretaria } = horarios;
 const textos = sitio.contacto;
 
 // El subrayado pasa de dorado a azul y se engrosa al pasar el mouse.

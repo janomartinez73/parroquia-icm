@@ -1,16 +1,17 @@
 /**
  * Metadatos del <head>, datos estructurados (schema.org) y URLs absolutas,
- * todo derivado de src/data/parroquia.json.
+ * todo derivado de src/data/parroquia.json y src/data/horarios.json.
  *
  * Lo que necesita una URL absoluta (canonical, og:url, og:image, sitemap) se
  * omite mientras sitio.seo.url esté vacía, para no publicar un dominio
  * equivocado. Los datos pendientes se avisan en la consola del build.
  */
-import { parroquia, telefonoInternacional } from './parroquia';
+import { horarios, parroquia, telefonoInternacional } from './parroquia';
 import { DIAS_APERTURA } from './horarios';
-import type { Apertura, DiaSemana } from '../types/parroquia';
+import type { Apertura, DiaSemana } from '../types/horarios';
 
-const { sitio, nombre, comunidad, barrio, direccion, geo, apertura, redes } = parroquia;
+const { sitio, nombre, comunidad, barrio, direccion, geo, redes } = parroquia;
+const { apertura } = horarios;
 
 /** theme-color: el marfil de la cabecera. Mismo valor que --color-marfil en global.css. */
 export const COLOR_MARFIL = '#fbf8f1';
@@ -74,7 +75,7 @@ const DIAS_SCHEMA: Record<DiaSemana, string> = {
 function horasDelTramo(tramo: string) {
   const partes = /^(\d{2}:\d{2}) a (\d{2}:\d{2})$/.exec(tramo);
   if (!partes) {
-    throw new Error(`parroquia.json: el tramo de apertura "${tramo}" debe tener el formato "HH:MM a HH:MM".`);
+    throw new Error(`horarios.json: el tramo de apertura "${tramo}" debe tener el formato "HH:MM a HH:MM".`);
   }
   return { opens: partes[1], closes: partes[2] };
 }

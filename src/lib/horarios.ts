@@ -9,8 +9,8 @@
  * testearlas con fechas fijas.
  */
 // Import nombrado: el bundle del cliente incluye solo `misas`, no todo el JSON.
-import { misas as misasParroquia } from '../data/parroquia.json';
-import type { Apertura, DiaSemana, Hora, Misas } from '../types/parroquia';
+import { misas as misasParroquia } from '../data/horarios.json';
+import type { Apertura, DiaSemana, Hora, Misas } from '../types/horarios';
 
 export const ZONA_HORARIA ='America/Argentina/Buenos_Aires';
 

@@ -1,8 +1,13 @@
 import datos from '../data/parroquia.json';
+import datosHorarios from '../data/horarios.json';
+import type { Horarios } from '../types/horarios';
 import type { Parroquia } from '../types/parroquia';
 
 /** Datos de la parroquia, validados contra el tipo en tiempo de compilación. */
 export const parroquia: Parroquia = datos;
+
+/** Horarios de misa, templo, secretaría y sacramentos, validados igual que . */
+export const horarios: Horarios = datosHorarios;
 
 const { contacto, direccion } = parroquia;
 

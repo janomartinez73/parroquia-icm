@@ -25,7 +25,7 @@ No hace falta hacer esto para cambiar horarios o agregar flyers: se puede todo d
 
 ## 3. Cómo cambiar un horario de misa
 
-Los horarios están en `src/data/parroquia.json`, en el bloque `"misas"`:
+Los horarios están en `src/data/horarios.json`, en el bloque `"misas"`:
 
 ```json
 "misas": {
@@ -57,7 +57,7 @@ En el mismo archivo están también `"apertura"` (horario del templo), `"secreta
 
 ### Desde la web de GitHub, sin bajar nada
 
-1. Entrá a https://github.com/janomartinez73/parroquia-icm/blob/main/src/data/parroquia.json
+1. Entrá a https://github.com/janomartinez73/parroquia-icm/blob/main/src/data/horarios.json
 2. Tocá el ícono del lápiz (**Edit this file**), arriba a la derecha del archivo.
 3. Hacé el cambio.
 4. Tocá **Commit changes…**, escribí una línea que diga qué cambiaste ("Agrego misa de los jueves 11 hs") y confirmá con **Commit changes**.
@@ -145,11 +145,16 @@ Las redes están en `"redes"`, dentro de `src/data/parroquia.json`. Hoy está ca
 | `geo` | Coordenadas del templo (para buscadores) |
 | `contacto` | Teléfono fijo, WhatsApp y correos |
 | `redes` | Redes sociales (sección 6) |
+| `sitio` | Todos los textos de la página que no son datos: títulos de sección, menú, textos de botones, descripciones de fotos, título y descripción para Google (`sitio.seo`) |
+
+**`src/data/horarios.json`** — horarios de la parroquia:
+
+| Bloque | Qué tiene |
+|---|---|
 | `misas` | Horarios de misa por día (sección 3) |
 | `apertura` | Horario en que está abierto el templo |
 | `secretaria` | Días y horarios de secretaría |
 | `bautismos`, `charlasPreBautismales` | Días, turnos y notas |
-| `sitio` | Todos los textos de la página que no son datos: títulos de sección, menú, textos de botones, descripciones de fotos, título y descripción para Google (`sitio.seo`) |
 
 **`src/data/eventos.json`** — lo que cambia seguido y vence:
 

@@ -9,11 +9,12 @@
  */
 import Marco from './Marco.astro';
 import Subtitulo from './Subtitulo.astro';
-import { parroquia } from '../lib/parroquia';
+import { horarios, parroquia } from '../lib/parroquia';
 import { DIAS_APERTURA, SEMANA } from '../lib/horarios';
-import type { Apertura, DiaSemana, Hora } from '../types/parroquia';
+import type { Apertura, DiaSemana, Hora } from '../types/horarios';
 
-const { misas, apertura, sitio } = parroquia;
+const { misas, apertura } = horarios;
+const { sitio } = parroquia;
 const textos = sitio.horarios;
 
 const lista = new Intl.ListFormat('es', { type: 'conjunction' });

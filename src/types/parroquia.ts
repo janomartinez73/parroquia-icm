@@ -1,14 +1,4 @@
-export type DiaSemana =
-  | 'domingo'
-  | 'lunes'
-  | 'martes'
-  | 'miercoles'
-  | 'jueves'
-  | 'viernes'
-  | 'sabado';
-
-/** Hora en formato 24 hs "HH:MM", por ejemplo "07:30". */
-export type Hora = string;
+import type { Apertura, DiaSemana } from './horarios';
 
 export interface Direccion {
   calle: string;
@@ -42,30 +32,6 @@ export interface Contacto {
   /** Número internacional sin "+" ni espacios, listo para wa.me. */
   whatsapp: string;
   emails: string[];
-}
-
-export interface Apertura {
-  lunesASabados: string[];
-  domingos: string[];
-}
-
-export type Misas = Record<DiaSemana, Hora[]>;
-
-export interface Bautismos {
-  dia: string;
-  turnos: string[];
-  nota: string;
-}
-
-export interface CharlasPreBautismales {
-  turnos: string[];
-  nota: string;
-}
-
-/** Un grupo de días de atención de secretaría con sus franjas horarias. */
-export interface HorarioSecretaria {
-  dias: string;
-  tramos: string[];
 }
 
 export interface Red {
@@ -193,9 +159,4 @@ export interface Parroquia {
   contacto: Contacto;
   /** Si está vacío, no se muestra nada de redes. */
   redes: Red[];
-  apertura: Apertura;
-  misas: Misas;
-  bautismos: Bautismos;
-  charlasPreBautismales: CharlasPreBautismales;
-  secretaria: HorarioSecretaria[];
 }

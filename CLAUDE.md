@@ -30,7 +30,7 @@ El 80% entra a ver horarios de misa. Todo lo demás es secundario.
   El control de versiones lo maneja el usuario manualmente.
 
 ## Fases
-Actual: 7 (automatización y documentación, cierre)
+Actual: 8 (edición por el cliente con Pages CMS)
 Siguientes: 1 datos · 2 layout · 3 horarios · 4 ubicación+sacramentos+contacto
-· 5 flyers · 6 SEO/a11y · 7 automatización
+· 5 flyers · 6 SEO/a11y · 7 automatización · 8 edición por el cliente con Pages CMS
 No adelantar trabajo de fases futuras.

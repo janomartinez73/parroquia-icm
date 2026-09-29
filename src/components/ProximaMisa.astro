@@ -36,7 +36,8 @@ const textosProxima = {
 
 <script>
   import { misasDeHoy, siguienteMisa } from '../lib/horarios';
-  import type { DiaSemana, TextosHorarios } from '../types/parroquia';
+  import type { DiaSemana } from '../types/horarios';
+  import type { TextosHorarios } from '../types/parroquia';
 
   type TextosProxima = TextosHorarios['proxima'] & { dias: Record<DiaSemana, string> };
 
