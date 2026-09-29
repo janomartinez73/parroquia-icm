@@ -5,9 +5,10 @@ import parroquia from './src/data/parroquia.json' with { type: 'json' };
 import { validarHorarios } from './src/lib/validacion';
 
 /**
- * Valida src/data/horarios.json al cargarlo y ordena las misas, antes de que
- * lo lea cualquier módulo: el del build y el script del cliente, que trae las
- * misas incrustadas. Un dato mal cargado corta el build.
+ * Normaliza y valida src/data/horarios.json al cargarlo, antes de que lo lea
+ * cualquier módulo: el del build y el script del cliente, que trae las misas
+ * incrustadas. Completa las listas que Pages CMS omite (un día sin misa, por
+ * ejemplo) y ordena las misas. Un dato mal cargado corta el build.
  * @returns {import('vite').Plugin}
  */
 function validacionHorarios() {

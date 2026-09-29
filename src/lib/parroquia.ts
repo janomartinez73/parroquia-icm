@@ -7,11 +7,13 @@ import type { Parroquia } from '../types/parroquia';
 export const parroquia: Parroquia = datos;
 
 /**
- * Horarios de misa, templo, secretaría y sacramentos, validados igual que
- * `parroquia` en tiempo de compilación. Además, al cargar el JSON en el build,
- * validarHorarios (src/lib/validacion.ts) revisa cada dato y ordena las misas.
+ * Horarios de misa, templo, secretaría y sacramentos. Llegan completos y
+ * validados: al cargar el JSON en el build, validarHorarios
+ * (src/lib/validacion.ts) completa las listas que Pages CMS omite, revisa cada
+ * dato y ordena las misas. Por eso se descarta el tipo que TypeScript deduce
+ * del archivo, que no tiene las listas omitidas.
  */
-export const horarios: Horarios = datosHorarios;
+export const horarios = datosHorarios as unknown as Horarios;
 
 const { contacto, direccion } = parroquia;
 

@@ -8,9 +8,14 @@
  * Todas reciben `ahora` (y `misas`) como parámetros opcionales para poder
  * testearlas con fechas fijas.
  */
-// Import nombrado: el bundle del cliente incluye solo `misas`, no todo el JSON.
-import { misas as misasParroquia } from '../data/horarios.json';
-import type { Apertura, DiaSemana, Hora, Misas } from '../types/horarios';
+// Import de módulo: el bundle del cliente incluye solo `misas`, no todo el JSON.
+// Llegan completas y ordenadas por validarHorarios (plugin de astro.config.mjs);
+// el tipo que TypeScript deduce del archivo no sirve, porque Pages CMS omite
+// los días sin misa.
+import * as datosHorarios from '../data/horarios.json';
+import type { Apertura, DiaSemana, Hora, Horarios, Misas } from '../types/horarios';
+
+const misasParroquia = (datosHorarios as unknown as Horarios).misas;
 
 export const ZONA_HORARIA ='America/Argentina/Buenos_Aires';
 

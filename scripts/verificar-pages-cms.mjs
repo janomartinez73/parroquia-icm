@@ -117,16 +117,16 @@ for (const { nombre, ruta, archivoTipo, tipo } of entradas) {
   ok(entrada.type === 'file' && entrada.format === 'json', `${nombre}: type file y format json`);
   const declaradas = rutasYaml(entrada.fields ?? []);
 
-  // 3. Claves del YAML contra el JSON actual. Lo que falte en el YAML, el CMS lo borra al guardar.
+  // 3. Claves del JSON actual contra el YAML. Lo que falte en el YAML, el CMS lo borra al guardar.
+  // Al revés no se controla: el CMS omite las listas vacías al guardar, así que
+  // un campo declarado puede faltar en el JSON. Que el YAML no declare campos
+  // de más lo controla el paso 4, contra el tipo.
   const json = JSON.parse(readFileSync(join(raiz, ruta), 'utf8'));
   const reales = rutasJson(json);
   const cubre = (r, d) => (r.endsWith('[]*') ? d.startsWith(r.slice(0, -1)) : r === d);
   const faltanJson = reales.filter((r) => !declaradas.some((d) => cubre(r, d)));
-  const sobranJson = declaradas.filter((d) => !reales.some((r) => cubre(r, d)));
-  ok(faltanJson.length === 0 && sobranJson.length === 0, `${nombre}: campos de .pages.yml iguales a ${ruta}`, [
-    ...faltanJson.map((r) => `${r.replace(/\*$/, '')} está en el JSON y falta en .pages.yml (el CMS lo borraría al guardar)`),
-    ...sobranJson.map((d) => `${d} está en .pages.yml y no existe en el JSON`),
-  ]);
+  ok(faltanJson.length === 0, `${nombre}: todos los campos de ${ruta} están en .pages.yml`,
+    faltanJson.map((r) => `${r.replace(/\*$/, '')} está en el JSON y falta en .pages.yml (el CMS lo borraría al guardar)`));
 
   // 4. Claves del YAML contra el tipo TypeScript.
   const tipoTs = tipoExportado(archivoTipo, tipo);

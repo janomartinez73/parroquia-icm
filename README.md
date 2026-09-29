@@ -46,10 +46,15 @@ Las horas llevan un `pattern` en `.pages.yml`, así que el panel no deja guardar
 
 ### Reescribe los JSON enteros
 
-Al guardar, Pages CMS no modifica solo el campo que cambió: arma el archivo de nuevo a partir de lo que declara `.pages.yml` y lo escribe entero. Eso tiene dos consecuencias:
+Al guardar, Pages CMS no modifica solo el campo que cambió: arma el archivo de nuevo a partir de lo que declara `.pages.yml` y lo escribe entero. Eso tiene tres consecuencias:
 
 - **Borra lo que no conoce.** Un campo que esté en el JSON y no en `.pages.yml` desaparece en la próxima edición desde el panel, sin aviso.
+- **Omite las listas vacías.** Una lista sin elementos no se guarda: la clave directamente desaparece del JSON. Por ejemplo, un aviso guardado sin flyers deja `eventos.json` sin `"flyers"`, y el lunes sin misa desaparece de `misas` la primera vez que se guardan los horarios. El sitio lo toma como lista vacía: un día de misas que falta es un día sin misa, y sin `"flyers"` no hay flyers. Vale para `avisos`, `flyers`, cada día de `misas`, `apertura.lunesASabados`, `apertura.domingos`, `secretaria` y sus `tramos`, `bautismos.turnos` y `charlasPreBautismales.turnos`. Un objeto que falta entero (por ejemplo `bautismos`) cuenta como vacío, y lo que se exige son sus textos obligatorios.
 - **El formato del archivo puede cambiar.** Por ejemplo, listas que estaban en un renglón (`["07:30", "19:30"]`) pueden quedar con un elemento por renglón, o las claves en otro orden. El contenido es el mismo y el sitio no cambia; no hace falta "arreglarlo".
+
+Lo que falte o esté vacío y no sea una lista (el día de bautismos, las aclaraciones, el texto de un aviso, el título, la imagen o las fechas de un flyer) sigue siendo obligatorio: corta el build con un mensaje que dice qué campo completar. Un día de misas con un nombre que no existe (`"feriado"`) también es un error, igual que una semana sin ninguna misa (con `misas` vacío o ausente): casi seguro es un error de carga. Si alguna vez fuera a propósito, hay que cambiar la validación; para suspensiones temporales se usa un aviso.
+
+Todo esto se resuelve en un solo lugar, al cargar cada archivo (`validarHorarios` y `validarEventos` en `src/lib/validacion.ts`): el resto del código, incluidos los scripts que corren en el navegador, recibe siempre la estructura completa. Por eso el código no usa el tipo que TypeScript deduce de esos JSON, que no tiene las listas omitidas.
 
 Los flyers subidos desde el panel quedan en `archivo` con la ruta completa (`src/assets/eventos/semana-santa.jpg`, a veces con `/` adelante) en vez de solo el nombre. El sitio acepta las dos formas.
 
@@ -60,7 +65,7 @@ Si se agrega, renombra o borra un campo de `horarios.json` o `eventos.json`, hay
 Esto lo controla `npm run verificar:cms` (`scripts/verificar-pages-cms.mjs`), que también corre en la validación automática (sección 10). Revisa que:
 
 - `.pages.yml` sea YAML válido y el panel edite solo `horarios.json` y `eventos.json`.
-- Los campos de `.pages.yml` sean exactamente los del JSON actual y los de los tipos `Horarios` y `Eventos` de `src/types/`. Si falta o sobra alguno, dice cuál y dónde.
+- Todos los campos del JSON actual estén declarados en `.pages.yml` (si no, el panel los borraría), y los campos de `.pages.yml` sean exactamente los de los tipos `Horarios` y `Eventos` de `src/types/`. Si falta o sobra alguno, dice cuál y dónde. Que un campo declarado no esté en el JSON no es error: el panel omite las listas vacías.
 - Los valores actuales del JSON cumplan los `pattern` del YAML (si no, el panel no dejaría guardar sin corregirlos primero).
 - Las fechas usen el formato `yyyy-MM-dd`, los campos de imagen apunten a una fuente de media que exista, y todos los campos tengan etiqueta.
 
@@ -110,7 +115,7 @@ Reglas:
 
 - La hora va entre comillas, con dos dígitos y en formato 24 hs: `"07:30"`, `"19:30"`. No `"7:30"` ni `"7.30 hs"`.
 - Las horas se separan con coma, en orden de la más temprana a la más tarde. **Después de la última no va coma.**
-- Un día sin misa queda con los corchetes vacíos: `[]`. El sitio muestra solo "Los lunes no hay misa".
+- Un día sin misa queda con los corchetes vacíos: `[]`. Si se guardó desde el panel, ese día directamente no aparece (sección 3); es lo mismo. El sitio muestra solo "Los lunes no hay misa".
 - Los nombres de los días (`"miercoles"`, `"sabado"`) van sin tilde y no se tocan.
 - No hace falta agrupar días: si martes y jueves tienen los mismos horarios, el sitio los junta solo.
 
@@ -264,8 +269,9 @@ Ojo: este workflow avisa, no frena. Cloudflare arma el sitio por su cuenta, pero
 
 - **Frena también a Cloudflare (lo detecta `npm run build`):**
   - Cualquiera de los tres JSON mal escrito: una coma de más, comillas sin cerrar.
-  - Cualquier dato inválido de `horarios.json`: una hora de misa mal cargada (`7.30` o `"7:30"` en vez de `"07:30"`), una misa repetida, un día que falta, un horario de apertura o de secretaría que no sea `"HH:MM a HH:MM"` o que cierre antes de abrir, un texto de bautismos o de charlas vacío.
-  - Cualquier dato inválido de `eventos.json`: una fecha que no sea `AAAA-MM-DD` o que no exista, un "hasta" anterior al "desde", un aviso sin texto, un flyer sin título o con una imagen que no está en `src/assets/eventos/`. Si falta una lista entera o un campo, también se corta, aunque el mensaje puede ser menos claro.
+  - Cualquier dato inválido de `horarios.json`: una hora de misa mal cargada (`7.30` o `"7:30"` en vez de `"07:30"`), una misa repetida, un día con un nombre que no existe (un día que falta no es error: es un día sin misa), una semana sin ninguna misa, un horario de apertura o de secretaría que no sea `"HH:MM a HH:MM"` o que cierre antes de abrir, un texto de bautismos o de charlas vacío.
+  - Cualquier dato inválido de `eventos.json`: una fecha que no sea `AAAA-MM-DD` o que no exista, un "hasta" anterior al "desde", un aviso sin texto, un flyer sin título o con una imagen que no está en `src/assets/eventos/`.
+  - En los dos archivos, un campo obligatorio que falta o un dato con la forma equivocada (un número donde va un texto, un texto donde va una lista). Una lista que falta no es error: el panel omite las listas vacías (sección 3).
   - En `parroquia.json`: `sitio.seo.url` mal escrita, o un `{marcador}` que no existe en el título o la descripción.
 - **Solo lo detecta `astro check`:** un dato de `parroquia.json` con la forma equivocada (por ejemplo, un número sin comillas donde va un texto, o un campo que falta) y los errores de tipos en el código. `parroquia.json` no se valida en el build, así que Cloudflare puede publicarlo igual y la página se ve rara: corregilo apenas aparezca el issue.
 - **Solo lo detecta `verificar:cms`:** `.pages.yml` desincronizado con los JSON o con los tipos, o un valor cargado que no cumple el formato que pide el panel. No afecta lo publicado, pero hay que corregirlo antes de la próxima edición desde el panel, porque al guardar podría borrar campos.
