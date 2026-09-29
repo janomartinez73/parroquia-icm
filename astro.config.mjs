@@ -31,6 +31,31 @@ function validacionHorarios() {
 export default defineConfig({
   // Vacía mientras no haya dominio: src/lib/seo.ts omite lo que necesita URL absoluta.
   site: parroquia.sitio.seo.url || undefined,
+  // CSP en una <meta> de cada página. Astro agrega solo los hashes de los
+  // scripts y estilos que empaqueta; los <script is:inline> quedarían
+  // bloqueados. frame-ancestors no funciona en una <meta>: va en public/_headers.
+  security: {
+    csp: {
+      directives: [
+        "default-src 'none'",
+        "base-uri 'none'",
+        "form-action 'none'",
+        // data: por el SVG de fondo que está en global.css.
+        "img-src 'self' data:",
+        "font-src 'self'",
+        // El mapa de Ubicación.
+        'frame-src https://www.google.com',
+      ],
+      // Atributos style="" con demoras de animación que dependen de los datos
+      // (cantidad de flyers, ítems del menú): no se pueden fijar por hash.
+      styleDirective: {
+        resources: [{ resource: "'unsafe-inline'", kind: 'attribute' }],
+      },
+    },
+  },
+  // No hay Markdown. Shiki, el resaltador por defecto, pone atributos style=""
+  // que la CSP bloquearía, y con CSP activa avisa en cada build.
+  markdown: { syntaxHighlight: false },
   vite: {
     plugins: [validacionHorarios(), tailwindcss()],
   },

@@ -6,7 +6,8 @@ Es la página web de la Parroquia Inmaculado Corazón de María (Viamonte 1585, 
 
 - **Código:** https://github.com/janomartinez73/parroquia-icm
 - **Publicación:** Cloudflare Pages. Cada vez que se guarda un cambio en la rama `main` de GitHub, Cloudflare vuelve a armar el sitio y lo publica solo, en uno o dos minutos. Además se republica todos los días a las 06:00 (ver sección 10).
-- **Dirección pública:** _(completar con la dirección de Cloudflare Pages o el dominio propio cuando esté definido)_.
+- **Dirección pública:** https://parroquia-icm.pages.dev (la misma que está en `sitio.seo.url` de `src/data/parroquia.json`; si algún día hay dominio propio, se cambia en los dos lugares).
+- **Tipo de proyecto en Cloudflare:** es un proyecto de **Pages**, no de Workers. Cloudflare ya marca Pages como "legacy" y recomienda Workers para proyectos nuevos. Por ahora funciona igual, pero si en el futuro hay que migrarlo, tené en cuenta que los encabezados de `public/_headers` y el Deploy Hook del rebuild diario (sección 10) son cosas de Pages y hay que revisarlos en la migración.
 
 No hay base de datos. Todo el contenido está en tres archivos de texto dentro de `src/data/`. Los horarios, los avisos y los flyers se editan desde un panel web, Pages CMS (sección 3), que guarda los cambios en esos mismos archivos. El resto se cambia editando los archivos.
 
@@ -259,7 +260,15 @@ Corre en cada cambio que se guarda en `main`, venga del panel, de la web de GitH
 - Cuando esté corregido, cerrá el issue. Si vuelve a fallar después, se abre uno nuevo.
 - Hace falta que el repositorio tenga los issues activados (**Settings → General → Features → Issues**; vienen activados por defecto). El workflow usa el token automático de GitHub con permiso solo para leer el código y escribir issues.
 
-Ojo: esto avisa, no frena. Cloudflare arma el sitio por su cuenta. Si el error es de JSON mal escrito, Cloudflare también falla y sigue publicada la versión anterior. Si es un dato con la forma equivocada (por ejemplo, una hora de misa sin comillas, `7.30` en vez de `"07:30"`), Cloudflare puede publicarlo igual y la página se ve rara: corregilo apenas aparezca el issue. Un error de `verificar:cms` no afecta lo publicado, pero hay que corregirlo antes de la próxima edición desde el panel.
+Ojo: este workflow avisa, no frena. Cloudflare arma el sitio por su cuenta, pero corre el mismo `npm run build`, así que lo que corta el build acá también lo corta allá, y en ese caso sigue publicada la versión anterior. Lo que detectan solo `astro check` o `verificar:cms` no llega a Cloudflare, que publica igual.
+
+- **Frena también a Cloudflare (lo detecta `npm run build`):**
+  - Cualquiera de los tres JSON mal escrito: una coma de más, comillas sin cerrar.
+  - Cualquier dato inválido de `horarios.json`: una hora de misa mal cargada (`7.30` o `"7:30"` en vez de `"07:30"`), una misa repetida, un día que falta, un horario de apertura o de secretaría que no sea `"HH:MM a HH:MM"` o que cierre antes de abrir, un texto de bautismos o de charlas vacío.
+  - Cualquier dato inválido de `eventos.json`: una fecha que no sea `AAAA-MM-DD` o que no exista, un "hasta" anterior al "desde", un aviso sin texto, un flyer sin título o con una imagen que no está en `src/assets/eventos/`. Si falta una lista entera o un campo, también se corta, aunque el mensaje puede ser menos claro.
+  - En `parroquia.json`: `sitio.seo.url` mal escrita, o un `{marcador}` que no existe en el título o la descripción.
+- **Solo lo detecta `astro check`:** un dato de `parroquia.json` con la forma equivocada (por ejemplo, un número sin comillas donde va un texto, o un campo que falta) y los errores de tipos en el código. `parroquia.json` no se valida en el build, así que Cloudflare puede publicarlo igual y la página se ve rara: corregilo apenas aparezca el issue.
+- **Solo lo detecta `verificar:cms`:** `.pages.yml` desincronizado con los JSON o con los tipos, o un valor cargado que no cumple el formato que pide el panel. No afecta lo publicado, pero hay que corregirlo antes de la próxima edición desde el panel, porque al guardar podría borrar campos.
 
 ### Rebuild diario (`rebuild-diario.yml`)
 

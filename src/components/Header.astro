@@ -77,9 +77,10 @@ const raya = 'origin-center transition-[translate,rotate,scale,opacity] duration
   </div>
 </header>
 
-<script is:inline>
-  // Cierra el menú mobile al elegir una sección.
+<script>
+  // Cierra el menú mobile al elegir una sección. Sin is:inline, para que Astro
+  // lo empaquete y lo incluya en la CSP (security.csp en astro.config.mjs).
   document.querySelectorAll('[data-menu] a').forEach((enlace) => {
-    enlace.addEventListener('click', () => enlace.closest('details').removeAttribute('open'));
+    enlace.addEventListener('click', () => enlace.closest('details')?.removeAttribute('open'));
   });
 </script>

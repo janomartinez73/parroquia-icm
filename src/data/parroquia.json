@@ -1,7 +1,7 @@
 {
   "sitio": {
     "seo": {
-      "url": "",
+      "url": "https://parroquia-icm.pages.dev",
       "titulo": "{nombre} — Horarios de misa | {ciudad}",
       "descripcion": "Horarios de misa de la {nombre}, en {calle}, {barrio}, {ciudad}. Apertura del templo, bautismos y contacto."
     },

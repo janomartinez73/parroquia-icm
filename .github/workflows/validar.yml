@@ -3,8 +3,10 @@
 # una cruz roja y se abre un issue en el repositorio (ver el último paso).
 #
 # Hacen falta los tres pasos porque detectan errores distintos:
-#   - build: JSON mal escrito (una coma de más), flyer sin su imagen, fechas mal.
-#   - check: un dato con la forma equivocada (falta "hasta", un número en vez de texto).
+#   - build: JSON mal escrito y cualquier dato inválido de horarios.json o
+#     eventos.json. Cloudflare corre el mismo build: esto también lo frena allá.
+#   - check: un dato de parroquia.json con la forma equivocada (un número en
+#     vez de texto, un campo que falta) y errores de tipos en el código.
 #   - verificar:cms: .pages.yml desincronizado con los JSON o los tipos. El CMS
 #     borraría al guardar los campos que no conoce.
 
