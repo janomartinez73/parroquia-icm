@@ -14,7 +14,10 @@ export interface Aviso extends Vigencia {
 
 /** Flyer de un evento. */
 export interface Flyer extends Vigencia {
-  /** Nombre del archivo dentro de src/assets/eventos/, por ejemplo "semana-santa.jpg". */
+  /**
+   * Imagen dentro de src/assets/eventos/: "semana-santa.jpg", o la ruta que
+   * guarda Pages CMS, "src/assets/eventos/semana-santa.jpg" (con o sin "/" inicial).
+   */
   archivo: string;
   /** Se muestra debajo de la imagen y es su texto alternativo. */
   titulo: string;

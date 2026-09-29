@@ -6,7 +6,11 @@ import type { Parroquia } from '../types/parroquia';
 /** Datos de la parroquia, validados contra el tipo en tiempo de compilación. */
 export const parroquia: Parroquia = datos;
 
-/** Horarios de misa, templo, secretaría y sacramentos, validados igual que . */
+/**
+ * Horarios de misa, templo, secretaría y sacramentos, validados igual que
+ * `parroquia` en tiempo de compilación. Además, al cargar el JSON en el build,
+ * validarHorarios (src/lib/validacion.ts) revisa cada dato y ordena las misas.
+ */
 export const horarios: Horarios = datosHorarios;
 
 const { contacto, direccion } = parroquia;

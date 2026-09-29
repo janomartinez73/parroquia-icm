@@ -8,6 +8,7 @@
  */
 import { horarios, parroquia, telefonoInternacional } from './parroquia';
 import { DIAS_APERTURA } from './horarios';
+import { partirTramo } from './validacion';
 import type { Apertura, DiaSemana } from '../types/horarios';
 
 const { sitio, nombre, comunidad, barrio, direccion, geo, redes } = parroquia;
@@ -71,21 +72,17 @@ const DIAS_SCHEMA: Record<DiaSemana, string> = {
   sabado: 'Saturday',
 };
 
-/** "08:00 a 13:00" → apertura y cierre. Un tramo con otro formato corta el build. */
-function horasDelTramo(tramo: string) {
-  const partes = /^(\d{2}:\d{2}) a (\d{2}:\d{2})$/.exec(tramo);
-  if (!partes) {
-    throw new Error(`horarios.json: el tramo de apertura "${tramo}" debe tener el formato "HH:MM a HH:MM".`);
-  }
-  return { opens: partes[1], closes: partes[2] };
-}
-
+// Los tramos ya llegan validados por validarHorarios (src/lib/validacion.ts).
 const horariosApertura = (Object.keys(DIAS_APERTURA) as (keyof Apertura)[]).flatMap((clave) =>
-  apertura[clave].map((tramo) => ({
-    '@type': 'OpeningHoursSpecification',
-    dayOfWeek: DIAS_APERTURA[clave].map((dia) => DIAS_SCHEMA[dia]),
-    ...horasDelTramo(tramo),
-  })),
+  apertura[clave].map((tramo) => {
+    const { inicio, fin } = partirTramo(tramo);
+    return {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: DIAS_APERTURA[clave].map((dia) => DIAS_SCHEMA[dia]),
+      opens: inicio,
+      closes: fin,
+    };
+  }),
 );
 
 /**

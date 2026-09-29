@@ -8,6 +8,7 @@ import type { ImageMetadata } from 'astro';
 import datos from '../data/eventos.json';
 import { parroquia } from './parroquia';
 import { ZONA_HORARIA } from './horarios';
+import { estaVacio } from './validacion';
 import type { Eventos, Fecha, Flyer, Vigencia } from '../types/eventos';
 
 /** Datos de eventos, validados contra el tipo en tiempo de compilación. */
@@ -17,6 +18,12 @@ export const ID_SECCION_EVENTOS = 'eventos';
 export const MAXIMO_FLYERS = 6;
 
 const CARPETA_FLYERS = '/src/assets/eventos/';
+
+/**
+ * Pages CMS guarda la ruta de la imagen ("src/assets/eventos/x.jpg" o
+ * "/src/assets/eventos/x.jpg"); a mano se carga solo "x.jpg". Todo queda en "x.jpg".
+ */
+const nombreDeArchivo = (archivo: string) => archivo.replace(/^\/?src\/assets\/eventos\//, '');
 
 const imagenes = import.meta.glob<ImageMetadata>('/src/assets/eventos/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', {
   eager: true,
@@ -58,14 +65,27 @@ function validarVigencia(nombre: string, { desde, hasta }: Vigencia) {
   }
 }
 
-eventos.avisos.forEach((aviso, i) => validarVigencia(`avisos[${i}] "${aviso.texto}"`, aviso));
+// Nombra el elemento con su texto, si tiene, para ubicarlo más fácil.
+const nombrar = (campo: string, texto: string) => (estaVacio(texto) ? campo : `${campo} "${texto}"`);
+
+eventos.avisos.forEach((aviso, i) => {
+  const nombre = nombrar(`avisos[${i}]`, aviso.texto);
+  if (estaVacio(aviso.texto)) errores.push(`${nombre}: el texto del aviso está vacío. Escribilo o borrá el aviso.`);
+  validarVigencia(nombre, aviso);
+});
 
 eventos.flyers.forEach((flyer, i) => {
-  const nombre = `flyers[${i}] "${flyer.titulo}"`;
+  const nombre = nombrar(`flyers[${i}]`, flyer.titulo);
+  if (estaVacio(flyer.titulo)) {
+    errores.push(`${nombre}: falta el título del flyer. Se muestra debajo de la imagen y la describe.`);
+  }
   validarVigencia(nombre, flyer);
-  if (!imagenes[CARPETA_FLYERS + flyer.archivo]) {
+  const archivo = nombreDeArchivo(flyer.archivo ?? '');
+  if (estaVacio(archivo)) {
+    errores.push(`${nombre}: falta elegir la imagen del flyer.`);
+  } else if (!imagenes[CARPETA_FLYERS + archivo]) {
     errores.push(
-      `${nombre}: no existe el archivo src/assets/eventos/${flyer.archivo}. ` +
+      `${nombre}: no existe el archivo src/assets/eventos/${archivo}. ` +
         'Revisá que el nombre coincida exactamente, con mayúsculas y extensión.',
     );
   }
@@ -90,7 +110,7 @@ export const avisosVigentes = eventos.avisos.filter((aviso) => estaVigente(aviso
 export const flyersVigentes: FlyerConImagen[] = eventos.flyers
   .filter((flyer) => estaVigente(flyer, hoy))
   .sort((a, b) => b.desde.localeCompare(a.desde))
-  .map((flyer) => ({ ...flyer, imagen: imagenes[CARPETA_FLYERS + flyer.archivo]! }));
+  .map((flyer) => ({ ...flyer, imagen: imagenes[CARPETA_FLYERS + nombreDeArchivo(flyer.archivo)]! }));
 
 /** Secciones del menú y la página; la de eventos solo si hay flyers vigentes. */
 export const seccionesVisibles = parroquia.sitio.secciones.filter(
