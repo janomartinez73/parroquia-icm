@@ -121,7 +121,16 @@ for (const { nombre, ruta, archivoTipo, tipo } of entradas) {
   // Al revés no se controla: el CMS omite las listas vacías al guardar, así que
   // un campo declarado puede faltar en el JSON. Que el YAML no declare campos
   // de más lo controla el paso 4, contra el tipo.
-  const json = JSON.parse(readFileSync(join(raiz, ruta), 'utf8'));
+  // Un archivo vacío o con solo espacios cuenta como {}: el CMS lo deja así al
+  // borrar el último elemento (el sitio hace lo mismo, ver leerJson en src/lib/validacion.ts).
+  const texto = readFileSync(join(raiz, ruta), 'utf8');
+  let json;
+  try {
+    json = texto.trim() === '' ? {} : JSON.parse(texto);
+  } catch (e) {
+    ok(false, `${nombre}: ${ruta} es un JSON válido`, [e.message]);
+    continue;
+  }
   const reales = rutasJson(json);
   const cubre = (r, d) => (r.endsWith('[]*') ? d.startsWith(r.slice(0, -1)) : r === d);
   const faltanJson = reales.filter((r) => !declaradas.some((d) => cubre(r, d)));

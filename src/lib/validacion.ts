@@ -16,7 +16,9 @@
  * script del cliente, sin sumarle código. validarEventos la llama
  * src/lib/eventos.ts, el único que lee src/data/eventos.json.
  */
-import { SEMANA } from './horarios';
+// De semana.ts y no de horarios.ts: este módulo se carga con astro.config.mjs
+// y no puede importar horarios.json (ver src/lib/semana.ts).
+import { SEMANA } from './semana';
 import type { DiaSemana, Horarios } from '../types/horarios';
 import type { Aviso, Eventos, Flyer } from '../types/eventos';
 
@@ -46,6 +48,25 @@ export function esFechaValida(fecha: unknown): fecha is string {
   const [anio, mes, dia] = fecha.split('-').map(Number);
   const d = new Date(Date.UTC(anio!, mes! - 1, dia));
   return d.getUTCFullYear() === anio && d.getUTCMonth() === mes! - 1 && d.getUTCDate() === dia;
+}
+
+/**
+ * Parsea el texto de un JSON que edita Pages CMS. Un archivo vacío o con solo
+ * espacios cuenta como {}: el CMS lo deja así al borrar el último elemento.
+ * Un JSON mal escrito corta el build con un mensaje en castellano.
+ *
+ * @param ruta para el mensaje, por ejemplo "src/data/eventos.json".
+ */
+export function leerJson(texto: string, ruta: string): unknown {
+  if (texto.trim() === '') return {};
+  try {
+    return JSON.parse(texto);
+  } catch (error) {
+    throw new Error(
+      `${ruta} está roto: no es un JSON válido (${(error as Error).message}). ` +
+        'Suele ser una coma de más o de menos, o comillas sin cerrar.',
+    );
+  }
 }
 
 const esObjeto = (valor: unknown): valor is Record<string, unknown> =>

@@ -50,11 +50,19 @@ Al guardar, Pages CMS no modifica solo el campo que cambió: arma el archivo de 
 
 - **Borra lo que no conoce.** Un campo que esté en el JSON y no en `.pages.yml` desaparece en la próxima edición desde el panel, sin aviso.
 - **Omite las listas vacías.** Una lista sin elementos no se guarda: la clave directamente desaparece del JSON. Por ejemplo, un aviso guardado sin flyers deja `eventos.json` sin `"flyers"`, y el lunes sin misa desaparece de `misas` la primera vez que se guardan los horarios. El sitio lo toma como lista vacía: un día de misas que falta es un día sin misa, y sin `"flyers"` no hay flyers. Vale para `avisos`, `flyers`, cada día de `misas`, `apertura.lunesASabados`, `apertura.domingos`, `secretaria` y sus `tramos`, `bautismos.turnos` y `charlasPreBautismales.turnos`. Un objeto que falta entero (por ejemplo `bautismos`) cuenta como vacío, y lo que se exige son sus textos obligatorios.
+- **Puede dejar el archivo vacío.** Si al guardar no queda nada (por ejemplo, se borra el último aviso y no hay flyers), escribe el archivo con 0 bytes, ni siquiera `{}`. El sitio toma un archivo vacío o con solo espacios como `{}`: `eventos.json` vacío es "sin avisos ni flyers" y el build pasa; `horarios.json` vacío corta el build con los mensajes de siempre (no hay misas, faltan los textos obligatorios).
 - **El formato del archivo puede cambiar.** Por ejemplo, listas que estaban en un renglón (`["07:30", "19:30"]`) pueden quedar con un elemento por renglón, o las claves en otro orden. El contenido es el mismo y el sitio no cambia; no hace falta "arreglarlo".
 
 Lo que falte o esté vacío y no sea una lista (el día de bautismos, las aclaraciones, el texto de un aviso, el título, la imagen o las fechas de un flyer) sigue siendo obligatorio: corta el build con un mensaje que dice qué campo completar. Un día de misas con un nombre que no existe (`"feriado"`) también es un error, igual que una semana sin ninguna misa (con `misas` vacío o ausente): casi seguro es un error de carga. Si alguna vez fuera a propósito, hay que cambiar la validación; para suspensiones temporales se usa un aviso.
 
 Todo esto se resuelve en un solo lugar, al cargar cada archivo (`validarHorarios` y `validarEventos` en `src/lib/validacion.ts`): el resto del código, incluidos los scripts que corren en el navegador, recibe siempre la estructura completa. Por eso el código no usa el tipo que TypeScript deduce de esos JSON, que no tiene las listas omitidas.
+
+Un archivo vacío no es JSON válido, así que tiene que resolverse antes de que lo lea el plugin JSON de Vite:
+
+- `horarios.json` lo transforma el plugin de `astro.config.mjs`, que corre antes que el de Vite. Sigue siendo un import de JSON porque el script de "próxima misa" trae solo las misas.
+- `eventos.json` se importa como texto (`eventos.json?raw`) en `src/lib/eventos.ts` y lo parsea `leerJson`. Así ni Vite ni TypeScript leen el JSON, y `npm run check` pasa aunque el archivo esté vacío.
+- `src/lib/validacion.ts` se carga junto con la config de Astro, así que no puede importar `horarios.json`, ni directamente ni a través de otro módulo. Si no, un `horarios.json` vacío o roto rompe la config antes de que el plugin pueda dar su mensaje. Por eso los días de la semana están en `src/lib/semana.ts`.
+- `npm run verificar:cms` también toma un archivo vacío como `{}`.
 
 Los flyers subidos desde el panel quedan en `archivo` con la ruta completa (`src/assets/eventos/semana-santa.jpg`, a veces con `/` adelante) en vez de solo el nombre. El sitio acepta las dos formas.
 

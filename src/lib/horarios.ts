@@ -13,22 +13,15 @@
 // el tipo que TypeScript deduce del archivo no sirve, porque Pages CMS omite
 // los días sin misa.
 import * as datosHorarios from '../data/horarios.json';
+import { SEMANA } from './semana';
 import type { Apertura, DiaSemana, Hora, Horarios, Misas } from '../types/horarios';
 
 const misasParroquia = (datosHorarios as unknown as Horarios).misas;
 
 export const ZONA_HORARIA ='America/Argentina/Buenos_Aires';
 
-/** Días en orden, empezando por el domingo. */
-export const SEMANA: readonly DiaSemana[] = [
-  'domingo',
-  'lunes',
-  'martes',
-  'miercoles',
-  'jueves',
-  'viernes',
-  'sabado',
-];
+// Vive en su propio módulo para que validacion.ts no importe horarios.json.
+export { SEMANA };
 
 /** Días que abarca cada grupo del horario de apertura del templo. */
 export const DIAS_APERTURA: Record<keyof Apertura, DiaSemana[]> = {

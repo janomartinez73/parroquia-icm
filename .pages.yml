@@ -9,7 +9,10 @@
 # JSON (sin flyers, eventos.json queda sin "flyers"; el lunes sin misa
 # desaparece de "misas"). El sitio toma una lista que falta como lista vacía:
 # lo resuelven validarHorarios y validarEventos (src/lib/validacion.ts) al
-# cargar cada archivo. Los textos obligatorios siguen siendo obligatorios, y
+# cargar cada archivo. Si al guardar no queda nada (se borra el último aviso
+# y no hay flyers), el CMS escribe el archivo con 0 bytes, ni siquiera {}: el
+# sitio y verificar:cms toman un archivo vacío como {} (leerJson en
+# src/lib/validacion.ts). Los textos obligatorios siguen siendo obligatorios, y
 # una semana sin ninguna misa corta el build.
 # Por lo mismo, npm run verificar:cms no exige que cada campo declarado acá
 # esté en el JSON; sí que todo campo del JSON esté declarado acá.

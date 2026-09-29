@@ -6,10 +6,12 @@
  * el HTML ya generado: el navegador nunca lee eventos.json.
  */
 import type { ImageMetadata } from 'astro';
-import datos from '../data/eventos.json';
+// Como texto (?raw), no como JSON: Pages CMS puede dejar el archivo vacío,
+// y ni el plugin JSON de Vite ni TypeScript aceptan un JSON vacío.
+import texto from '../data/eventos.json?raw';
 import { parroquia } from './parroquia';
 import { ZONA_HORARIA } from './horarios';
-import { validarEventos } from './validacion';
+import { leerJson, validarEventos } from './validacion';
 import type { Fecha, Flyer, Vigencia } from '../types/eventos';
 
 export const ID_SECCION_EVENTOS = 'eventos';
@@ -23,11 +25,13 @@ const imagenes = import.meta.glob<ImageMetadata>('/src/assets/eventos/*.{jpg,jpe
 });
 
 /**
- * Datos de eventos, completos y validados. El tipo que TypeScript deduce del
- * JSON no sirve: Pages CMS omite las listas vacías. Un dato mal cargado corta
- * el build (ver src/lib/validacion.ts).
+ * Datos de eventos, completos y validados: un archivo vacío cuenta como {} y
+ * una lista que falta, como vacía. Un dato mal cargado corta el build (ver
+ * src/lib/validacion.ts).
  */
-const eventos = validarEventos(datos, (archivo) => Boolean(imagenes[CARPETA_FLYERS + archivo]));
+const eventos = validarEventos(leerJson(texto, 'src/data/eventos.json'), (archivo) =>
+  Boolean(imagenes[CARPETA_FLYERS + archivo]),
+);
 
 const formatoFecha = new Intl.DateTimeFormat('en', {
   timeZone: ZONA_HORARIA,

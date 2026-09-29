@@ -2,13 +2,16 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import parroquia from './src/data/parroquia.json' with { type: 'json' };
-import { validarHorarios } from './src/lib/validacion';
+import { leerJson, validarHorarios } from './src/lib/validacion';
 
 /**
  * Normaliza y valida src/data/horarios.json al cargarlo, antes de que lo lea
  * cualquier módulo: el del build y el script del cliente, que trae las misas
  * incrustadas. Completa las listas que Pages CMS omite (un día sin misa, por
  * ejemplo) y ordena las misas. Un dato mal cargado corta el build.
+ *
+ * Corre antes que el plugin JSON de Vite (enforce: 'pre'), así que también
+ * resuelve un archivo vacío, que el CMS puede dejar y Vite no acepta.
  * @returns {import('vite').Plugin}
  */
 function validacionHorarios() {
@@ -17,13 +20,7 @@ function validacionHorarios() {
     enforce: 'pre',
     transform(codigo, id) {
       if (!id.split('?')[0]?.endsWith('/src/data/horarios.json')) return;
-      let datos;
-      try {
-        datos = JSON.parse(codigo);
-      } catch {
-        throw new Error('src/data/horarios.json está roto: no es un JSON válido.');
-      }
-      return JSON.stringify(validarHorarios(datos));
+      return JSON.stringify(validarHorarios(leerJson(codigo, 'src/data/horarios.json')));
     },
   };
 }
