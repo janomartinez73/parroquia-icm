@@ -1,0 +1,246 @@
+# Panel de edición de Pages CMS (app.pagescms.org).
+#
+# El CMS reescribe cada archivo entero al guardar y borra todo campo que no
+# esté declarado acá. Si se agrega, renombra o borra un campo de
+# src/data/horarios.json o src/data/eventos.json, hay que actualizar este
+# archivo en el mismo cambio.
+#
+# src/data/parroquia.json (textos del sitio y contacto) queda fuera del panel
+# a propósito: lo maneja el desarrollador.
+
+media:
+  - name: flyers
+    label: Flyers
+    input: src/assets/eventos
+    output: /src/assets/eventos
+    extensions: [jpg, jpeg, png, webp]
+    rename: safe
+
+content:
+  - name: horarios
+    label: Horarios
+    type: file
+    format: json
+    path: src/data/horarios.json
+    fields:
+      - name: misas
+        label: Misas
+        type: object
+        description: Un día sin misa se deja sin horarios. El orden no importa, en la página salen ordenadas.
+        fields:
+          - name: domingo
+            label: Domingo
+            type: string
+            list: true
+            description: Hora de cada misa, por ejemplo 07:30 o 19:30.
+            pattern:
+              regex: '^([01]\d|2[0-3]):[0-5]\d$'
+              message: Escribí la hora con 4 números, por ejemplo 07:30 o 19:30.
+          - name: lunes
+            label: Lunes
+            type: string
+            list: true
+            description: Hora de cada misa, por ejemplo 07:30 o 19:30.
+            pattern:
+              regex: '^([01]\d|2[0-3]):[0-5]\d$'
+              message: Escribí la hora con 4 números, por ejemplo 07:30 o 19:30.
+          - name: martes
+            label: Martes
+            type: string
+            list: true
+            description: Hora de cada misa, por ejemplo 07:30 o 19:30.
+            pattern:
+              regex: '^([01]\d|2[0-3]):[0-5]\d$'
+              message: Escribí la hora con 4 números, por ejemplo 07:30 o 19:30.
+          - name: miercoles
+            label: Miércoles
+            type: string
+            list: true
+            description: Hora de cada misa, por ejemplo 07:30 o 19:30.
+            pattern:
+              regex: '^([01]\d|2[0-3]):[0-5]\d$'
+              message: Escribí la hora con 4 números, por ejemplo 07:30 o 19:30.
+          - name: jueves
+            label: Jueves
+            type: string
+            list: true
+            description: Hora de cada misa, por ejemplo 07:30 o 19:30.
+            pattern:
+              regex: '^([01]\d|2[0-3]):[0-5]\d$'
+              message: Escribí la hora con 4 números, por ejemplo 07:30 o 19:30.
+          - name: viernes
+            label: Viernes
+            type: string
+            list: true
+            description: Hora de cada misa, por ejemplo 07:30 o 19:30.
+            pattern:
+              regex: '^([01]\d|2[0-3]):[0-5]\d$'
+              message: Escribí la hora con 4 números, por ejemplo 07:30 o 19:30.
+          - name: sabado
+            label: Sábado
+            type: string
+            list: true
+            description: Hora de cada misa, por ejemplo 07:30 o 19:30.
+            pattern:
+              regex: '^([01]\d|2[0-3]):[0-5]\d$'
+              message: Escribí la hora con 4 números, por ejemplo 07:30 o 19:30.
+
+      - name: apertura
+        label: Apertura del templo
+        type: object
+        fields:
+          - name: lunesASabados
+            label: De lunes a sábados
+            type: string
+            list: true
+            description: Cada tramo con hora de apertura y de cierre, por ejemplo 08:00 a 13:00.
+            pattern:
+              regex: '^([01]\d|2[0-3]):[0-5]\d a ([01]\d|2[0-3]):[0-5]\d$'
+              message: 'Escribilo así: 08:00 a 13:00'
+          - name: domingos
+            label: Domingos
+            type: string
+            list: true
+            description: Cada tramo con hora de apertura y de cierre, por ejemplo 09:00 a 12:00.
+            pattern:
+              regex: '^([01]\d|2[0-3]):[0-5]\d a ([01]\d|2[0-3]):[0-5]\d$'
+              message: 'Escribilo así: 08:00 a 13:00'
+
+      - name: secretaria
+        label: Horarios de secretaría
+        type: object
+        description: Un grupo por cada conjunto de días con el mismo horario.
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{dias}'
+        fields:
+          - name: dias
+            label: Días
+            type: string
+            required: true
+            description: Tal como se lee en la página, por ejemplo "Martes a Viernes" o "Sábados".
+          - name: tramos
+            label: Horarios
+            type: string
+            list: true
+            required: true
+            description: Cada tramo con hora de apertura y de cierre, por ejemplo 16:00 a 19:30.
+            pattern:
+              regex: '^([01]\d|2[0-3]):[0-5]\d a ([01]\d|2[0-3]):[0-5]\d$'
+              message: 'Escribilo así: 08:00 a 13:00'
+
+      - name: bautismos
+        label: Bautismos
+        type: object
+        fields:
+          - name: dia
+            label: Día
+            type: string
+            required: true
+            description: Por ejemplo "Todos los sábados".
+          - name: turnos
+            label: Turnos
+            type: string
+            list: true
+            description: 'Un renglón por turno, por ejemplo "Turno mañana: 10:30 hs".'
+            pattern:
+              regex: '\S'
+              message: Escribí el turno o borrá el renglón vacío.
+          - name: nota
+            label: Aclaración
+            type: string
+            required: true
+            description: Se muestra debajo de los turnos.
+
+      - name: charlasPreBautismales
+        label: Charlas prebautismales
+        type: object
+        fields:
+          - name: turnos
+            label: Turnos
+            type: string
+            list: true
+            description: 'Un renglón por turno, por ejemplo "Primeros sábados: 17:00 hs".'
+            pattern:
+              regex: '\S'
+              message: Escribí el turno o borrá el renglón vacío.
+          - name: nota
+            label: Aclaración
+            type: string
+            required: true
+            description: Se muestra debajo de los turnos.
+
+  - name: eventos
+    label: Avisos y flyers
+    type: file
+    format: json
+    path: src/data/eventos.json
+    fields:
+      - name: avisos
+        label: Avisos
+        type: object
+        description: Mensajes cortos que salen en una franja arriba de todo, por ejemplo un cambio de horario.
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{texto}'
+        fields:
+          - name: texto
+            label: Texto del aviso
+            type: string
+            required: true
+          - name: desde
+            label: Desde
+            type: date
+            required: true
+            default: ''
+            description: El aviso se muestra arriba de todo desde el primer día hasta el último, inclusive.
+            options:
+              format: yyyy-MM-dd
+          - name: hasta
+            label: Hasta
+            type: date
+            required: true
+            default: ''
+            description: El aviso se muestra arriba de todo desde el primer día hasta el último, inclusive.
+            options:
+              format: yyyy-MM-dd
+
+      - name: flyers
+        label: Flyers
+        type: object
+        description: Imágenes de eventos. Se muestran solo entre las fechas elegidas.
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{titulo}'
+        fields:
+          - name: archivo
+            label: Imagen
+            type: image
+            required: true
+            description: Foto o imagen del flyer, en JPG, PNG o WEBP.
+            options:
+              media: flyers
+          - name: titulo
+            label: Título
+            type: string
+            required: true
+            description: Se muestra debajo de la imagen.
+          - name: desde
+            label: Desde
+            type: date
+            required: true
+            default: ''
+            description: El flyer se muestra desde el primer día hasta el último, inclusive.
+            options:
+              format: yyyy-MM-dd
+          - name: hasta
+            label: Hasta
+            type: date
+            required: true
+            default: ''
+            description: El flyer se muestra desde el primer día hasta el último, inclusive.
+            options:
+              format: yyyy-MM-dd

@@ -26,6 +26,9 @@ El 80% entra a ver horarios de misa. Todo lo demás es secundario.
   dependencias innecesarias
 - Imágenes siempre con el componente <Image> de Astro
 - Español rioplatense en toda la interfaz
+- Si se agrega, renombra o borra un campo de src/data/horarios.json o
+  src/data/eventos.json, hay que actualizar también .pages.yml en el mismo
+  cambio: el CMS reescribe esos archivos enteros y borra lo que no conoce
 - NO ejecutar comandos de git ni de gh bajo ninguna circunstancia.
   El control de versiones lo maneja el usuario manualmente.
 
