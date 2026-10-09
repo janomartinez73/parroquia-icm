@@ -1,5 +1,6 @@
 ---
-import Emblema from './Emblema.astro';
+import { Image } from 'astro:assets';
+import dibujo from '../assets/logo.jpeg';
 import { parroquia } from '../lib/parroquia';
 import { seccionesVisibles as secciones } from '../lib/eventos';
 
@@ -11,15 +12,22 @@ const raya = 'origin-center transition-[translate,rotate,scale,opacity] duration
 
 <header class="sombra-al-bajar sticky top-0 z-40 border-b-2 border-oro bg-marfil/95">
   <div class="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-3 px-4 py-2">
-    <a href="#" class="group/marca flex min-h-12 items-center gap-2.5 leading-tight text-tinta no-underline">
-      <Emblema
-        class="hidden h-10 w-9 shrink-0 text-oro-oscuro transition-transform duration-500 ease-suave group-hover/marca:scale-110 min-[400px]:block"
+    <a href="#" class="group/marca flex min-h-12 items-center gap-2 leading-tight text-tinta min-[380px]:gap-2.5 no-underline">
+      <!-- Dibujo del Inmaculado Corazón; alt vacío porque el nombre está escrito al lado.
+           multiply funde el fondo blanco del JPEG con el marfil de la cabecera.
+           Hasta 460px el nombre va en dos líneas: en una no entra junto al botón del menú. -->
+      <Image
+        src={dibujo}
+        alt=""
+        widths={[48, 96, 144]}
+        sizes="(min-width: 768px) 54px, (min-width: 380px) 47px, 41px"
+        class="h-12 w-auto shrink-0 mix-blend-multiply transition-transform duration-500 ease-suave group-hover/marca:scale-110 min-[380px]:h-14 md:h-16"
       />
       <span class="flex flex-col">
         <span class="font-capitales block text-xs tracking-[0.3em] text-oro-oscuro uppercase">
           {marca.antetitulo}
         </span>
-        <span class="font-display block text-lg font-semibold text-azul min-[360px]:whitespace-nowrap sm:text-xl">
+        <span class="font-display block text-lg leading-tight font-semibold text-balance text-azul min-[460px]:whitespace-nowrap sm:text-xl">
           {marca.titulo}
         </span>
       </span>
