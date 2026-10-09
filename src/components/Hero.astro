@@ -1,7 +1,7 @@
 ---
 /**
- * Portada sobre cielo azul noche: la corona de doce estrellas sobre el
- * Inmaculado Corazón, el nombre, la dirección, la próxima misa y los accesos
+ * Portada sobre cielo azul noche: el dibujo del Inmaculado Corazón en su
+ * tarjeta, el nombre, la dirección, la próxima misa y los accesos
  * directos. En pantallas anchas, la fachada va a la derecha en un arco, con un
  * rosetón grande detrás. En celular no va: la misma torre se ve en Ubicación y
  * así los horarios quedan a poco scroll.
@@ -12,8 +12,7 @@ import { Image } from 'astro:assets';
 import fotoFrente from '../assets/frente-parroquia.jpg';
 import Arco from './Arco.astro';
 import Boton from './Boton.astro';
-import CoronaEstrellas from './CoronaEstrellas.astro';
-import Emblema from './Emblema.astro';
+import Logo from './Logo.astro';
 import Ornamento from './Ornamento.astro';
 import ProximaMisa from './ProximaMisa.astro';
 import Roseton from './Roseton.astro';
@@ -26,11 +25,15 @@ const { sitio, barrio, comunidad, direccion } = parroquia;
 <section class="fondo-cielo relative overflow-hidden border-b-4 border-double border-oro px-4 pt-4 pb-6 text-marfil md:py-20">
   <div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-[1fr_auto] lg:gap-20">
     <div class="text-center md:text-left">
-      <!-- La corona rodea al Corazón desde arriba. -->
-      <div class="relative mx-auto h-16 w-32 text-oro md:mx-0 md:h-32 md:w-60">
-        <CoronaEstrellas alCargar={0} class="absolute inset-x-0 top-0 w-full" />
-        <Emblema class="animate-emblema absolute bottom-0 left-1/2 h-11 w-10 -translate-x-1/2 [animation-delay:250ms] md:h-24 md:w-21" />
-      </div>
+      <!-- Sin la corona de estrellas: el dibujo ya tiene su aureola, y el cielo, sus estrellas. -->
+      <!-- alt vacío: el nombre está escrito justo debajo, en el título. -->
+      <Logo
+        alt=""
+        widths={[160, 240, 340]}
+        sizes="(min-width: 768px) 158px, 50px"
+        priority
+        class="animate-emblema mx-auto w-16 [animation-delay:150ms] md:mx-0 md:w-44"
+      />
 
       <h1 class="mt-3 text-balance md:mt-6">
         <span

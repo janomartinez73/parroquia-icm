@@ -6,6 +6,7 @@ import TituloSeccion from '../components/TituloSeccion.astro';
 import Footer from '../components/Footer.astro';
 import BotonWhatsApp from '../components/BotonWhatsApp.astro';
 import Horarios from '../components/Horarios.astro';
+import Comunidad from '../components/Comunidad.astro';
 import Ubicacion from '../components/Ubicacion.astro';
 import Campanario from '../components/Campanario.astro';
 import Sacramentos from '../components/Sacramentos.astro';
@@ -24,6 +25,7 @@ type Componente = typeof Horarios;
 const contenidos: Record<string, Componente | undefined> = {
   eventos: Eventos,
   horarios: Horarios,
+  comunidad: Comunidad,
   ubicacion: Ubicacion,
   sacramentos: Sacramentos,
   contacto: Contacto,

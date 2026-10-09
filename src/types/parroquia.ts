@@ -80,6 +80,37 @@ export interface TextosHorarios {
   dias: Record<DiaSemana, { singular: string; plural: string }>;
 }
 
+/** Sección "Nuestra comunidad": los Misioneros Claretianos. */
+export interface TextosComunidad {
+  presentacion: {
+    /** Comienzo del párrafo, en negrita. */
+    destacado: string;
+    resto: string;
+  };
+  /** Nombre oficial de la congregación; se despliega junto con el cierre. */
+  nombre: {
+    /** Botón para desplegar el nombre y el cierre. */
+    boton: string;
+    texto: string;
+  };
+  /** Cita de San Antonio María Claret: la primera oración siempre se ve; la continuación, al desplegarla. */
+  cita: {
+    inicio: string;
+    continuacion: string;
+    autor: string;
+    /** Botón para desplegar la continuación. */
+    leerCompleta: string;
+    /** El mismo botón, con la cita desplegada. */
+    leerMenos: string;
+  };
+  /** Sigue al nombre, en el mismo desplegable. `latin` va en cursiva y marcado como latín, entre `antes` y `despues`. */
+  cierre: {
+    antes: string;
+    latin: string;
+    despues: string;
+  };
+}
+
 export interface TextosUbicacion {
   comoLlegar: string;
   /** Atributo title del iframe del mapa. */
@@ -127,6 +158,10 @@ export interface Sitio {
     boton: string;
     etiqueta: string;
   };
+  /** Dibujo de src/assets/logo.jpeg. Donde el nombre ya está escrito al lado, va con alt vacío. */
+  logo: {
+    alt: string;
+  };
   hero: {
     alt: string;
     /** Botón que lleva a la sección de horarios. */
@@ -139,6 +174,7 @@ export interface Sitio {
   /** "eventos" se omite solo cuando no hay flyers vigentes. */
   secciones: Seccion[];
   horarios: TextosHorarios;
+  comunidad: TextosComunidad;
   ubicacion: TextosUbicacion;
   sacramentos: TextosSacramentos;
   contacto: TextosContacto;

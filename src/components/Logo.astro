@@ -1,0 +1,44 @@
+---
+/**
+ * Imagen de la parroquia: el dibujo de la Virgen con "Inmaculado Corazón de
+ * María" (src/assets/logo.jpeg; pese al nombre, no es el logo de los
+ * Claretianos). Va completo y tal cual: sin recortar ni cambiarle el fondo.
+ * Va en una tarjeta blanca con un filete oro fino, así su fondo blanco queda
+ * integrado también sobre el cielo azul noche.
+ *
+ * El ancho sale de la clase (w-*); `sizes` tiene que coincidir con ese ancho
+ * menos el relleno de la tarjeta.
+ */
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.jpeg';
+
+interface Props {
+  /** Vacío donde el nombre ya está escrito al lado. */
+  alt: string;
+  widths: number[];
+  sizes: string;
+  /** Relleno de la tarjeta: más fino en los tamaños chicos. */
+  fino?: boolean;
+  priority?: boolean;
+  class?: string;
+}
+
+const { alt, widths, sizes, fino = false, priority = false, class: clase } = Astro.props;
+---
+
+<span
+  class:list={[
+    'block shrink-0 border border-oro bg-white shadow-[0_0.75rem_1.5rem_-1rem_rgb(19_33_63/0.5)]',
+    fino ? 'rounded-md p-0.5' : 'rounded-xl p-1.5 md:p-2',
+    clase,
+  ]}
+>
+  <Image
+    src={logo}
+    alt={alt}
+    widths={widths}
+    sizes={sizes}
+    priority={priority}
+    class:list={['block h-auto w-full', fino ? 'rounded-sm' : 'rounded-lg']}
+  />
+</span>

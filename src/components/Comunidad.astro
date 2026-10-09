@@ -1,0 +1,81 @@
+---
+/**
+ * Los Misioneros Claretianos: presentación, la cita de San Antonio María
+ * Claret y, al final, el nombre oficial y el significado de C.M.F.
+ *
+ * Para que en celular no alargue la página, la cita muestra solo la primera
+ * oración y el nombre va plegado: los dos se despliegan con <details>, sin
+ * JavaScript. El dibujo va al costado del primer párrafo; en pantallas
+ * anchas, en su propia columna.
+ */
+import Estrella from './Estrella.astro';
+import Logo from './Logo.astro';
+import { parroquia } from '../lib/parroquia';
+
+const { sitio } = parroquia;
+const { presentacion, nombre, cita, cierre } = sitio.comunidad;
+
+// Abierto, el botón pasa debajo del texto (order-1): así lo desplegado sigue
+// a lo que ya se veía. Cada <details> se nombra con group/desplegable.
+const claseBoton =
+  'font-capitales mx-auto flex min-h-11 w-fit text-center text-balance cursor-pointer list-none items-center gap-2 text-sm font-semibold tracking-[0.12em] text-oro-oscuro not-italic uppercase underline decoration-oro/60 underline-offset-4 transition-colors duration-300 hover:text-azul hover:decoration-azul group-open/desplegable:order-1 [&::-webkit-details-marker]:hidden';
+const claseFlecha = 'size-4 shrink-0 transition-transform duration-300 ease-suave group-open/desplegable:rotate-180';
+---
+
+<!-- Bloque en celular, con el dibujo flotando a la izquierda; grilla en lg, donde el float no cuenta. -->
+<div class="revelar mx-auto max-w-5xl lg:grid lg:grid-cols-[15rem_1fr] lg:items-start lg:gap-14">
+  <Logo
+    alt={sitio.logo.alt}
+    widths={[180, 300, 460]}
+    sizes="(min-width: 1024px) 222px, 66px"
+    class="float-left mt-1.5 mr-3 mb-1 w-20 lg:float-none lg:m-0 lg:w-full"
+  />
+
+  <div>
+    <p class="leading-normal text-pretty md:leading-relaxed"><strong class="text-azul">{presentacion.destacado}</strong> {presentacion.resto}</p>
+
+    <figure class="clear-both mt-3 text-center md:mt-8">
+      <!-- En celular, el ornamento se reduce a las estrellas de la firma: una fila menos. -->
+      <div class="hidden items-center justify-center gap-2 text-oro md:flex" aria-hidden="true">
+        <span class="h-px w-12 bg-current"></span>
+        <Estrella class="size-3" />
+        <span class="font-display -mb-6 text-6xl leading-none">&ldquo;</span>
+        <Estrella class="size-3" />
+        <span class="h-px w-12 bg-current"></span>
+      </div>
+      <blockquote class="font-display md:mt-1 text-[1.3rem] leading-snug text-balance text-azul italic md:text-[1.6rem]">
+        <p>{cita.inicio}</p>
+        <details class="group/desplegable flex flex-col">
+          <summary class={claseBoton}>
+            <span class="group-open/desplegable:hidden">{cita.leerCompleta}</span>
+            <span class="hidden group-open/desplegable:inline">{cita.leerMenos}</span>
+            <svg class={claseFlecha} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </summary>
+          <p class="mt-2 group-open/desplegable:animate-aparecer">{cita.continuacion}</p>
+        </details>
+      </blockquote>
+      <figcaption class="flex items-center justify-center gap-2 text-oro">
+        <span class="hidden h-px w-6 bg-current sm:block" aria-hidden="true"></span>
+        <Estrella class="size-2.5 shrink-0" />
+        <cite class="font-capitales text-xs font-semibold tracking-[0.12em] text-oro-oscuro not-italic uppercase md:text-sm md:tracking-[0.14em]">{cita.autor}</cite>
+        <Estrella class="size-2.5 shrink-0" />
+        <span class="hidden h-px w-6 bg-current sm:block" aria-hidden="true"></span>
+      </figcaption>
+    </figure>
+
+    <details class="group/desplegable mt-3 flex flex-col border-t border-celeste pt-2 md:mt-8 md:pt-4">
+      <summary class={claseBoton}>
+        {nombre.boton}
+        <svg class={claseFlecha} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m6 9 6 6 6-6"></path>
+        </svg>
+      </summary>
+      <div class="pb-2 text-center text-pretty group-open/desplegable:animate-aparecer">
+        <p>{nombre.texto}</p>
+        <p class="mt-3">{cierre.antes} <i lang="la" class="text-azul">{cierre.latin}</i>{cierre.despues}</p>
+      </div>
+    </details>
+  </div>
+</div>

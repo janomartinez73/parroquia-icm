@@ -14,6 +14,9 @@
       "boton": "Menú",
       "etiqueta": "Navegación principal"
     },
+    "logo": {
+      "alt": "Imagen del Inmaculado Corazón de María"
+    },
     "hero": {
       "alt": "Fachada de la parroquia vista desde la vereda: torre de ladrillo con reloj, rosetón y el cartel «Parroquia Inmaculado Corazón de María» sobre la puerta de entrada",
       "verHorarios": "Horarios de misa"
@@ -24,6 +27,7 @@
     "secciones": [
       { "id": "eventos", "titulo": "Eventos" },
       { "id": "horarios", "titulo": "Horarios" },
+      { "id": "comunidad", "titulo": "Nuestra comunidad" },
       { "id": "ubicacion", "titulo": "Ubicación" },
       { "id": "sacramentos", "titulo": "Sacramentos" },
       { "id": "contacto", "titulo": "Contacto" }
@@ -54,6 +58,28 @@
         "jueves": { "singular": "jueves", "plural": "Jueves" },
         "viernes": { "singular": "viernes", "plural": "Viernes" },
         "sabado": { "singular": "sábado", "plural": "Sábados" }
+      }
+    },
+    "comunidad": {
+      "presentacion": {
+        "destacado": "Somos una Congregación de Misioneros",
+        "resto": "fundada por San Antonio María Claret el 16 de julio de 1849, en Vic, España, junto con los PP. Esteban Sala, José Xifré, Domingo Fábregas, Jaime Clotet y Manuel Vilaró."
+      },
+      "nombre": {
+        "boton": "Nuestro nombre y C.M.F.",
+        "texto": "El nombre oficial de nuestra congregación es Congregación de Misioneros Hijos del Inmaculado Corazón de la Bienaventurada Virgen María, comúnmente conocidos como Claretianos."
+      },
+      "cita": {
+        "inicio": "Un claretiano es un Hijo del Inmaculado Corazón de María; es un hombre que arde en caridad y que abrasa por donde pasa.",
+        "continuacion": "Que desea eficazmente y procura por todos los medios encender a todos los hombres en el fuego del divino amor. Nada le arredra; se goza en las privaciones; aborda los trabajos; abraza los sacrificios; se complace en las calumnias; se alegra en los tormentos y dolores que sufre y se gloría en la cruz de Jesucristo. No piensa sino cómo seguirá e imitará a Cristo en orar, en trabajar, en sufrir, en procurar siempre y únicamente la mayor gloria de Dios y la salvación de los hombres.",
+        "autor": "San Antonio María Claret",
+        "leerCompleta": "Leer la cita completa",
+        "leerMenos": "Mostrar menos"
+      },
+      "cierre": {
+        "antes": "Al final de nuestros nombres ponemos C.M.F., las iniciales de las palabras latinas",
+        "latin": "Cordis Mariae Filius",
+        "despues": ", que significan Hijo del Corazón de María."
       }
     },
     "ubicacion": {

@@ -26,8 +26,10 @@ const jsonLd = JSON.stringify(datosEstructurados(fotoHero.src)).replace(/</g, '\
     {canonical && <link rel="canonical" href={canonical} />}
     <meta name="theme-color" content={COLOR_MARFIL} />
     <link rel="preload" href={fuentePrincipal} as="font" type="font/woff2" crossorigin />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <!-- Íconos de la pestaña: el rostro de la Virgen de src/assets/logo.jpeg, sin el texto.
+         Los anteriores (el Emblema) quedan de respaldo en public/*-corazon.*. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
     <!-- Ícono cuando se agrega el sitio a la pantalla de inicio del celular. -->
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 

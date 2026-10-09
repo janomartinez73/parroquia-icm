@@ -8,28 +8,33 @@
  * data-maximo. Si no queda ninguno visible, oculta el elemento cuyo id es el
  * valor de data-vigencia y sus enlaces en el menú.
  */
-import { ZONA_HORARIA } from '../lib/horarios';
-
-const zona = ZONA_HORARIA;
 ---
 
-<script is:inline define:vars={{ zona }}>
-  const partes = new Intl.DateTimeFormat('en', { timeZone: zona, year: 'numeric', month: '2-digit', day: '2-digit' })
+<script>
+  // Sin is:inline ni define:vars, para que Astro lo empaquete y lo incluya en
+  // la CSP (security.csp en astro.config.mjs): un script en línea se bloquea.
+  import { ZONA_HORARIA } from '../lib/horarios';
+
+  const partes = new Intl.DateTimeFormat('en', { timeZone: ZONA_HORARIA, year: 'numeric', month: '2-digit', day: '2-digit' })
     .formatToParts(new Date())
-    .reduce((acc, parte) => ({ ...acc, [parte.type]: parte.value }), {});
+    .reduce<Record<string, string>>((acc, parte) => ({ ...acc, [parte.type]: parte.value }), {});
   const hoy = `${partes.year}-${partes.month}-${partes.day}`;
 
-  document.querySelectorAll('[data-vigencia]').forEach((grupo) => {
+  document.querySelectorAll<HTMLElement>('[data-vigencia]').forEach((grupo) => {
     const maximo = Number(grupo.dataset.maximo) || Infinity;
     let visibles = 0;
-    grupo.querySelectorAll('[data-hasta]').forEach((item) => {
-      item.hidden = item.dataset.hasta < hoy || visibles >= maximo;
+    grupo.querySelectorAll<HTMLElement>('[data-hasta]').forEach((item) => {
+      item.hidden = (item.dataset.hasta ?? '') < hoy || visibles >= maximo;
       if (!item.hidden) visibles++;
     });
     if (visibles > 0) return;
 
     const id = grupo.dataset.vigencia;
-    document.getElementById(id).hidden = true;
-    document.querySelectorAll(`a[href="#${id}"]`).forEach((enlace) => (enlace.closest('li').hidden = true));
+    const elemento = id ? document.getElementById(id) : null;
+    if (elemento) elemento.hidden = true;
+    document.querySelectorAll(`a[href="#${id}"]`).forEach((enlace) => {
+      const li = enlace.closest('li');
+      if (li) li.hidden = true;
+    });
   });
 </script>
