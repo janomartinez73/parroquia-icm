@@ -25,12 +25,13 @@
       "etiqueta": "Avisos"
     },
     "eventos": {
-      "verDocumento": "Ver más información (PDF)"
+      "verDocumento": "Ver más información (PDF)",
+      "verEnGrande": "Tocá la imagen para verla en grande"
     },
     "secciones": [
       { "id": "eventos", "titulo": "Eventos" },
       { "id": "horarios", "titulo": "Horarios" },
-      { "id": "comunidad", "titulo": "Nuestra comunidad" },
+      { "id": "comunidad", "titulo": "Nuestra comunidad", "menu": "Comunidad" },
       { "id": "ubicacion", "titulo": "Ubicación" },
       { "id": "sacramentos", "titulo": "Sacramentos" },
       { "id": "contacto", "titulo": "Contacto" }
@@ -155,6 +156,7 @@
     ]
   },
   "redes": [
-    { "nombre": "Facebook", "url": "https://www.facebook.com/ParroquiaInmaculadoCorazondeMariadeRosario/" }
+    { "nombre": "Facebook", "url": "https://www.facebook.com/ParroquiaInmaculadoCorazondeMariadeRosario/" },
+    { "nombre": "Instagram", "url": "https://www.instagram.com/corazondemariarosario/" }
   ]
 }

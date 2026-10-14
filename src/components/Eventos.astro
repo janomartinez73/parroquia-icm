@@ -2,44 +2,72 @@
 /**
  * Grilla de flyers vigentes. index.astro solo la incluye si hay alguno.
  *
- * Cada flyer va en una caja 4:5 con object-fit contain: entra entero, sin
- * recortes, cualquiera sea su proporción. Si el flyer tiene PDF, debajo del
- * título va un botón que lo abre en otra pestaña, sin incrustarlo.
+ * Cada flyer se ve entero, con su proporción real y sin recortes. Si queda
+ * uno solo, va más grande y centrado. Al tocar la imagen se abre en otra
+ * pestaña una versión de buena resolución, para hacer zoom en el celular.
+ * Si el flyer tiene PDF, debajo del título va un botón que lo abre en otra
+ * pestaña, sin incrustarlo.
  */
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import Boton from './Boton.astro';
 import { enlaceDocumento, flyersVigentes, ID_SECCION_EVENTOS, MAXIMO_FLYERS } from '../lib/eventos';
 import { parroquia } from '../lib/parroquia';
 
+const textos = parroquia.sitio.eventos;
+
 // Flex en lugar de grid: si queda un flyer solo en la fila, va centrado.
-const claseFlyer = 'w-full sm:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-1.667rem)]';
+// flyer-solo (global.css): si es el único visible, ocupa hasta 640px (en px:
+// el rem del sitio es de 18px).
+const claseFlyer =
+  'w-full sm:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-1.667rem)] flyer-solo:w-full flyer-solo:max-w-[640px]';
+
+// La imagen mide el <li> menos el borde y el relleno del marco (22px); el <li>,
+// la página menos el relleno de la sección (36px).
+const solo = Math.min(flyersVigentes.length, MAXIMO_FLYERS) === 1;
+const sizes = solo
+  ? '(min-width: 676px) 618px, calc(100vw - 58px)'
+  : '(min-width: 1024px) 340px, (min-width: 640px) calc(50vw - 63px), calc(100vw - 58px)';
 
 // Nunca más ancho que el original.
-const anchos = (original: number) => [...new Set([400, 800].map((ancho) => Math.min(ancho, original)))];
+const hasta = (original: number, anchos: number[]) => [...new Set(anchos.map((ancho) => Math.min(ancho, original)))];
+
+// Versión grande que abre al tocar el flyer: generada por Astro, hasta 1600px.
+const flyers = await Promise.all(
+  flyersVigentes.map(async (flyer) => ({
+    ...flyer,
+    grande: await getImage({ src: flyer.imagen, width: Math.min(1600, flyer.imagen.width), format: 'jpg' }),
+  })),
+);
 ---
 
-<ul data-vigencia={ID_SECCION_EVENTOS} data-maximo={MAXIMO_FLYERS} class="flex flex-wrap justify-center gap-10">
+<ul data-vigencia={ID_SECCION_EVENTOS} data-maximo={MAXIMO_FLYERS} class="flex flex-wrap items-start justify-center gap-10">
   {
-    flyersVigentes.map((flyer, i) => (
+    flyers.map((flyer, i) => (
       <li data-hasta={flyer.hasta} hidden={i >= MAXIMO_FLYERS} class:list={['revelar', claseFlyer]}>
         <figure>
-          <div class="hornacina border-2 border-oro bg-white p-2 shadow-[0_1rem_2rem_-1.5rem_rgb(19_33_63/0.35)] transition-[translate,box-shadow] duration-300 ease-suave hover:-translate-y-1.5 hover:shadow-[0_1.25rem_2rem_-1rem_rgb(19_33_63/0.45)]">
+          <a
+            href={flyer.grande.src}
+            target="_blank"
+            rel="noopener"
+            class="hornacina block border-2 border-oro bg-white p-2 shadow-[0_1rem_2rem_-1.5rem_rgb(19_33_63/0.35)] transition-[translate,box-shadow] duration-300 ease-suave hover:-translate-y-1.5 hover:shadow-[0_1.25rem_2rem_-1rem_rgb(19_33_63/0.45)]"
+          >
             <Image
               src={flyer.imagen}
               alt={flyer.titulo}
-              widths={anchos(flyer.imagen.width)}
-              sizes="(min-width: 1024px) 350px, (min-width: 640px) calc(50vw - 56px), calc(100vw - 56px)"
-              class="hornacina aspect-[4/5] w-full bg-celeste-claro object-contain"
+              widths={hasta(flyer.imagen.width, [400, 640, 960, 1280, 1600])}
+              sizes={sizes}
+              class="hornacina h-auto w-full"
             />
-          </div>
-          <figcaption class="font-display mt-3 text-center text-2xl leading-tight font-semibold text-balance text-azul">
+          </a>
+          <p class="mt-2 text-center text-sm italic">{textos.verEnGrande}</p>
+          <figcaption class="font-display mt-2 text-center text-2xl leading-tight font-semibold text-balance text-azul">
             {flyer.titulo}
           </figcaption>
         </figure>
         {flyer.documento && (
           <div class="mt-4 flex justify-center">
             <Boton href={enlaceDocumento(flyer.documento)} externo variante="principal">
-              {parroquia.sitio.eventos.verDocumento}
+              {textos.verDocumento}
             </Boton>
           </div>
         )}

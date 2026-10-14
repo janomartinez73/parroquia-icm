@@ -11,7 +11,7 @@ const raya = 'origin-center transition-[translate,rotate,scale,opacity] duration
 ---
 
 <header class="sombra-al-bajar sticky top-0 z-40 border-b-2 border-oro bg-marfil/95">
-  <div class="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-3 px-4 py-2">
+  <div class="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-3 px-4 py-2 xl:gap-10">
     <a href="#" class="group/marca flex min-h-12 items-center gap-2 leading-tight text-tinta min-[380px]:gap-2.5 no-underline">
       <!-- Dibujo del Inmaculado Corazón; alt vacío porque el nombre está escrito al lado.
            multiply funde el fondo blanco del JPEG con el marfil de la cabecera.
@@ -34,22 +34,22 @@ const raya = 'origin-center transition-[translate,rotate,scale,opacity] duration
     </a>
 
     <nav aria-label={menu.etiqueta}>
-      <ul class="hidden gap-7 lg:flex">
+      <ul class="hidden gap-6 xl:flex">
         {
           secciones.map((seccion) => (
             <li>
               <a
                 href={`#${seccion.id}`}
-                class="font-capitales relative flex min-h-12 items-center text-sm font-semibold tracking-[0.14em] text-tinta uppercase transition-colors duration-300 after:absolute after:inset-x-0 after:bottom-2 after:h-0.5 after:origin-center after:scale-x-0 after:bg-oro after:transition-transform after:duration-300 after:ease-suave hover:text-azul hover:after:scale-x-100"
+                class="font-capitales relative flex min-h-12 items-center text-sm font-semibold tracking-[0.12em] text-tinta uppercase transition-colors duration-300 after:absolute after:inset-x-0 after:bottom-2 after:h-0.5 after:origin-center after:scale-x-0 after:bg-oro after:transition-transform after:duration-300 after:ease-suave hover:text-azul hover:after:scale-x-100"
               >
-                {seccion.titulo}
+                {seccion.menu ?? seccion.titulo}
               </a>
             </li>
           ))
         }
       </ul>
 
-      <details class="group lg:hidden" data-menu>
+      <details class="group xl:hidden" data-menu>
         <summary
           class="font-capitales flex min-h-12 cursor-pointer list-none items-center gap-1.5 rounded-sm border-2 border-azul/40 px-2.5 text-sm font-semibold tracking-[0.1em] text-azul uppercase transition-colors duration-300 group-open:border-azul group-open:bg-azul group-open:text-marfil hover:border-azul [&::-webkit-details-marker]:hidden"
         >
@@ -74,7 +74,7 @@ const raya = 'origin-center transition-[translate,rotate,scale,opacity] duration
                   href={`#${seccion.id}`}
                   class="font-capitales flex min-h-13 items-center gap-3 text-base font-semibold tracking-[0.14em] text-tinta uppercase transition-[color,padding] duration-300 hover:pl-2 hover:text-azul"
                 >
-                  {seccion.titulo}
+                  {seccion.menu ?? seccion.titulo}
                 </a>
               </li>
             ))

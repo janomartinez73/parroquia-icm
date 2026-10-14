@@ -55,6 +55,8 @@ export interface TextosWhatsApp {
 export interface Seccion {
   id: string;
   titulo: string;
+  /** Etiqueta corta para la barra de navegación. Si falta, se usa el título. */
+  menu?: string;
 }
 
 /** Textos de la sección de horarios. */
@@ -174,6 +176,8 @@ export interface Sitio {
   eventos: {
     /** Botón debajo de un flyer que tiene PDF; lo abre en otra pestaña. */
     verDocumento: string;
+    /** Indicación debajo de cada flyer: la imagen abre en grande en otra pestaña. */
+    verEnGrande: string;
   };
   /** "eventos" se omite solo cuando no hay flyers vigentes. */
   secciones: Seccion[];

@@ -50,10 +50,10 @@ const claseEnlace =
         redes.length > 0 && (
           <div>
             <Subtitulo menor texto={textos.redes} />
-            <ul class="flex flex-wrap justify-center gap-x-6">
+            <ul class="flex flex-wrap justify-center gap-x-6 sm:flex-col sm:items-center">
               {redes.map((red) => (
                 <li>
-                  <a href={red.url} target="_blank" rel="noopener" class:list={[claseEnlace, 'inline-block py-1 text-2xl']}>
+                  <a href={red.url} target="_blank" rel="noopener" class:list={[claseEnlace, 'inline-flex min-h-11 items-center text-2xl']}>
                     {red.nombre}
                   </a>
                 </li>

@@ -209,6 +209,10 @@ body {
    `hoy:` aplica al bloque y a todo lo que tiene adentro. */
 @custom-variant hoy (&:is(.hoy, .hoy *));
 
+/* Flyer que quedó solo en su lista: ningún otro <li> visible. Cuenta también
+   los que FiltroVigencia oculta en el cliente con hidden. */
+@custom-variant flyer-solo (ul:not(:has(> li:not([hidden]) ~ li:not([hidden]))) > &);
+
 /* Nombres de días en los listados de horarios. */
 @utility dia {
   font-weight: 700;
