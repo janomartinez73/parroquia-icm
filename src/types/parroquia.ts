@@ -171,6 +171,10 @@ export interface Sitio {
     /** Nombre accesible de la banda de avisos. */
     etiqueta: string;
   };
+  eventos: {
+    /** Botón debajo de un flyer que tiene PDF; lo abre en otra pestaña. */
+    verDocumento: string;
+  };
   /** "eventos" se omite solo cuando no hay flyers vigentes. */
   secciones: Seccion[];
   horarios: TextosHorarios;

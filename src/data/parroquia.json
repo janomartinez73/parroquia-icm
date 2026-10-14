@@ -24,6 +24,9 @@
     "avisos": {
       "etiqueta": "Avisos"
     },
+    "eventos": {
+      "verDocumento": "Ver más información (PDF)"
+    },
     "secciones": [
       { "id": "eventos", "titulo": "Eventos" },
       { "id": "horarios", "titulo": "Horarios" },

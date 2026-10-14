@@ -21,6 +21,12 @@ export interface Flyer extends Vigencia {
   archivo: string;
   /** Se muestra debajo de la imagen y es su texto alternativo. */
   titulo: string;
+  /**
+   * PDF con más información, dentro de public/documentos/: "retiro.pdf", o la
+   * ruta que guarda Pages CMS, "/documentos/retiro.pdf". Si falta o está vacío,
+   * el flyer va sin botón. Ya validado, queda solo el nombre.
+   */
+  documento?: string;
 }
 
 export interface Eventos {

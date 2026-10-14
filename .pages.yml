@@ -27,6 +27,13 @@ media:
     output: /src/assets/eventos
     extensions: [jpg, jpeg, png, webp]
     rename: safe
+  # PDF de los flyers. Van en public/ porque se sirven tal cual, sin procesar.
+  - name: documentos
+    label: Documentos PDF
+    input: public/documentos
+    output: /documentos
+    extensions: [pdf]
+    rename: safe
 
 content:
   - name: horarios
@@ -240,6 +247,12 @@ content:
             type: string
             required: true
             description: Se muestra debajo de la imagen.
+          - name: documento
+            label: Más información (PDF, opcional)
+            type: file
+            description: Si el evento tiene más información, armala en Word, guardala como PDF y subila acá.
+            options:
+              media: documentos
           - name: desde
             label: Desde
             type: date

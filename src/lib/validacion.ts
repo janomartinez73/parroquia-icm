@@ -42,6 +42,12 @@ export function partirTramo(tramo: string): { inicio: string; fin: string } {
  */
 export const nombreDeArchivo = (archivo: string) => archivo.replace(/^\/?src\/assets\/eventos\//, '');
 
+/**
+ * Pages CMS guarda la ruta pública del PDF ("/documentos/x.pdf"); a mano se
+ * carga solo "x.pdf". Todo queda en "x.pdf".
+ */
+export const nombreDeDocumento = (documento: string) => documento.trim().replace(/^\/?documentos\//, '');
+
 /** True si es una fecha "AAAA-MM-DD" que existe en el calendario. */
 export function esFechaValida(fecha: unknown): fecha is string {
   if (typeof fecha !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) return false;
@@ -233,12 +239,18 @@ export function validarHorarios(datos: unknown): Horarios {
 
 /**
  * Normaliza y valida el contenido de src/data/eventos.json. Lo devuelve con
- * las dos listas presentes y la imagen de cada flyer como nombre de archivo
- * ("x.jpg"). Junta todos los errores y los tira juntos.
+ * las dos listas presentes, la imagen de cada flyer como nombre de archivo
+ * ("x.jpg") y su PDF, si tiene, también ("x.pdf"). Junta todos los errores y
+ * los tira juntos.
  *
  * @param existeImagen dice si "x.jpg" está en src/assets/eventos/.
+ * @param existeDocumento dice si "x.pdf" está en public/documentos/.
  */
-export function validarEventos(datos: unknown, existeImagen: (archivo: string) => boolean): Eventos {
+export function validarEventos(
+  datos: unknown,
+  existeImagen: (archivo: string) => boolean,
+  existeDocumento: (documento: string) => boolean,
+): Eventos {
   if (!esObjeto(datos)) {
     throw new Error('Hay errores en src/data/eventos.json:\n  - el archivo está vacío o no tiene el formato esperado.\n');
   }
@@ -288,7 +300,22 @@ export function validarEventos(datos: unknown, existeImagen: (archivo: string) =
           'Revisá que el nombre coincida exactamente, con mayúsculas y extensión.',
       );
     }
-    return [{ archivo, titulo, ...vigencia(nombre, valores) }];
+    // El PDF es opcional: si falta o está vacío, el flyer va sin botón.
+    let documento: string | undefined;
+    if (!falta(valores.documento) && typeof valores.documento !== 'string') {
+      errores.push(`${nombre}: "documento" tiene que ser un texto y es ${JSON.stringify(valores.documento)}.`);
+    } else if (!estaVacio(valores.documento)) {
+      documento = nombreDeDocumento(valores.documento as string);
+      if (!/\.pdf$/i.test(documento)) {
+        errores.push(`${nombre}: el documento "${documento}" no es un PDF. Guardalo como PDF y subilo de nuevo.`);
+      } else if (!existeDocumento(documento)) {
+        errores.push(
+          `${nombre}: no existe el archivo public/documentos/${documento}. ` +
+            'Revisá que el nombre coincida exactamente, con mayúsculas y extensión, o subí el PDF de nuevo.',
+        );
+      }
+    }
+    return [{ archivo, titulo, ...(documento ? { documento } : {}), ...vigencia(nombre, valores) }];
   });
 
   if (errores.length > 0) {

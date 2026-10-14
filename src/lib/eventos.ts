@@ -5,6 +5,8 @@
  * entre dos deploys, FiltroVigencia.astro vuelve a filtrar en el cliente, sobre
  * el HTML ya generado: el navegador nunca lee eventos.json.
  */
+import { existsSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import type { ImageMetadata } from 'astro';
 // Como texto (?raw), no como JSON: Pages CMS puede dejar el archivo vacío,
 // y ni el plugin JSON de Vite ni TypeScript aceptan un JSON vacío.
@@ -29,8 +31,22 @@ const imagenes = import.meta.glob<ImageMetadata>('/src/assets/eventos/*.{jpg,jpe
  * una lista que falta, como vacía. Un dato mal cargado corta el build (ver
  * src/lib/validacion.ts).
  */
-const eventos = validarEventos(leerJson(texto, 'src/data/eventos.json'), (archivo) =>
-  Boolean(imagenes[CARPETA_FLYERS + archivo]),
+/**
+ * PDF de public/documentos/. Se sirven tal cual, sin pasar por Vite, así que
+ * se leen del disco. Se compara contra la lista exacta de nombres y no con
+ * existsSync: en Windows "Retiro.pdf" encontraría "retiro.pdf", y en
+ * Cloudflare el enlace daría 404.
+ */
+const CARPETA_DOCUMENTOS = join(process.cwd(), 'public', 'documentos');
+const documentos = new Set(existsSync(CARPETA_DOCUMENTOS) ? readdirSync(CARPETA_DOCUMENTOS) : []);
+
+/** Dirección pública del PDF de un flyer ("x.pdf" → "/documentos/x.pdf"). */
+export const enlaceDocumento = (documento: string) => `/documentos/${encodeURIComponent(documento)}`;
+
+const eventos = validarEventos(
+  leerJson(texto, 'src/data/eventos.json'),
+  (archivo) => Boolean(imagenes[CARPETA_FLYERS + archivo]),
+  (documento) => documentos.has(documento),
 );
 
 const formatoFecha = new Intl.DateTimeFormat('en', {

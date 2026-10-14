@@ -39,6 +39,7 @@ Todo lo define `.pages.yml`, en la raíz del repositorio:
 | **Horarios** | `src/data/horarios.json` (misas, apertura, secretaría, bautismos, charlas pre-bautismales) |
 | **Avisos y flyers** | `src/data/eventos.json` |
 | **Flyers** (biblioteca de imágenes) | carpeta `src/assets/eventos/` |
+| **Documentos PDF** (biblioteca de PDF de los flyers) | carpeta `public/documentos/` |
 
 `src/data/parroquia.json` (textos del sitio, contacto, redes) queda fuera del panel a propósito: lo maneja el desarrollador.
 
@@ -64,7 +65,22 @@ Un archivo vacío no es JSON válido, así que tiene que resolverse antes de que
 - `src/lib/validacion.ts` se carga junto con la config de Astro, así que no puede importar `horarios.json`, ni directamente ni a través de otro módulo. Si no, un `horarios.json` vacío o roto rompe la config antes de que el plugin pueda dar su mensaje. Por eso los días de la semana están en `src/lib/semana.ts`.
 - `npm run verificar:cms` también toma un archivo vacío como `{}`.
 
-Los flyers subidos desde el panel quedan en `archivo` con la ruta completa (`src/assets/eventos/semana-santa.jpg`, a veces con `/` adelante) en vez de solo el nombre. El sitio acepta las dos formas.
+Los flyers subidos desde el panel quedan en `archivo` con la ruta completa (`src/assets/eventos/semana-santa.jpg`, a veces con `/` adelante) en vez de solo el nombre. El sitio acepta las dos formas. Con los PDF pasa lo mismo: el panel guarda `documento` como `/documentos/retiro.pdf`, y a mano alcanza con `retiro.pdf`.
+
+### Cargar un evento con PDF desde el panel
+
+Un flyer puede llevar un PDF con más información (horarios, inscripción, programa). Debajo del título del flyer aparece el botón "Ver más información (PDF)", que lo abre en una pestaña nueva; el PDF no se incrusta en la página. Es opcional: sin PDF, el flyer se ve como siempre.
+
+1. Armá el texto en Word y guardalo como PDF (**Archivo → Guardar como → PDF**). Conviene un nombre simple, sin espacios ni tildes: `retiro-adviento.pdf`.
+2. En el panel, entrá a **Avisos y flyers** y agregá el flyer como siempre (imagen, título, fechas), o abrí uno que ya esté cargado.
+3. En **Más información (PDF, opcional)**, elegí el PDF o subilo desde ahí. También se puede subir antes desde **Documentos PDF**, en el menú lateral, y después elegirlo en el flyer.
+4. Tocá **Save**.
+
+El botón aparece y desaparece junto con el flyer, según sus fechas. Para sacar el PDF de un flyer, se vacía el campo y se guarda; el archivo queda en **Documentos PDF** hasta que se lo borre de ahí. Si se borra un PDF que algún flyer todavía usa, el sitio no se publica hasta corregirlo (ver abajo).
+
+Los PDF van en `public/documentos/` y no en `src/assets/` porque se sirven tal cual, sin procesar, en `/documentos/nombre.pdf`. Al publicar se valida cada flyer que tenga `documento`: que sea un `.pdf` y que exista en `public/documentos/` con el nombre exacto, con mayúsculas y extensión iguales (en Windows `Retiro.pdf` encontraría `retiro.pdf`, pero en Cloudflare el enlace daría error). Si no, el build se corta con un mensaje que dice qué flyer revisar. La carpeta lleva un `.gitkeep` para existir aunque esté vacía: el panel y `npm run verificar:cms` la necesitan.
+
+No choca con la seguridad del sitio: el PDF se abre como página nueva, no dentro de la nuestra. La CSP de la `<meta>` vale solo para el HTML del sitio y no limita a dónde lleva un enlace, y los encabezados de `public/_headers` que le llegan al PDF (`frame-ancestors 'none'`, `X-Frame-Options: DENY`) solo impiden mostrarlo dentro de un marco, que no es el caso. `X-Content-Type-Options: nosniff` tampoco molesta: Cloudflare lo sirve como `application/pdf`.
 
 ### Regla: `.pages.yml` sincronizado con los JSON
 
@@ -75,7 +91,7 @@ Esto lo controla `npm run verificar:cms` (`scripts/verificar-pages-cms.mjs`), qu
 - `.pages.yml` sea YAML válido y el panel edite solo `horarios.json` y `eventos.json`.
 - Todos los campos del JSON actual estén declarados en `.pages.yml` (si no, el panel los borraría), y los campos de `.pages.yml` sean exactamente los de los tipos `Horarios` y `Eventos` de `src/types/`. Si falta o sobra alguno, dice cuál y dónde. Que un campo declarado no esté en el JSON no es error: el panel omite las listas vacías.
 - Los valores actuales del JSON cumplan los `pattern` del YAML (si no, el panel no dejaría guardar sin corregirlos primero).
-- Las fechas usen el formato `yyyy-MM-dd`, los campos de imagen apunten a una fuente de media que exista, y todos los campos tengan etiqueta.
+- Las fechas usen el formato `yyyy-MM-dd`, los campos de imagen y de archivo (el PDF) apunten a una fuente de media que exista, y todos los campos tengan etiqueta.
 
 Para probar una variante de la configuración sin tocar la real: `npm run verificar:cms -- ruta/a/otra.yml`.
 
@@ -83,7 +99,7 @@ Para probar una variante de la configuración sin tocar la real: `npm run verifi
 
 1. Entrá a https://app.pagescms.org e iniciá sesión con la cuenta de GitHub dueña del repositorio.
 2. El panel pide instalar la app de GitHub **Pages CMS**. Instalala en la cuenta y, en **Repository access**, elegí **Only select repositories** y marcá solo `parroquia-icm`. Se puede cambiar después desde GitHub: **Settings → Applications → Installed GitHub Apps → Pages CMS → Configure** (en la configuración de la cuenta, no del repositorio).
-3. Volvé al panel, elegí el repositorio y la rama `main`. Tienen que aparecer **Horarios**, **Avisos y flyers** y **Flyers**. Si dice que no encuentra la configuración, revisá que `.pages.yml` esté en `main`.
+3. Volvé al panel, elegí el repositorio y la rama `main`. Tienen que aparecer **Horarios**, **Avisos y flyers**, **Flyers** y **Documentos PDF**. Si dice que no encuentra la configuración, revisá que `.pages.yml` esté en `main`.
 
 ### Invitar a quien edita
 
@@ -163,6 +179,7 @@ La forma normal es el panel de Pages CMS (sección 3), que sube la imagen y agre
 
    - `archivo`: el nombre exacto de la imagen, con mayúsculas y extensión iguales.
    - `titulo`: se muestra debajo del flyer.
+   - `documento` (opcional): un PDF con más información, subido antes a `public/documentos/`, por ejemplo `"documento": "retiro-adviento.pdf"`. Si no hay, el campo no va (o queda `""`). Ver "Cargar un evento con PDF desde el panel" en la sección 3.
    - `desde` y `hasta`: fechas en formato `AAAA-MM-DD`. Las dos cuentan: el flyer se ve desde el primer día hasta el último, inclusive.
    - Si ya hay otros flyers, cada bloque `{ … }` se separa del siguiente con una coma.
 3. **Guardá el cambio** (Commit changes). Se publica solo.
@@ -243,7 +260,7 @@ Las redes están en `"redes"`, dentro de `src/data/parroquia.json`. Hoy está ca
 | `avisos` | Mensajes de la franja roja (sección 6) |
 | `flyers` | Flyers de eventos (sección 5) |
 
-**Fotos:** las fijas están en `src/assets/`: `frente-parroquia.jpg` (la fachada, arriba de todo y en la miniatura al compartir el enlace), `esquina-parroquia.jpg` (Ubicación), `campanario.jpg` (banda de cielo estrellado), `altar-mayor.jpg` (Bautismos) y `entrada-secretaria.jpg` (Contacto). `padre-claret.jpg` hoy no se usa. Los flyers, en `src/assets/eventos/`. Para cambiar una foto fija, subí la nueva con el mismo nombre de archivo.
+**Fotos:** las fijas están en `src/assets/`: `frente-parroquia.jpg` (la fachada, arriba de todo y en la miniatura al compartir el enlace), `esquina-parroquia.jpg` (Ubicación), `campanario.jpg` (banda de cielo estrellado), `altar-mayor.jpg` (Bautismos) y `entrada-secretaria.jpg` (Contacto). `padre-claret.jpg` hoy no se usa. Los flyers, en `src/assets/eventos/`, y sus PDF, en `public/documentos/`. Para cambiar una foto fija, subí la nueva con el mismo nombre de archivo.
 
 El resto de las carpetas (`src/components`, `src/lib`, etc.) es el código que arma la página. Para el uso diario no hace falta tocarlo.
 

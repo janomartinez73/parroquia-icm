@@ -3,10 +3,13 @@
  * Grilla de flyers vigentes. index.astro solo la incluye si hay alguno.
  *
  * Cada flyer va en una caja 4:5 con object-fit contain: entra entero, sin
- * recortes, cualquiera sea su proporción.
+ * recortes, cualquiera sea su proporción. Si el flyer tiene PDF, debajo del
+ * título va un botón que lo abre en otra pestaña, sin incrustarlo.
  */
 import { Image } from 'astro:assets';
-import { flyersVigentes, ID_SECCION_EVENTOS, MAXIMO_FLYERS } from '../lib/eventos';
+import Boton from './Boton.astro';
+import { enlaceDocumento, flyersVigentes, ID_SECCION_EVENTOS, MAXIMO_FLYERS } from '../lib/eventos';
+import { parroquia } from '../lib/parroquia';
 
 // Flex en lugar de grid: si queda un flyer solo en la fila, va centrado.
 const claseFlyer = 'w-full sm:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-1.667rem)]';
@@ -18,8 +21,8 @@ const anchos = (original: number) => [...new Set([400, 800].map((ancho) => Math.
 <ul data-vigencia={ID_SECCION_EVENTOS} data-maximo={MAXIMO_FLYERS} class="flex flex-wrap justify-center gap-10">
   {
     flyersVigentes.map((flyer, i) => (
-      <li data-hasta={flyer.hasta} hidden={i >= MAXIMO_FLYERS} class={claseFlyer}>
-        <figure class="revelar">
+      <li data-hasta={flyer.hasta} hidden={i >= MAXIMO_FLYERS} class:list={['revelar', claseFlyer]}>
+        <figure>
           <div class="hornacina border-2 border-oro bg-white p-2 shadow-[0_1rem_2rem_-1.5rem_rgb(19_33_63/0.35)] transition-[translate,box-shadow] duration-300 ease-suave hover:-translate-y-1.5 hover:shadow-[0_1.25rem_2rem_-1rem_rgb(19_33_63/0.45)]">
             <Image
               src={flyer.imagen}
@@ -33,6 +36,13 @@ const anchos = (original: number) => [...new Set([400, 800].map((ancho) => Math.
             {flyer.titulo}
           </figcaption>
         </figure>
+        {flyer.documento && (
+          <div class="mt-4 flex justify-center">
+            <Boton href={enlaceDocumento(flyer.documento)} externo variante="principal">
+              {parroquia.sitio.eventos.verDocumento}
+            </Boton>
+          </div>
+        )}
       </li>
     ))
   }

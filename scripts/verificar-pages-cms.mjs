@@ -73,6 +73,8 @@ const tipoExportado = (archivo, nombre) => {
   return simbolo && checker.getDeclaredTypeOfSymbol(simbolo);
 };
 const rutasTipo = (tipo, prefijo = '') => {
+  // Un campo opcional (documento?: string) es string | undefined: cuenta como string.
+  tipo = checker.getNonNullableType(tipo);
   if (checker.isArrayType(tipo)) return rutasTipo(checker.getTypeArguments(tipo)[0], prefijo + '[]');
   if (tipo.flags & (ts.TypeFlags.StringLike | ts.TypeFlags.NumberLike | ts.TypeFlags.BooleanLike)) return [prefijo];
   return checker.getPropertiesOfType(tipo).flatMap((p) =>
@@ -170,14 +172,15 @@ for (const { nombre, ruta, archivoTipo, tipo } of entradas) {
     malFecha.map(({ ruta: r }) => `${r} tiene que llevar options.format: yyyy-MM-dd`));
 }
 
-// 7. Cada campo image usa una fuente de media declarada, cuya carpeta existe.
+// 7. Cada campo image o file usa una fuente de media declarada, cuya carpeta existe.
 const media = Array.isArray(config?.media) ? config.media : [];
 for (const m of media) {
   const dir = join(raiz, m.input ?? '');
   ok(existsSync(dir) && statSync(dir).isDirectory(), `media ${m.name}: existe la carpeta ${m.input}`);
 }
-const imagenes = contenido.flatMap((c) => campos(c.fields ?? [], (f) => f.type === 'image').map((x) => ({ ...x, c })));
-for (const { ruta, f, c } of imagenes) {
+const archivos = contenido.flatMap((c) =>
+  campos(c.fields ?? [], (f) => f.type === 'image' || f.type === 'file').map((x) => ({ ...x, c })));
+for (const { ruta, f, c } of archivos) {
   ok(media.some((m) => m.name === f.options?.media), `${c.name}.${ruta}: usa la fuente de media "${f.options?.media}"`,
     [`fuentes declaradas: ${media.map((m) => m.name).join(', ') || '(ninguna)'}`]);
 }
