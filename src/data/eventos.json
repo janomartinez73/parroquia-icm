@@ -1,17 +1,9 @@
 {
   "avisos": [
     {
-      "texto": "Jueves 22 de Octubre proyección de la Película del Padre Claret, 20hs en el Salón Parroquial",
-      "desde": "2026-10-05",
-      "hasta": "2026-10-20"
-    }
-  ],
-  "flyers": [
-    {
-      "archivo": "/src/assets/eventos/avisos-parroquiales-de-octubre.jpg",
-      "titulo": "Asamblea abierta parroquial 2026",
-      "desde": "2026-10-14",
-      "hasta": "2026-10-18"
+      "texto": "Hoy en la Misa de las 19:30 hs se celebrarán las Confirmaciones de Nuestra Parroquia",
+      "desde": "2026-11-14",
+      "hasta": "2026-11-15"
     }
   ]
 }
