@@ -12,6 +12,12 @@
       "titulo": "Fiesta de la Medalla Milagrosa",
       "desde": "2026-11-14",
       "hasta": "2026-11-28"
+    },
+    {
+      "archivo": "/src/assets/eventos/whatsapp-image-2026-11-17-at-180508.jpeg",
+      "titulo": "Concierto de Navidad",
+      "desde": "2026-11-21",
+      "hasta": "2026-12-20"
     }
   ]
 }
